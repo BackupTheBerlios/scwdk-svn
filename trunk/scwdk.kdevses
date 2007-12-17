@@ -1,40 +1,22 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="11" >
-  <Doc0 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/scwdk.h" >
-   <View0 Encoding="" line="0" Type="Source" />
+ <DocsAndViews NumberOfDocuments="5" >
+  <Doc0 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/src/scwdk.cpp" >
+   <View0 Encoding="" line="78" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swtext.h" >
-   <View0 Encoding="" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/library/swncurses.h" >
+   <View0 Encoding="" line="69" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swtext.cpp" >
-   <View0 Encoding="" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/library/swmain.cpp" >
+   <View0 Encoding="" line="87" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swuicontrol.cpp" >
-   <View0 Encoding="" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/library/swncurses.cpp" >
+   <View0 Encoding="" line="209" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swmain.h" >
-   <View0 Encoding="" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///home/bretzel/Projects/napplication.cpp" >
+   <View0 Encoding="UTF-8" line="0" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swuicontrol.h" >
-   <View0 Encoding="" Type="Source" />
-  </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/events.cpp" >
-   <View0 Encoding="" Type="Source" />
-  </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/events.h" >
-   <View0 Encoding="" Type="Source" />
-  </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swmain.cpp" >
-   <View0 Encoding="UTF-8" Type="Source" />
-  </Doc8>
-  <Doc9 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swncurses.h" >
-   <View0 Encoding="" Type="Source" />
-  </Doc9>
-  <Doc10 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk-0.1a/library/swncurses.cpp" >
-   <View0 Encoding="" line="202" Type="Source" />
-  </Doc10>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
@@ -48,6 +30,9 @@
   <kdevbookmarks>
    <bookmarks/>
   </kdevbookmarks>
+  <kdevsubversion>
+   <subversion base="" />
+  </kdevsubversion>
   <kdevvalgrind>
    <executable path="" params="" />
    <valgrind path="" params="" />

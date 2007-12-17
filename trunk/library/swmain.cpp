@@ -79,13 +79,17 @@ bool swMain::QueryExit(swObject* _sender )
  */
 int swMain::Run()
 {
-    int r;
+    Event* e;
     Debug << "Initializing...";
     if( (r = Init()) ) return r;
     // nothing else to do for now  - just test queryexit
     do{
-        r = _nc->WaitEvent();
-        
+        e = _nc->WaitEvent();
+        ///@todo Process the event
+        //Desktop( 0 )->_do_Updates();
+    }while(1);
+    return 0;
+}
 
 /*!
     \fn ncdk::NApplication::translate_ncurses_event ( int )
@@ -113,14 +117,6 @@ void NApplication::translate_ncurses_event ( int __nce )
    }
 }
 */
-    Desktop( 0 )->_do_Updates();
-    (void)QueryExit( this );
-    Dbg << "returned from QueryExit_"; DEND;
-    //_nc->WaitEvent();
-    getch();
-    return 0;
-}
-
 
 /*!
     \fn swMain::Init()
@@ -154,4 +150,70 @@ int swMain::RunOptions()
         Dbg << *it;
     DEND;
     return 0; // test
+}
+
+
+/*!
+    \fn swMain::_preProcessEvent( Event* _ev )
+ */
+Event* swMain::_preProcessEvent( Event* _ev )
+{
+    int nc = _ev->NcursesEvent();
+    if( _ev == ERR ) return ;
+    // is mouse event ?
+    switch( nc ){
+        case KEY_RESIZE:
+            PostEvent( new NMessageEvent(event::TermResize) );
+            break;
+        case KEY_MOUSE:
+            _prepare_mouse_ev ( nc );
+        break;
+        case KEY_MESSAGE:
+            _prepare_message_ev( nc );
+        break;
+        default: // Assume keyboard input key event
+            //cerr << _HERE_ << "key even- value=" << __nce << "[" << (char)__nce << ']' <<   endl;
+            _prepare_keyinput_ev (  );
+        break;
+    }
+    delete _ev;
+    return 0l;
+}
+
+
+/*!
+    \fn swMain::_prepare_mouse_ev( int nc )
+ */
+Event* swMain::_prepare_mouse_ev( int nc )
+{
+    /// @todo implement me
+}
+
+
+/*!
+    \fn swMain::_prepare_keyinput_ev( Event* _ev )
+ */
+Event* swMain::_prepare_keyinput_ev( Event* _ev )
+{
+    event_t ev = 0;
+    KeyPressEvent* _kev = _ev->toEventType<KeyPressEvent>();
+    if(!_kev) return 0l; // screwed - return NIL - abort message processing.
+    if( _kev->isMeta() ){
+        //_translate_metakey
+    }
+    if( e == KEY_RESIZE){
+        PostEvent(new NMessageEvent(event::TermResize) );
+        return;
+    }
+    PostEvent( new NKeyPressEvent( e, bMeta ) );
+    if(e != 27) bMeta = false;    /// @todo implement me
+}
+
+
+/*!
+    \fn swMain::_prepare_message_ev(int nc )
+ */
+Event* swMain::_prepare_message_ev(int nc )
+{
+    /// @todo implement me
 }

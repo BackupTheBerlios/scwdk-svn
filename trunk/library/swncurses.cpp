@@ -196,6 +196,8 @@ bool swNCurses::_CanExit( swObject*& _sender )
 Event* swNCurses::WaitEvent()
 {
     int ncurses_event = 0;
+    KeyPressEvent* _ke;
+    Event* _ev;
     bMeta = false;
     REGET:
     if( (ncurses_event = getch()) != ERR){
@@ -204,6 +206,11 @@ Event* swNCurses::WaitEvent()
             goto REGET;
         }
     }
-    return ncurses_event;
+    // If bMeta is set ( meta-key input ) it is surely a keypress input event!!! Thus the goal is to transport the event with the meta flag set.
+    if( bMeta ) return new KeyPressEvent( ncurses_event, bMeta );
+    // Otherwize determine later the type of input event...
+    return new Event(ncurses_event);
 }
+
+
 

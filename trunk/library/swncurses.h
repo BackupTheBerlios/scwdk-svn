@@ -68,7 +68,6 @@ public:
 protected:
     Size _scrSize;
     bMeta;
-
 };
 
 
