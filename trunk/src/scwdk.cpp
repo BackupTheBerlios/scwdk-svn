@@ -97,7 +97,7 @@ int Main::Init(){
     wr->JoinAcs( pxy (wr->Geometry().width()-1, tc->Height()-3) , direction::left, tc->DefAttr() );
     wr->AscLine( pxy(1,tc->Height()-3), tc->Width()-2, direction::right, tc->DefAttr() );
 
-    (*wr) << pxy( 1, tc->Height()-2) << swWriter::text << "<fgcolor cyan;strong;>texte dans une zone encadree.";
+    (*wr) << pxy( 1, tc->Height()-2) << swWriter::text << "<fgcolor cyan;strong;underline;>texte dans une zone encadree.";
     tc->EndWrite();
 
 
@@ -105,7 +105,7 @@ int Main::Init(){
     ct->SetGeometry(Rect( 5,3 , 40,3 ) );
     wr = ct->StartWrite();
     wr->Clear();
-    (*wr) << pxy(1,1) << swWriter::text << "<bgcolor black;fgcolor green; strong;>[ child control embbeded in parent  ]";
+    (*wr) << pxy(1,1) << swWriter::text << "<bgcolor black;fgcolor green; strong;>[ child control embbeded in parent   ]";
     wr->DrawFrame( wr->Geometry(), swTAttr( 2,swcolor::cyan, A_BOLD) );
     ct->EndWrite();
     //tc->Update(); 
