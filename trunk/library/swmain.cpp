@@ -186,7 +186,10 @@ Event* swMain::_preProcessEvent( Event* _ev )
  */
 Event* swMain::_prepare_mouse_ev( int nc )
 {
-    /// @todo implement me
+    MEVENT mev;
+    getmouse( &mev );
+    MouseEvent* Mev = new MouseEvent( mev );
+    
 }
 
 
@@ -196,17 +199,15 @@ Event* swMain::_prepare_mouse_ev( int nc )
 Event* swMain::_prepare_keyinput_ev( Event* _ev )
 {
     event_t ev = 0;
-    KeyPressEvent* _kev = _ev->toEventType<KeyPressEvent>();
-    if(!_kev) return 0l; // screwed - return NIL - abort message processing.
-    if( _kev->isMeta() ){
-        //_translate_metakey
-    }
+    NMessageEvent* Mes;
+    KeyPressEvent* Kev;
     if( e == KEY_RESIZE){
-        PostEvent(new NMessageEvent(event::TermResize) );
-        return;
+        PostEvent( (Mes = new MessageEvent(event::TermResize) ) );
+        return Mes;
     }
-    PostEvent( new NKeyPressEvent( e, bMeta ) );
-    if(e != 27) bMeta = false;    /// @todo implement me
+    PostEvent( ( Kev = new NKeyPressEvent( e, bMeta ) ) );
+    bMeta = false;    /// @todo implement me
+    return  Kev;
 }
 
 
@@ -217,3 +218,4 @@ Event* swMain::_prepare_message_ev(int nc )
 {
     /// @todo implement me
 }
+
