@@ -84,10 +84,12 @@ int swMain::Run()
     if( (r = Init()) ) return r;
     // nothing else to do for now  - just test queryexit
     do{
+        _dsk->Refresh();
         e = _nc->WaitEvent();
         ///@todo Process the event
-        //Desktop( 0 )->_do_Updates();
-    }while(1);
+        e = _preProcessEvent( e );
+        e = DispatchEvents();
+    }while( e->What() != event::Quit );
     return 0;
 }
 
