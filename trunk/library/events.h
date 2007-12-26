@@ -80,6 +80,7 @@ namespace event{
     extern const event_t Windows;
     extern const event_t Input;
     extern const event_t CanFocus;
+    extern const event_t Done;
    std::string toString( event_t );
    enum Type{
       TimerEvent = 1,
@@ -97,12 +98,15 @@ Event class and its subclasses are those which hold an event managed by the Appl
 @author Serge Lussier
 */
 
-using std::list;
+//using std::list;
 
 class Event{
 public:
 
-
+   typedef std::list<Event*> List;
+   typedef List::iterator iterator;
+   typedef List::const_iterator const_iterator;
+   
    Event();
    Event(event::Type t, event_t v) : __type(t), __e(v){  }
    Event(int _ncurses_event) : __nce(_ncurses_event){  }
