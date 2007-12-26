@@ -64,6 +64,7 @@ public:
     virtual int Init();
     int Run();
     virtual Event* _prepare_message_ev(int nc );
+    int PostEvent( Event* _e );
 protected:
 
     typedef std::list< swWriter * > UQ; // Update Queu
@@ -72,11 +73,14 @@ protected:
     swDesktop* _dsk;
 
     static swMain* _Self;
+    std::list<Event*> _evq;
+    mutex* _evq_x;
 protected:
     virtual Event* _prepare_mouse_ev( int nc );
     virtual Event* _prepare_keyinput_ev( Event* _ev );
 protected:
     virtual Event* _preProcessEvent( Event* _ev );
+    Event* DispatchEvents();
 };
 
 #endif
