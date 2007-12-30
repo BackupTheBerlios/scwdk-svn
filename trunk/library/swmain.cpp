@@ -96,7 +96,7 @@ Event* swMain::_prepare_mouse_ev( int nc )
     MEVENT mev;
     if(getmouse( &mev ) == ERR ) return 0l;
     MouseEvent* Mev = new MouseEvent( mev );
-    return mev;
+    return Mev;
 }
 
 /*!
@@ -105,13 +105,13 @@ Event* swMain::_prepare_mouse_ev( int nc )
 Event* swMain::_prepare_keyinput_ev( Event* _ev )
 {
     event_t ev = 0;
-    NMessageEvent* Mes;
+    MessageEvent* Mes;
     KeyPressEvent* Kev;
-    if( e == KEY_RESIZE){
+    if( _ev->What() == KEY_RESIZE){
         PostEvent( (Mes = new MessageEvent(event::TermResize) ) );
         return Mes;
     }
-    PostEvent( ( Kev = new NKeyPressEvent( e, bMeta ) ) );
+    PostEvent( ( Kev = new KeyPressEvent( _ev->What(), bMeta ) ) );
     bMeta = false;    /// @todo implement me
     return  Kev;
 }

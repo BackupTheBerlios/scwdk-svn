@@ -67,7 +67,7 @@ public:
     Event* WaitEvent();
 protected:
     Size _scrSize;
-    bMeta;
+    bool bMeta;
 };
 
 

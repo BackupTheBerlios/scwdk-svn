@@ -70,7 +70,7 @@ namespace event{
    const  event_t TermResize           = 0x20000000;
    const  event_t ResizeEvent          = 0x40000000;
    const  event_t PostUpdate           = 0x80000000;
-   const  event_t Done                 = 0x11111111;
+   //const  event_t Done                 = 0x11111111;
    
    const event_t MaxUser               = 0xFFFFFFF; // last user event id
 
