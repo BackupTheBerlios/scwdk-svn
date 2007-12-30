@@ -96,6 +96,7 @@ Event* swMain::_prepare_mouse_ev( int nc )
     MEVENT mev;
     if(getmouse( &mev ) == ERR ) return 0l;
     MouseEvent* Mev = new MouseEvent( mev );
+    PostEvent( Mev );
     return Mev;
 }
 
@@ -107,13 +108,14 @@ Event* swMain::_prepare_keyinput_ev( Event* _ev )
     event_t ev = 0;
     MessageEvent* Mes;
     KeyPressEvent* Kev;
-    if( _ev->What() == KEY_RESIZE){
+    ///@todo Before pushing the key event, there is lots of function keys and other keyboard commands to translate into MessageEvent or refined KeyInput event
+    if( _ev->NcursesEvent() == KEY_RESIZE){
         PostEvent( (Mes = new MessageEvent(event::TermResize) ) );
         return Mes;
     }
-    PostEvent( ( Kev = new KeyPressEvent( _ev->What(), bMeta ) ) );
-    bMeta = false;    /// @todo implement me
-    return  Kev;
+    // Just push the event
+    PostEvent( _ev );//( Kev = new KeyPressEvent( _ev->What(), bMeta ) ) );
+    return  _ev;
 }
 
 /*!
@@ -132,13 +134,9 @@ Event* swMain::_preProcessEvent( Event* _ev )
     int nc = _ev->NcursesEvent();
     MessageEvent* me;
     Event* E;
-    if( _ev == ERR ) return ;
+    if( nc == ERR ) return 0l;
     // is mouse event ?
     switch( nc ){
-        case KEY_RESIZE:
-            me = new MessageEvent(event::TermResize);
-            E = me;
-            break;
         case KEY_MOUSE:
             E = _prepare_mouse_ev ( nc );
         break;
@@ -146,8 +144,9 @@ Event* swMain::_preProcessEvent( Event* _ev )
 //            E = _prepare_message_ev( nc );
 //        break;
         default: // Assume keyboard input key event
-            //cerr << _HERE_ << "key even- value=" << __nce << "[" << (char)__nce << ']' <<   endl;
-            E = _prepare_keyinput_ev (  );
+            // Just transport the original event that is already a KeyPressEvent
+            E = _prepare_keyinput_ev ( _ev );
+            return E;
         break;
     }
     // delete original Event instance.
@@ -171,8 +170,8 @@ Event* swMain::DispatchEvents()
     // Iterate all the events in the queu as well as the ones inserted during the loop...
     for(; i!= _evq.end(); i++){
         // Last message may be Event::Quit that was inserted at the end of the queu after all the other messages
-        _e = ProcessEvent( *i );
-        if( _e->What() == Event::Quit ) break; // cancel the loop and process the quit event, if cancelled, inserted events after quit will then be processed otherwize, the app quits!
+        //_e = ProcessEvent( *i );
+        if( _e->What() == event::Quit ) break; // cancel the loop and process the quit event, if cancelled, inserted events after quit will then be processed otherwize, the app quits!
     }
     return _e;
 }
@@ -185,11 +184,12 @@ Event* swMain::DispatchEvents()
 int swMain::Run()
 {
     Event* e;
+    int r;
     Debug << "Initializing...";
     if( (r = Init()) ) return r;
 
     do{
-        _dsk->Refresh();
+        //_dsk->Refresh();
         e = _nc->WaitEvent();
         ///@todo Process the event
         if( (e = _preProcessEvent( e )) ){
