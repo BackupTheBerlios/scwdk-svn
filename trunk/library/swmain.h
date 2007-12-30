@@ -25,6 +25,8 @@
 #include "swwriter.h"
 #include "swncurses.h"
 #include "swdesktop.h"
+#include "mutex.h"
+
 
 
 
