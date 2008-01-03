@@ -93,11 +93,7 @@ int swMain::PostEvent( Event* _e )
  */
 Event* swMain::_prepare_mouse_ev( int nc )
 {
-    MEVENT mev;
-    if(getmouse( &mev ) == ERR ) return 0l;
-    MouseEvent* Mev = new MouseEvent( mev );
-    PostEvent( Mev );
-    return Mev;
+    return 0l;
 }
 
 /*!
@@ -105,16 +101,6 @@ Event* swMain::_prepare_mouse_ev( int nc )
  */
 Event* swMain::_prepare_keyinput_ev( Event* _ev )
 {
-    event_t ev = 0;
-    MessageEvent* Mes;
-    KeyPressEvent* Kev;
-    ///@todo Before pushing the key event, there is lots of function keys and other keyboard commands to translate into MessageEvent or refined KeyInput event
-    if( _ev->NcursesEvent() == KEY_RESIZE){
-        PostEvent( (Mes = new MessageEvent(event::TermResize) ) );
-        return Mes;
-    }
-    // Just push the event
-    PostEvent( _ev );//( Kev = new KeyPressEvent( _ev->What(), bMeta ) ) );
     return  _ev;
 }
 
@@ -131,27 +117,6 @@ Event* swMain::_prepare_message_ev(int nc )
  */
 Event* swMain::_preProcessEvent( Event* _ev )
 {
-    int nc = _ev->NcursesEvent();
-    MessageEvent* me;
-    Event* E;
-    if( nc == ERR ) return 0l;
-    // is mouse event ?
-    switch( nc ){
-        case KEY_MOUSE:
-            E = _prepare_mouse_ev ( nc );
-        break;
-//        case KEY_MESSAGE:
-//            E = _prepare_message_ev( nc );
-//        break;
-        default: // Assume keyboard input key event
-            // Just transport the original event that is already a KeyPressEvent
-            E = _prepare_keyinput_ev ( _ev );
-            return E;
-        break;
-    }
-    // delete original Event instance.
-    delete _ev;
-    // Return resulting final Event may be 0L (if event is invalid or not to be propagated)
     return E;
 }
 
@@ -179,7 +144,7 @@ Event* swMain::DispatchEvents()
 /*!
     \fn swMain::Run()
     \brief Setup the program's environment as the main thread, waits for user/system input events, then
-    dispatch it until the event::Quit is the only remaining event to proceed.
+    dispatch it until the event::Quit is left.
  */
 int swMain::Run()
 {

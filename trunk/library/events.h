@@ -31,6 +31,12 @@
 
 typedef unsigned long event_t;
 
+
+#define CONTROLKEY  1
+#define FUNCTIONKEY 2
+#define DATAKEY     3
+
+
 namespace event{
 
    extern const event_t Timer;
@@ -182,10 +188,27 @@ public:
     */
    bool isMeta()    { return bMeta;  }
 
+    /*!
+        \fn KeyPressEvent::SetClass( int K )
+     */
+    void SetClass( int K )
+    {
+        Class = K;
+    }
+
+    /*!
+        \fn KeyPressEvent::KeyClass()
+     */
+    int KeyClass()
+    {
+        return Class;
+    }
+
 private:
    virtual void _translate();
    int key;
    bool bMeta;
+   int Class;
 };
 
 

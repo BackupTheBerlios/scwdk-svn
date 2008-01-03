@@ -68,6 +68,11 @@ public:
 protected:
     Size _scrSize;
     bool bMeta;
+protected:
+    Event* _preProcess( int nce, bool m );
+protected:
+    MouseEvent* _mouseEvent( int nc );
+    KeyPressEvent* _inKey(int nc, bool m);
 };
 
 

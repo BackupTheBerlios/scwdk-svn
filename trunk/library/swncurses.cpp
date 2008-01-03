@@ -207,10 +207,63 @@ Event* swNCurses::WaitEvent()
         }
     }
     // If bMeta is set ( meta-key input ) it is surely a keypress input event!!! Thus the goal is to transport the event with the meta flag set.
-    if( bMeta ) return new KeyPressEvent( ncurses_event, bMeta );
-    // Otherwize determine later the type of input event...
-    return new Event(ncurses_event);
+    return _preProcess( ncurses_event, bMeta );
 }
 
 
 
+
+
+/*!
+    \fn swNCurses::_mouseEvent( int nc )
+ */
+MouseEvent* swNCurses::_mouseEvent( int )
+{
+    MEVENT mev;
+    if(getmouse( &mev ) == ERR ) return 0l;
+    MouseEvent* Mev = new MouseEvent( mev );
+    return Mev;
+}
+
+
+/*!
+    \fn swNCurses::_inKey(int nc, bool m)
+ */
+KeyPressEvent* swNCurses::_inKey(int nc, bool m)
+{
+    KeyPressEvent* key=0l;
+    // Preprocess key input:
+    // Arrow keys, function keys, ESC, CTRL, etc...
+    key = new KeyPressEvent( nc,m);
+    if( (nc >= KEY_F(1)) && (nc <= KEY_F(12)) ) {
+        key->SetClass( FUNCTIONKEY );
+        key->SetEvent( event::KeyFunction );
+        return key;
+    }
+    key->SetClass(CONTROLKEY);
+    if( (nc >= KEY_DOWN) && (nc <= KEY_RIGHT)  || ( nc==KEY_HOME) || (nc==KEY_END) ) {
+        key->SetEvent( event::DirectionKey );
+        return key;
+    }
+    
+    key->SetClass( DATAKEY );
+    key->SetEvent( event::KeyPress );
+    return key;
+}
+
+
+/*!
+    \fn swNCurses::_preProcess( int nce, bool m )
+ */
+Event* swNCurses::_preProcess( int nce, bool m )
+{
+    Event* _e = 0l;
+    switch( nce ){
+    // Pre-process the ncurses event ( input events such as keyin or mouse
+        case KEY_MOUSE:
+            return _mouseEvent( 0 );
+        default:
+            return _inKey( nce, m );
+    }
+    return _e;
+}
