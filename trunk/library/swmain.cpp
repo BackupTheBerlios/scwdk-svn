@@ -113,12 +113,14 @@ Event* swMain::_prepare_message_ev(int nc )
 }
 
 /*!
-    \fn swMain::_preProcessEvent( Event* _ev )
+    \fn swMain::ProcessEvent( Event* _ev )
  */
-Event* swMain::_preProcessEvent( Event* _ev )
+Event* swMain::ProcessEvent( Event* _ev )
 {
     ///@note Moved to swNCurses::_preProcess(...)
-    return 0l;
+    // for now just quit!
+    _ev->SetEvent( event::Quit );
+    return _ev;
 }
 
 /*!
@@ -134,9 +136,10 @@ Event* swMain::DispatchEvents()
     Event::iterator i;
     Event* _e;
     // Iterate all the events in the queu as well as the ones inserted during the loop...
-    for(; i!= _evq.end(); i++){
+    for(i=_evq.begin(); i!= _evq.end(); i++){
         // Last message may be Event::Quit that was inserted at the end of the queu after all the other messages
-        //_e = ProcessEvent( *i );
+        _e = *i;
+        _e = ProcessEvent( *i );
         if( _e->What() == event::Quit ) break; // cancel the loop and process the quit event, if cancelled, inserted events after quit will then be processed otherwize, the app quits!
     }
     return _e;
@@ -158,9 +161,9 @@ int swMain::Run()
         _dsk->_do_Updates();
         e = _nc->WaitEvent();
         ///@todo Process the event
-        if( (e = _preProcessEvent( e )) ){
+        //if( (e = _preProcessEvent( e )) ){
             PostEvent( e );
-        }
+        //}
         e = DispatchEvents();
     }while( e->What() != event::Quit );
     return 0;
@@ -184,6 +187,11 @@ int swMain::Init()
         Dbg << " Desktop failed to init ???";DEND;
         return r;
     }
+
+    // Create the events queu mutex
+    _evq_x = new mutex;
+    _evq_x->init();
+
     if( ( r = RunOptions() ) ) return r;
     return 0;
 }

@@ -81,7 +81,7 @@ protected:
     virtual Event* _prepare_mouse_ev( int nc );
     virtual Event* _prepare_keyinput_ev( Event* _ev );
 protected:
-    virtual Event* _preProcessEvent( Event* _ev );
+    virtual Event* ProcessEvent( Event* _ev );
     Event* DispatchEvents();
 };
 
