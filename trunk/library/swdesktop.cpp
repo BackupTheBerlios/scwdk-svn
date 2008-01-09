@@ -103,7 +103,7 @@ int swDesktop::_drawControl ( UNode* u )
             
         //}
     }
-    ::refresh();
+    //::refresh();
     return 0;
 }
 

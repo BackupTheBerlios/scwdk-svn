@@ -117,7 +117,8 @@ Event* swMain::_prepare_message_ev(int nc )
  */
 Event* swMain::_preProcessEvent( Event* _ev )
 {
-    return E;
+    ///@note Moved to swNCurses::_preProcess(...)
+    return 0l;
 }
 
 /*!
@@ -154,7 +155,7 @@ int swMain::Run()
     if( (r = Init()) ) return r;
 
     do{
-        //_dsk->Refresh();
+        _dsk->_do_Updates();
         e = _nc->WaitEvent();
         ///@todo Process the event
         if( (e = _preProcessEvent( e )) ){
