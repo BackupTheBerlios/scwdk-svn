@@ -161,7 +161,7 @@ int swMain::Run()
         _dsk->_do_Updates();
         e = _nc->WaitEvent();
         ///@todo Process the event
-        //if( (e = _preProcessEvent( e )) ){
+            //if( (e = _preProcessEvent( e )) ){
             PostEvent( e );
         //}
         e = DispatchEvents();
