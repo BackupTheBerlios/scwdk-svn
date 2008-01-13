@@ -23,10 +23,10 @@
 
 #include <ncurses.h>
 
-#include <rect.h>
+#include "rect.h"
 
 
-
+#include "exstring.h"
 
 
 typedef unsigned long event_t;
@@ -161,6 +161,16 @@ public:
      */
     event_t What() { return __e; }
 
+    /*!
+        \fn Event::ToString()
+     */
+    String ToString()
+    {
+       String S;
+       S << "No string for event " << What();
+       return S;
+    }
+
 private:
     event_t __e;           ///< The event value
     event::Type __type;    ///< event type
@@ -249,6 +259,7 @@ public:
     bool isLeft();
     bool isMiddle();
     bool isRight();   
+    virtual String ToString();
 private:
     friend class Application;
     MEVENT _data;

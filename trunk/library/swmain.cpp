@@ -88,38 +88,32 @@ int swMain::PostEvent( Event* _e )
 }
 
 
-/*!
-    \fn swMain::_prepare_mouse_ev( int nc )
- */
-Event* swMain::_prepare_mouse_ev( int nc )
-{
-    return 0l;
-}
-
-/*!
-    \fn swMain::_prepare_keyinput_ev( Event* _ev )
- */
-Event* swMain::_prepare_keyinput_ev( Event* _ev )
-{
-    return  _ev;
-}
-
-/*!
-    \fn swMain::_prepare_message_ev(int nc )
- */
-Event* swMain::_prepare_message_ev(int nc )
-{
-    /// @todo implement me
-}
 
 /*!
     \fn swMain::ProcessEvent( Event* _ev )
+    \brief This is the central event action that is dispatched to the target(s)
+    through one of the transport methods
  */
 Event* swMain::ProcessEvent( Event* _ev )
 {
-    ///@note Moved to swNCurses::_preProcess(...)
+    String msgStr;
+    Debug;
+    msgStr << "ev:";
     // for now just quit!
+
+    MouseEvent* Mev;
+    KeyPressEvent* Kev;
+    switch ( _ev->Type() ){
+        case event::MouseEvent:
+            Mev = _ev->toEventType<MouseEvent>();
+            if(!Mev) return 0l;
+            msgStr << Mev->ToString();
+            break;
+        default:
+            break;
+    }
     _ev->SetEvent( event::Quit );
+    Dbg << msgStr( );DEND;
     return _ev;
 }
 
@@ -210,3 +204,30 @@ int swMain::RunOptions()
 }
 
 
+
+
+/*!
+    \fn swMain::_KeyInput( KeyPressEvenet* Kev )
+ */
+Event* swMain::_KeyInput( KeyPressEvenet* Kev )
+{
+    /// @todo implement me
+}
+
+
+/*!
+    \fn swMain::_MouseEvent( MouseEvent* Mev )
+ */
+Event* swMain::_MouseEvent( MouseEvent* Mev )
+{
+    /// @todo implement me
+}
+
+
+/*!
+    \fn swMain::_MessageEvent(MessageEvent* msg )
+ */
+Event* swMain::_MessageEvent(MessageEvent* msg )
+{
+    /// @todo implement me
+}

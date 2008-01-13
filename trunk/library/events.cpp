@@ -126,13 +126,13 @@ bool MouseEvent::identify_event()
        ( bs &  BUTTON1_CLICKED  ) ||
        ( bs &  BUTTON1_DOUBLE_CLICKED) ||
        ( bs &  BUTTON1_TRIPLE_CLICKED)) left = 1;
-   else
+   //else
    if( ( bs &  BUTTON2_RELEASED ) ||
        ( bs &  BUTTON2_PRESSED  ) ||
        ( bs &  BUTTON2_CLICKED  ) ||
        ( bs &  BUTTON2_DOUBLE_CLICKED) ||
        ( bs &  BUTTON2_TRIPLE_CLICKED)) middle = 1;
-   else
+   //else
    if( ( bs &  BUTTON3_RELEASED ) ||
        ( bs &  BUTTON3_PRESSED  ) ||
        ( bs &  BUTTON3_CLICKED  ) ||
@@ -176,7 +176,7 @@ bool MouseEvent::identify_event()
    }
    else
    if( _oldPos != pos ){
-      SetEvent( event::MouseMove );
+      SetEvent( What() | event::MouseMove );
    }
    return true;
 }
@@ -224,3 +224,29 @@ bool MouseEvent::isRight()
 {
     return right !=0;
 }
+
+
+/*!
+    \fn MouseEvent::ToString()
+ */
+String MouseEvent::ToString()
+{
+    String S;
+    S << "MouseEvent [ ";
+    switch ( What() ){
+        case event::MouseMove:
+            S << " event::MouseMove ] " << pos.tostring();
+            break;
+        case event::MouseButtonPress:
+            S << " event::MouseButtonPress ] " << pos.tostring();
+            break;
+        default:
+            S << " no string for event " << What();
+            break;
+    }
+    S << " Button(s):" << (right ? " right ": left  ? " left " : middle ? " middle " : "Others");
+    return S;
+}
+
+
+

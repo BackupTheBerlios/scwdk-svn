@@ -65,7 +65,6 @@ public:
     virtual int RunOptions();
     virtual int Init();
     int Run();
-    virtual Event* _prepare_message_ev(int nc );
     int PostEvent( Event* _e );
 protected:
 
@@ -78,11 +77,11 @@ protected:
     std::list<Event*> _evq;
     mutex* _evq_x;
 protected:
-    virtual Event* _prepare_mouse_ev( int nc );
-    virtual Event* _prepare_keyinput_ev( Event* _ev );
-protected:
     virtual Event* ProcessEvent( Event* _ev );
     Event* DispatchEvents();
+    virtual Event* _KeyInput( KeyPressEvenet* Kev );
+    virtual Event* _MouseEvent( MouseEvent* Mev );
+    virtual Event* _MessageEvent(MessageEvent* msg );
 };
 
 #endif

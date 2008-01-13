@@ -220,7 +220,7 @@ Event* swNCurses::WaitEvent()
 MouseEvent* swNCurses::_mouseEvent( int )
 {
     MEVENT mev;
-    // Just a test for svn+ssh with KDevelop 3.5.0  Sabayon 3.5 loop1 beta
+    // Just a test for svn+ssh with KDevelop 3.5.0  Sabayon 3.5 loop1 bet
     if(getmouse( &mev ) == ERR ) return 0l;
     MouseEvent* Mev = new MouseEvent( mev );
     return Mev;
