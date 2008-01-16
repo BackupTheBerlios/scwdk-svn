@@ -28,4 +28,28 @@ swCommand::~swCommand()
 {
 }
 
+/*!
+    \fn swCommand::operator ( swCommand::Delegate d )
+    \brief This method returns true if the connected slot is the very same instance as the one to test
+    this means that a "delegate" slot object must be previously created then passed to the swCommand::operator +=() method,
+    and then saved as reference to be used with the operator == ...Otherwize "false" will always be returned ...
+    The purpose of this is to be able to control the relationship of the slot ( or delegate ) object  with the command.
+    When it is required to disable or to re-enable the delegate into the command, this operator ensure that the delegate
+    object is properly dissociated from, or associated to the command.
+
+    So this == operator returns true to tell that the delegate is associated ( connected ) to the command, then false if not.
+ */
+bool swCommand::operator ==( swCommand::Delegate d )
+{
+    std::list< swCommand::Delegator::iterator >::iterator I;
+    swCommand::Delegator::iterator D;
+    if( delegates.empty() ) return false;
+    I = delegates.begin();
+    do{
+        D = *I;
+        if ((*D) == d) return true;
+    }while( I != delegates.end() );
+    return false;
+}
+
 
