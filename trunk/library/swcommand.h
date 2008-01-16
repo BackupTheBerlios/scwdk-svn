@@ -28,10 +28,28 @@
 class swCommand : public swObject
 {
 public:
-    swCommand(swObject* swParent);
+    typedef sigc::signal< bool, swObject*& >::accumulated<swObject::interruptible>  Delegator;
+    typedef sigc::slot<bool, swObject*&> Delegate;
+    
+    typedef std::list< swCommand* > list;
+    typedef swCommand::list::iterator iterator;
+    
+    swCommand(swObject* swParent, const std::string& nameid);
 
+    swCommand& operator += ( swCommand::Delegate d){
+        delegates.push_back( delegator.connect( d ) );
+        return *this;
+    }
+
+    
     virtual ~swCommand();
+    bool operator ==( Delegate d );
 
+private:
+    
+    Delegator delegator;
+    std::list< Delegator::iterator > delegates;
+    
 };
 
 #endif
