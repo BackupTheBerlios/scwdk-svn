@@ -79,7 +79,7 @@ protected:
 protected:
     virtual Event* ProcessEvent( Event* _ev );
     Event* DispatchEvents();
-    virtual Event* _KeyInput( KeyPressEvenet* Kev );
+    virtual Event* _KeyInput( KeyPressEvent* Kev );
     virtual Event* _MouseEvent( MouseEvent* Mev );
     virtual Event* _MessageEvent(MessageEvent* msg );
 };

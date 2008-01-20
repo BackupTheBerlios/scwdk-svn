@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "swcommand.h"
 
-swCommand::swCommand(swObject* swParent): swObject(swParent)
+swCommand::swCommand(swObject* swParent, const std::string& _nameid): swObject(swParent,0,_nameid.c_str())
 {
 }
 

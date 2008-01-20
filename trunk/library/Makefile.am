@@ -1,4 +1,4 @@
-INCLUDES = -I/usr/lib/sigc++-2.0/include -I/usr/include/sigc++-2.0
+INCLUDES = -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include
 METASOURCES = AUTO
 lib_LTLIBRARIES = libscwdk.la
 libscwdk_la_LIBADD = -lncurses -ldl -lpthread -lsigc-2.0

@@ -207,9 +207,9 @@ int swMain::RunOptions()
 
 
 /*!
-    \fn swMain::_KeyInput( KeyPressEvenet* Kev )
+    \fn swMain::_KeyInput( KeyPressEvent* Kev )
  */
-Event* swMain::_KeyInput( KeyPressEvenet* Kev )
+Event* swMain::_KeyInput( KeyPressEvent* Kev )
 {
     /// @todo implement me
 }
