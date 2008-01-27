@@ -108,6 +108,7 @@ Event* swMain::ProcessEvent( Event* _ev )
             Mev = _ev->toEventType<MouseEvent>();
             if(!Mev) return 0l;
             msgStr << Mev->ToString();
+            _ev = _MouseEvent( Mev );
             break;
         default:
             break;
@@ -220,7 +221,11 @@ Event* swMain::_KeyInput( KeyPressEvent* Kev )
  */
 Event* swMain::_MouseEvent( MouseEvent* Mev )
 {
-    /// @todo implement me
+	Debug;
+	switch( Mev->What() ){
+		
+	}
+	return Mev;    
 }
 
 
