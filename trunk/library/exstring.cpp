@@ -46,7 +46,9 @@ char  String::operator[](int I)
 */
 int  String::split(std::list<std::string>& l, const std::string& seq, char s1, char s2, bool keeptok)
 {
+
    typedef std::string::size_type ST;
+   int KT = keeptok ? 0: 1;
    std::vector<int> tok_s1;
    std::vector<int> tok_s2;
    if(l.size()) l.clear();
@@ -73,7 +75,7 @@ int  String::split(std::list<std::string>& l, const std::string& seq, char s1, c
          return 1;
       }
       if(tok_s1.size()){
-         if(tok_s1[0]) l.push_back(seq.substr(0, tok_s1[0] - (keeptok ? 0: 1)) );
+         if(tok_s1[0]) l.push_back(seq.substr(0, tok_s1[0] - KT) );
          for(pos = 0; pos < tok_s1.size(); pos++){
             if(pos>0){
                int c = tok_s1[pos] - tok_s2[pos-1];
