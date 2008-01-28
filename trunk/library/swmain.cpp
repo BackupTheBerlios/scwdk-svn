@@ -223,8 +223,16 @@ Event* swMain::_MouseEvent( MouseEvent* Mev )
 {
 	Debug;
 	switch( Mev->What() ){
-		
+		case event::MouseButtonPress:
+		case event::MouseButtonClick:	
+			//_selectFocus( Mev ); // Same or other UI controle selected 
 	}
+    switch ( Mev->What() ){
+        case event::MouseButtonClick:
+            // Just do the UI 's command - if any
+        default:
+            // no- no default events;
+    }
 	return Mev;    
 }
 

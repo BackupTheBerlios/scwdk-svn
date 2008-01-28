@@ -166,6 +166,7 @@ swUiControl::iterator swDesktop::_locateControl( swUiControl* ui )
 
 //-------------- TEST -- REMOVE WHEN FINISHED ---------------
 #include "swtext.h"
+// ----------------------------------------------------------
 
 /*!
     \fn swDesktop::Init()
@@ -189,7 +190,7 @@ int swDesktop::Init()
     }
     SetGeometry( Rect(0,0, _n->Width(), _n->Height()) );
     _wr->Clear();
-    //
+    // ------------------------------------------------- TESTS
     swText T;
     T << " <fgcolor red;bgcolor white; /strong;>     Desktop initializecd...<fgcolor black;>Good To GO!!! <fgcolor blue;> Actual size: <fgcolor black;>"
       << Width() << "<fgcolor blue;>:<fgcolor black;>" << Height() << "     ";
@@ -198,7 +199,9 @@ int swDesktop::Init()
     mvaddchstr( 0, 3, p);// Height()-2, p );
     delete [] p;
     T.ReleaseData();
+    // -----------------------------------------------------
     Update();
+    
     return 0;
 }
 

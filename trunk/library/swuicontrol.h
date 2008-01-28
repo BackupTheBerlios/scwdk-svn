@@ -107,6 +107,7 @@ public:
         \brief Default method to call to set the control to be in Focuessed mode ( input events routed to this control )
         \param bool b = true by default - false to set to unfocuss mode.
         \return bool - not used yet - to be determined.
+        \author Serge Lussier (bretzel)
      */
     virtual bool Activate( bool b=true ){
         return false;
