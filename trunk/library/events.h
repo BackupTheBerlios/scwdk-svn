@@ -20,10 +20,13 @@
 #ifndef NCDKNEVENT_H
 #define NCDKNEVENT_H
 
+#include "scwdk.h"
+#include "swobject.h"
 
-#include <ncurses.h>
+//#include <ncurses.h>
 
 #include "rect.h"
+#include <map>
 
 
 #include "exstring.h"
@@ -97,6 +100,8 @@ namespace event{
 
 
 } // namespace event
+
+
 
 /**
 Event class and its subclasses are those which hold an event managed by the Application events queu.
@@ -315,6 +320,52 @@ public:
 
 
 
+/*!
+    \class EventDelegator
+    \brief Events propagation system
+    \note just a design test -- not to really be implemented unless it's worth it and really usefull.
+*/
+
+class EventDelegate : public swObject{
+public:
+    typedef sigc::signal<bool, Event*>::accumulated< swObject::interruptible> Delegate;
+    typedef sigc::slot<bool, Event*> Client;
+
+
+//private:
+    struct DelegateNode{
+        EventDelegate::Delegate Delegate;
+        DelegateNode() {}
+        int operator += (EventDelegate::Client client ){
+            Delegate.connect( client );
+            return 0;
+        }
+    };
+
+    typedef std::map< event_t, EventDelegate::DelegateNode* > DelegateMap;
+    EventDelegate() { }
+    virtual ~EventDelegate() {}
+
+    /*!
+    \fn EventDelegate::operator []( event:event_t ev)
+    */
+    DelegateNode& operator []( event_t ev)
+    {   
+        DelegateMap::iterator it = Delegates.find( ev );
+        if( it == Delegates.end() ){
+            Delegates[ev] = new DelegateNode;
+            it = Delegates.find( ev );
+        }
+        return *(it->second);
+    }
+
+private:
+    DelegateMap Delegates;
+};
+
+
+
+    
 
 
 #endif

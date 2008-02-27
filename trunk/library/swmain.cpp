@@ -222,6 +222,9 @@ Event* swMain::_KeyInput( KeyPressEvent* Kev )
 Event* swMain::_MouseEvent( MouseEvent* Mev )
 {
 	Debug;
+ // Get the app-wide system static event delegator
+    EventsDelegator::MouseEvent( Mev );
+       
 	switch( Mev->What() ){
 		case event::MouseButtonPress:
 		case event::MouseButtonClick:	
