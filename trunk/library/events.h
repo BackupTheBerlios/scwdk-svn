@@ -358,13 +358,28 @@ public:
         }
         return *(it->second);
     }
+    static DelegateNode& Select( const std::string& _path );
 
 private:
     DelegateMap Delegates;
 };
 
 
+class EventDelegateGroup : public swObject{
+public:
+    typedef std::map<std::string, EventDelegate* > DelegateGroup;
+    typedef DelegateGroup::iterator iterator;
+    
+    EventDelegateGroup( ) {}
+    virtual ~EventDelegateGroup() {}
+    static EventDelegate&  Select( const string& _path );
+    
+};
 
+
+
+    
+        
     
 
 

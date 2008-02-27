@@ -254,3 +254,21 @@ String MouseEvent::ToString()
 
 
 
+
+
+/*!
+    \fn EventDelegate::Select( const std::string& _path )
+ */
+DelegateNode& EventDelegate::Select( const std::string& _path )
+{
+    /// @todo implement me
+}
+
+
+/*!
+    \fn EventDelegateGroup::Select( const string& _path )
+ */
+EventDelegate&  EventDelegateGroup::Select( const string& _path )
+{
+    /// @todo implement me
+}
