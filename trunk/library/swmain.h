@@ -66,6 +66,7 @@ public:
     virtual int Init();
     int Run();
     int PostEvent( Event* _e );
+    bool InitEVD();
 protected:
 
     typedef std::list< swWriter * > UQ; // Update Queu
@@ -76,6 +77,7 @@ protected:
     static swMain* _Self;
     std::list<Event*> _evq;
     mutex* _evq_x;
+    static DelegateGroup EventsPropagator;
 protected:
     virtual Event* ProcessEvent( Event* _ev );
     Event* DispatchEvents();

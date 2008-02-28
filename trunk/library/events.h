@@ -328,11 +328,10 @@ public:
 
 class EventDelegate : public swObject{
 public:
+
     typedef sigc::signal<bool, Event*>::accumulated< swObject::interruptible> Delegate;
     typedef sigc::slot<bool, Event*> Client;
 
-
-//private:
     struct DelegateNode{
         EventDelegate::Delegate Delegate;
         DelegateNode() {}
@@ -358,7 +357,7 @@ public:
         }
         return *(it->second);
     }
-    static DelegateNode& Select( const std::string& _path );
+    //static DelegateNode& Select( const std::string& _path );
 
 private:
     DelegateMap Delegates;
@@ -372,8 +371,24 @@ public:
     
     EventDelegateGroup( ) {}
     virtual ~EventDelegateGroup() {}
-    static EventDelegate&  Select( const string& _path );
     
+    EventDelegateGroup& operator +=( const std::string& );
+    EventDelegateGroup& operator +=( EventDelegate* evd );
+    /*!
+        \fn EventDelegateGroup::operator [](const std::string& _name )
+    */
+    EventDelegate& EventDelegateGroup::operator [](const std::string& _name )
+    {
+        DelegateGroup::iterator it = Groups.find( _name );
+        if( it == Groups.end() ){
+            Groups[ _name ] = new EventDelegate;
+            it = Groups.find( _name );
+        }
+        return *(it->second);
+        
+    }
+    DelegateGroup Groups;
+
 };
 
 

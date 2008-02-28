@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "swmain.h"
 
+DelegateGroup EventsPropagator;
 
 swMain* swMain::_Self=0l;
 
@@ -177,6 +178,8 @@ int swMain::Init()
         Dbg << " swNcurses::Init() returned fail ...";
         return r;
     }
+    InitEVD();
+    
     _dsk = new swDesktop( this, 0, "swMain::Desktop = default");
     if( ( r = _dsk->Init() ) ){
         Dbg << " Desktop failed to init ???";DEND;
@@ -224,18 +227,6 @@ Event* swMain::_MouseEvent( MouseEvent* Mev )
 	Debug;
  // Get the app-wide system static event delegator
     EventsDelegator::MouseEvent( Mev );
-       
-	switch( Mev->What() ){
-		case event::MouseButtonPress:
-		case event::MouseButtonClick:	
-			//_selectFocus( Mev ); // Same or other UI controle selected 
-	}
-    switch ( Mev->What() ){
-        case event::MouseButtonClick:
-            // Just do the UI 's command - if any
-        default:
-            // no- no default events;
-    }
 	return Mev;    
 }
 
@@ -246,4 +237,16 @@ Event* swMain::_MouseEvent( MouseEvent* Mev )
 Event* swMain::_MessageEvent(MessageEvent* msg )
 {
     /// @todo implement me
+}
+
+
+/*!
+    \fn swMain::InitEVD()
+ */
+bool swMain::InitEVD()
+{
+    EventDelegate& evd = EventsPropagator["keyinput"];
+    evd[event::KeyFunction] += sigc::mem_fun(this, &swMain::_KeyFn);
+    
+    
 }
