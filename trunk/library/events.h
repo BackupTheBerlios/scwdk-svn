@@ -372,12 +372,12 @@ public:
     EventDelegateGroup( ) {}
     virtual ~EventDelegateGroup() {}
     
-    EventDelegateGroup& operator +=( const std::string& );
-    EventDelegateGroup& operator +=( EventDelegate* evd );
+    //EventDelegateGroup& operator +=( const std::string& );
+    //EventDelegateGroup& operator +=( EventDelegate* evd );
     /*!
         \fn EventDelegateGroup::operator [](const std::string& _name )
     */
-    EventDelegate& EventDelegateGroup::operator [](const std::string& _name )
+    EventDelegate& operator [](const std::string& _name )
     {
         DelegateGroup::iterator it = Groups.find( _name );
         if( it == Groups.end() ){
@@ -390,12 +390,6 @@ public:
     DelegateGroup Groups;
 
 };
-
-
-
-    
-        
-    
 
 
 #endif

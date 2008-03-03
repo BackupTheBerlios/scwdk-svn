@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "swmain.h"
 
-DelegateGroup EventsPropagator;
+EventDelegateGroup swMain::EventsPropagator;
 
 swMain* swMain::_Self=0l;
 
@@ -226,7 +226,6 @@ Event* swMain::_MouseEvent( MouseEvent* Mev )
 {
 	Debug;
  // Get the app-wide system static event delegator
-    EventsDelegator::MouseEvent( Mev );
 	return Mev;    
 }
 
@@ -246,7 +245,29 @@ Event* swMain::_MessageEvent(MessageEvent* msg )
 bool swMain::InitEVD()
 {
     EventDelegate& evd = EventsPropagator["keyinput"];
-    evd[event::KeyFunction] += sigc::mem_fun(this, &swMain::_KeyFn);
+    evd[event::KeyFunction]  += sigc::mem_fun(this, &swMain::_KeyFn);
+    /*
+    evd[event::KeyPress]     += sigc::mem_fun(this, &swMain::_KeyInput);
+    evd[event::DirectionKey] += sigc::mem_fun(this, &swMain::_ArrowKey);
     
-    
+    evd = EventsPropagator["MouseEvent"];
+    evd[event::MouseButtonPress] += sigc::mem_fun(this, &swMain::_MouseButtonPress);
+    evd[event::MouseButtonClick] += sigc::mem_fun(this, &swMain::_MouseButtonClick);
+    evd[event::MouseButtonDblClick] += sigc::mem_fun(this, &swMain::_MouseButtonDblClick);
+    evd[event::MouseButtonRelease] += sigc::mem_fun(this, &swMain::_MouseButtonRelease);
+    */
+}
+
+
+/*!
+    \fn swMain::_KeyFn(Event*)
+ */
+bool swMain::_KeyFn(Event* ev)
+{
+    KeyPressEvent* kev;
+    if (!( kev = ev->toEventType<KeyPressEvent>()) ){
+        return false;
+    }
+    ///@todo process the functionkey 
+    return true;
 }

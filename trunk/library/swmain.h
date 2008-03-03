@@ -77,13 +77,16 @@ protected:
     static swMain* _Self;
     std::list<Event*> _evq;
     mutex* _evq_x;
-    static DelegateGroup EventsPropagator;
+    static EventDelegateGroup EventsPropagator;
 protected:
     virtual Event* ProcessEvent( Event* _ev );
     Event* DispatchEvents();
     virtual Event* _KeyInput( KeyPressEvent* Kev );
     virtual Event* _MouseEvent( MouseEvent* Mev );
     virtual Event* _MessageEvent(MessageEvent* msg );
+private:
+    // Slots( delegates ):
+    bool _KeyFn(Event*);
 };
 
 #endif
