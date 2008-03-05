@@ -102,21 +102,16 @@ Event* swMain::ProcessEvent( Event* _ev )
     msgStr << "ev:";
     // for now just quit!
 
-    MouseEvent* Mev;
-    KeyPressEvent* Kev;
-    switch ( _ev->Type() ){
-        case event::MouseEvent:
-            Mev = _ev->toEventType<MouseEvent>();
-            if(!Mev) return 0l;
-            msgStr << Mev->ToString();
-            _ev = _MouseEvent( Mev );
-            break;
-        default:
-            break;
+    EventDelegate::DelegateNode& dn = EventsPropagator[ _ev->What() ];
+    if(! dn ){
+        Debug;
+        Dbg << " Event "<< _ev->What() << "not registered! exiting!\n\n"; DEND;
+        _ev->SetEvent( event::Quit );
+        return  _ev;
     }
-    _ev->SetEvent( event::Quit );
-    Dbg << msgStr( );DEND;
+    dn(_ev );
     return _ev;
+    
 }
 
 /*!
@@ -265,9 +260,8 @@ bool swMain::InitEVD()
 bool swMain::_KeyFn(Event* ev)
 {
     KeyPressEvent* kev;
-    if (!( kev = ev->toEventType<KeyPressEvent>()) ){
-        return false;
-    }
+    Debug ;DEND;
+    
     ///@todo process the functionkey 
     return true;
 }

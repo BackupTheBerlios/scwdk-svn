@@ -27,6 +27,8 @@ using std::cerr;
 using std::endl;
 
 
+EventDelegate::DelegateNode EventDelegate::DelegateNode::nul;
+EventDelegate EventDelegate::nul;
 
 namespace event{
 
@@ -38,7 +40,7 @@ namespace event{
    const event_t KeyPress              = 0x20;  /// key pressed
    const event_t DirectionKey          = 0x21;
    const event_t KeySelect             = 0x22;  /// ENTER keypress == "Select"
-   const event_t KeyFunction           = 0x23;  /// Functions key
+   const event_t KeyFunction           = 0x24;  /// Functions key
    const event_t KeyRelease            = 0x40;  /// key released
    const event_t FocusIn               = 0x80;  /// keyboard focus received
    const event_t FocusOut              = 0x100;  /// keyboard focus lost
@@ -189,7 +191,15 @@ bool MouseEvent::identify_event()
  */
 void KeyPressEvent::_translate()
 {
+    gDebug ;
+    Dbg << "meta:" << ( bMeta ? " yes" : "no" ) << " key" << key ;DEND;
     cerr << "==> " << (char*)(bMeta ? "meta-" : "key") << '[' << (char) key << "] (#" << key << ')'  << endl;
+    if( ( key >= KEY_F(1) ) && ( key <= KEY_F(12) )) SetEvent( event::KeyFunction );
+    else
+    if( ( key >= KEY_DOWN ) && ( key <= KEY_RIGHT )) SetEvent( event::DirectionKey );
+    else
+    if( ( key >= KEY_SLEFT ) || ( key <= KEY_SRIGHT ) ) SetEvent( event::DirectionKey );
+    // Otherwize left event to KeyPress
 }
 
 
