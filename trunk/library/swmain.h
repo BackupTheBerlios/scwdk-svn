@@ -66,7 +66,6 @@ public:
     virtual int Init();
     int Run();
     int PostEvent( Event* _e );
-    bool InitEVD();
 protected:
 
     typedef std::list< swWriter * > UQ; // Update Queu
@@ -77,13 +76,13 @@ protected:
     static swMain* _Self;
     std::list<Event*> _evq;
     mutex* _evq_x;
-    static EventDelegateGroup EventsPropagator;
+    //static EventDelegateGroup EventsPropagator;
 protected:
-    virtual Event* ProcessEvent( Event* _ev );
-    Event* DispatchEvents();
-    virtual Event* _KeyInput( KeyPressEvent* Kev );
-    virtual Event* _MouseEvent( MouseEvent* Mev );
-    virtual Event* _MessageEvent(MessageEvent* msg );
+    virtual event_t ProcessEvent( Event* _ev );
+    event_t DispatchEvents();
+    virtual event_t _KeyInput( KeyPressEvent* Kev );
+    virtual event_t _MouseEvent( MouseEvent* Mev );
+    virtual event_t _MessageEvent(MessageEvent* msg );
 private:
     // Slots( delegates ):
     bool _KeyFn(Event*);

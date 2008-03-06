@@ -320,12 +320,14 @@ public:
 
 
 
-/*!
-    \class EventDelegator
-    \brief Events propagation system
-    \note just a design test -- not to really be implemented unless it's worth it and really usefull.
-*/
+// /*!
+//    \class EventDelegator
+//    \brief Events propagation system
+//    \note just a design test -- not to really be implemented unless it's worth it and really usefull.
+// */
 
+
+/*
 class EventDelegate : public swObject{
 public:
 
@@ -352,7 +354,7 @@ public:
 
     /*!
     \fn EventDelegate::operator []( event:event_t ev)
-    */
+    
     DelegateNode& operator []( event_t ev)
     {   
         gDebug;
@@ -397,7 +399,7 @@ public:
     //EventDelegateGroup& operator +=( EventDelegate* evd );
     /*!
         \fn EventDelegateGroup::operator [](const std::string& _name )
-    */
+    
     EventDelegate& operator [](const std::string& _name )
     {
         DelegateGroup::iterator it = Groups.find( _name );
@@ -431,6 +433,6 @@ public:
     DelegateGroup Groups;
 
 };
-
+*/
 
 #endif

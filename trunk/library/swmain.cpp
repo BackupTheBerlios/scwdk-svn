@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "swmain.h"
 
-EventDelegateGroup swMain::EventsPropagator;
+//EventDelegateGroup swMain::EventsPropagator;
 
 swMain* swMain::_Self=0l;
 
@@ -95,29 +95,41 @@ int swMain::PostEvent( Event* _e )
     \brief This is the central event action that is dispatched to the target(s)
     through one of the transport methods
  */
-Event* swMain::ProcessEvent( Event* _ev )
+event_t swMain::ProcessEvent( Event* _ev )
 {
     String msgStr;
     Debug;
     msgStr << "ev:";
-    // for now just quit!
-
-    EventDelegate::DelegateNode& dn = EventsPropagator[ _ev->What() ];
-    if(! dn ){
-        Debug;
-        Dbg << " Event "<< _ev->What() << "not registered! exiting!\n\n"; DEND;
-        _ev->SetEvent( event::Quit );
-        return  _ev;
+    if(!_ev) return 0;
+    KeyPressEvent* pKev;
+    MouseEvent*    pMev;
+    Event*         pEv;
+    Debug;
+    switch( _ev->Type() ){
+        case event::KeyEvent:
+            pKev = _ev->toEventType<KeyPressEvent>();
+            if(! pKev ) break;
+            // -- Propagate the event here -
+            return 0;
+        case event::MouseEvent:
+            pMev = _ev->toEventType<MouseEvent>();
+            if(!pMev) break;
+            // -- Propagate the event here --
+            
+            return 0;
+        case event::TimerEvent:
+            break;
+        case event::MessageEvent:
+            break;
     }
-    dn(_ev );
-    return _ev;
-    
+
+    return event::Quit;//(event_t)0;
 }
 
 /*!
     \fn swMain::DispatchEvents()
  */
-Event* swMain::DispatchEvents()
+event_t swMain::DispatchEvents()
 {
     // no need to lock the queu since new events can be generated from within this thread and from other thread and PostEvent does protect the queu
     _evq_x->lock();
@@ -125,15 +137,17 @@ Event* swMain::DispatchEvents()
     _evq_x->unlock();
     if(!S) return 0l;
     Event::iterator i;
-    Event* _e;
+    event_t e;
     // Iterate all the events in the queu as well as the ones inserted during the loop...
     for(i=_evq.begin(); i!= _evq.end(); i++){
         // Last message may be Event::Quit that was inserted at the end of the queu after all the other messages
-        _e = *i;
-        _e = ProcessEvent( *i );
-        if( _e->What() == event::Quit ) break; // cancel the loop and process the quit event, if cancelled, inserted events after quit will then be processed otherwize, the app quits!
+        // cancel the loop and process the quit event, if cancelled, inserted events after quit will then be processed otherwize, the app quits!
+        e = ProcessEvent( *i );
+        _evq.remove( *i);
+        delete *i;
+        if(e == event::Quit ) return e;
     }
-    return _e;
+    return e;
 }
 
 /*!
@@ -144,6 +158,7 @@ Event* swMain::DispatchEvents()
 int swMain::Run()
 {
     Event* e;
+    event_t ev;
     int r;
     Debug << "Initializing...";
     if( (r = Init()) ) return r;
@@ -155,8 +170,8 @@ int swMain::Run()
             //if( (e = _preProcessEvent( e )) ){
             PostEvent( e );
         //}
-        e = DispatchEvents();
-    }while( e->What() != event::Quit );
+        ev = DispatchEvents();
+    }while( ev != event::Quit );
     return 0;
 }
 
@@ -173,7 +188,7 @@ int swMain::Init()
         Dbg << " swNcurses::Init() returned fail ...";
         return r;
     }
-    InitEVD();
+    //InitEVD();
     
     _dsk = new swDesktop( this, 0, "swMain::Desktop = default");
     if( ( r = _dsk->Init() ) ){
@@ -208,7 +223,7 @@ int swMain::RunOptions()
 /*!
     \fn swMain::_KeyInput( KeyPressEvent* Kev )
  */
-Event* swMain::_KeyInput( KeyPressEvent* Kev )
+event_t swMain::_KeyInput( KeyPressEvent* Kev )
 {
     /// @todo implement me
 }
@@ -217,26 +232,27 @@ Event* swMain::_KeyInput( KeyPressEvent* Kev )
 /*!
     \fn swMain::_MouseEvent( MouseEvent* Mev )
  */
-Event* swMain::_MouseEvent( MouseEvent* Mev )
+event_t swMain::_MouseEvent( MouseEvent* Mev )
 {
 	Debug;
  // Get the app-wide system static event delegator
-	return Mev;    
+	return 0;
 }
 
 
 /*!
     \fn swMain::_MessageEvent(MessageEvent* msg )
  */
-Event* swMain::_MessageEvent(MessageEvent* msg )
+event_t swMain::_MessageEvent(MessageEvent* msg )
 {
     /// @todo implement me
+    return 0;
 }
 
 
 /*!
     \fn swMain::InitEVD()
- */
+ 
 bool swMain::InitEVD()
 {
     EventDelegate& evd = EventsPropagator["keyinput"];
@@ -250,13 +266,13 @@ bool swMain::InitEVD()
     evd[event::MouseButtonClick] += sigc::mem_fun(this, &swMain::_MouseButtonClick);
     evd[event::MouseButtonDblClick] += sigc::mem_fun(this, &swMain::_MouseButtonDblClick);
     evd[event::MouseButtonRelease] += sigc::mem_fun(this, &swMain::_MouseButtonRelease);
-    */
+    
 }
 
 
 /*!
     \fn swMain::_KeyFn(Event*)
- */
+
 bool swMain::_KeyFn(Event* ev)
 {
     KeyPressEvent* kev;
@@ -265,3 +281,7 @@ bool swMain::_KeyFn(Event* ev)
     ///@todo process the functionkey 
     return true;
 }
+*/
+
+
+

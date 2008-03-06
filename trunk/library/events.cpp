@@ -27,8 +27,8 @@ using std::cerr;
 using std::endl;
 
 
-EventDelegate::DelegateNode EventDelegate::DelegateNode::nul;
-EventDelegate EventDelegate::nul;
+ //EventDelegate::DelegateNode EventDelegate::DelegateNode::nul;
+//EventDelegate EventDelegate::nul;
 
 namespace event{
 

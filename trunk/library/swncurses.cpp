@@ -196,8 +196,8 @@ bool swNCurses::_CanExit( swObject*& _sender )
 Event* swNCurses::WaitEvent()
 {
     int ncurses_event = 0;
-    KeyPressEvent* _ke;
-    Event* _ev;
+    KeyPressEvent* _ke=0l;
+    Event* _ev=0l;
     bMeta = false;
     REGET:
     if( (ncurses_event = getch()) != ERR){
@@ -263,6 +263,7 @@ Event* swNCurses::_preProcess( int nce, bool m )
     // Pre-process the ncurses event ( input events such as keyin or mouse
         case KEY_MOUSE:
             return _mouseEvent( 0 );
+        // there are other kind of input events to pre process here ( terminal cmds, stdio, etc... )
         default:
             return _inKey( nce, m );
     }
