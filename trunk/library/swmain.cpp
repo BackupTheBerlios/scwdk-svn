@@ -107,6 +107,7 @@ event_t swMain::ProcessEvent( Event* _ev )
     Debug;
     switch( _ev->Type() ){
         case event::KeyEvent:
+            Dbg << " A keyinput event " ;DEND;
             pKev = _ev->toEventType<KeyPressEvent>();
             if(! pKev ) break;
             // -- Propagate the event here -
@@ -114,8 +115,9 @@ event_t swMain::ProcessEvent( Event* _ev )
         case event::MouseEvent:
             pMev = _ev->toEventType<MouseEvent>();
             if(!pMev) break;
+            Dbg << " A mouseinput event ";
             // -- Propagate the event here --
-            
+            Dbg << "just return 0...";DEND; 
             return 0;
         case event::TimerEvent:
             break;
@@ -138,15 +140,21 @@ event_t swMain::DispatchEvents()
     if(!S) return 0l;
     Event::iterator i;
     event_t e;
+    Debug;
+    Event* T;
+    if(_evq.empty()) return 0;
     // Iterate all the events in the queu as well as the ones inserted during the loop...
     for(i=_evq.begin(); i!= _evq.end(); i++){
         // Last message may be Event::Quit that was inserted at the end of the queu after all the other messages
         // cancel the loop and process the quit event, if cancelled, inserted events after quit will then be processed otherwize, the app quits!
         e = ProcessEvent( *i );
-        _evq.remove( *i);
+        Dbg " ProcessEvent returned: " << e;DEND;
+        T = *i;
+        //_evq.remove( T );
         delete *i;
-        if(e == event::Quit ) return e;
+        if(e == event::Quit ) break;
     }
+    _evq.clear();
     return e;
 }
 
