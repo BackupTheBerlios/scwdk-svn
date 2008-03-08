@@ -185,6 +185,7 @@ private:
 
 class KeyPressEvent : public Event{
 public:
+    typedef sigc::signal< bool, KeyPressEvent*> KeyInputDelegate;
    KeyPressEvent(): Event(){}
 
    KeyPressEvent(int kv, bool meta):Event(event::KeyEvent, event::KeyPress){
@@ -224,6 +225,13 @@ private:
    int key;
    bool bMeta;
    int Class;
+   static KeyInputDelegate KID;
+
+    void operator += ( sigc::slot< bool, KeyPressEvent*> slot ){
+        KeyPressEvent::KID.connect( slot );
+    }
+       
+   
 };
 
 

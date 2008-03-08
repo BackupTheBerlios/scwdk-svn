@@ -25,6 +25,7 @@
 
 using std::cerr;
 using std::endl;
+KeyPressEvent::KeyInputDelegate KeyPressEvent::KID;
 
 
  //EventDelegate::DelegateNode EventDelegate::DelegateNode::nul;

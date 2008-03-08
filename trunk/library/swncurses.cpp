@@ -195,6 +195,7 @@ bool swNCurses::_CanExit( swObject*& _sender )
  */
 Event* swNCurses::WaitEvent()
 {
+    Debug ; DEND;
     int ncurses_event = 0;
     KeyPressEvent* _ke=0l;
     Event* _ev=0l;
