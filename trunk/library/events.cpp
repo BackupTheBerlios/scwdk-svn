@@ -25,7 +25,15 @@
 
 using std::cerr;
 using std::endl;
-KeyPressEvent::KeyInputDelegate KeyPressEvent::KID;
+
+// Static global signals
+KeyPressEvent::KeyInputDelegate KeyPressEvent::delegate;
+MouseEvent::MouseEventDelegate MouseEvent::delegate;
+MessageEvent::MessageDelegate MessageEvent::delegate;
+// ------------------------
+
+
+
 
 
  //EventDelegate::DelegateNode EventDelegate::DelegateNode::nul;

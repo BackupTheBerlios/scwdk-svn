@@ -221,16 +221,17 @@ public:
     }
 
 private:
+    friend class swMain;
    virtual void _translate();
    int key;
    bool bMeta;
    int Class;
-   static KeyInputDelegate KID;
+   static KeyInputDelegate delegate;
 
+    // Make the operator private and give the access only to a swMain instance
     void operator += ( sigc::slot< bool, KeyPressEvent*> slot ){
-        KeyPressEvent::KID.connect( slot );
+        KeyPressEvent::delegate.connect( slot );
     }
-       
    
 };
 
@@ -239,6 +240,7 @@ private:
 
 class MouseEvent : public Event{
 public:
+    typedef sigc::signal< bool, MouseEvent*> MouseEventDelegate;
    MouseEvent() : Event(event::MouseEvent, 0){}
    MouseEvent(MEVENT MEV):
       Event(event::MouseEvent, 0 ),
@@ -274,7 +276,7 @@ public:
     bool isRight();   
     virtual String ToString();
 private:
-    friend class Application;
+    friend class swMain;;
     MEVENT _data;
     long mleft, mright, mmiddle;
     pxy pos;
@@ -282,21 +284,32 @@ private:
     pxy _oldPos;
     virtual void _translate();
     bool identify_event();
+    static MouseEventDelegate delegate;
+    void operator += ( sigc::slot< bool, MouseEvent* > slot ){
+        MouseEvent::delegate.connect( slot );
+    }
 
 };
 
 class MessageEvent : public Event{
 public:
+    typedef sigc::signal< bool, MessageEvent*> MessageDelegate;
    MessageEvent(): Event() {}
    MessageEvent(event_t ev) : Event(event::MessageEvent, ev){ _sender = 0l;}
    MessageEvent(event_t ev, void* sender) : Event(event::MessageEvent, ev){ _sender = sender;}
    void* Sender() { return _sender; }
 private:
+    friend class swMain;
     void* _sender;
+    static MessageDelegate delegate;
+    void operator += ( sigc::slot< bool, MessageEvent* > slot ){
+        MessageEvent::delegate.connect( slot );
+    }
 };
 
 
 
+        
 //class NMouse
 
 
