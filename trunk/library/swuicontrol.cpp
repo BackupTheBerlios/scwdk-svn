@@ -188,3 +188,13 @@ void swUiControl::Resize( const Size& newSize )
 {
     SetGeometry(Rect ( m_geometry.x(), m_geometry.y(), newSize.width(), newSize.height() ));
 }
+
+
+/*!
+        \fn swUiControl::Main()
+     */
+swMain* swUiControl::Main() {
+    return swMain::Instance(); 
+}
+
+

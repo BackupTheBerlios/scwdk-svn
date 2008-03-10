@@ -26,7 +26,7 @@
 #include "swtattr.h"
 
 // Doxygen and graphviz api documentation format
-
+class swMain;
 
 /*!
     \defgroup UICONTROLS User Interface Controls
@@ -133,6 +133,8 @@ public:
         return 0;
     }
     virtual void Resize( const Size& newSize );
+
+    swMain* Main();
 
 
     
