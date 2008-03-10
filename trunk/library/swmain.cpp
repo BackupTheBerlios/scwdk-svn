@@ -110,19 +110,23 @@ event_t swMain::ProcessEvent( Event* _ev )
             Dbg << " A keyinput event " ;DEND;
             pKev = _ev->toEventType<KeyPressEvent>();
             if(! pKev ) break;
-            // -- Propagate the event here -
-            return 0;
+            return _KeyInput( pKev );
         case event::MouseEvent:
             pMev = _ev->toEventType<MouseEvent>();
             if(!pMev) break;
             Dbg << " A mouseinput event ";
-            // -- Propagate the event here --
-            Dbg << "just return 0...";DEND; 
-            return 0;
+            return _MouseEvent( pMev );
         case event::TimerEvent:
             break;
         case event::MessageEvent:
-            break;
+            Dbg << " A Message ( '" << _ev->What() << "') received...";
+            if( _ev->What() == event::TermResize ){
+                Dbg << " Termresize event received !!!!";
+                Dbg << "The new term geometry is: " << Rect(0,0, _nc->Width(), _nc->Height()).tostring();
+                _dsk->Resize( Size(_nc->Width(), _nc->Height() )) ;
+            }
+            DEND;
+            return 0;
     }
 
     return event::Quit;//(event_t)0;
@@ -233,7 +237,7 @@ int swMain::RunOptions()
  */
 event_t swMain::_KeyInput( KeyPressEvent* Kev )
 {
-    /// @todo implement me
+    return event::Quit;
 }
 
 
@@ -244,6 +248,7 @@ event_t swMain::_MouseEvent( MouseEvent* Mev )
 {
 	Debug;
  // Get the app-wide system static event delegator
+    return event::Quit;
 	return 0;
 }
 

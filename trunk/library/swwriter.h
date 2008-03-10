@@ -154,6 +154,7 @@ public:
     // Static public methods for direct writing into the ncurses screen ... 
     //
     void DrawFrame3D( const Rect& r, const swTAttr& A );
+    int Fill( const Rect& r, swTAttr A, chtype C );
 
 
 private:

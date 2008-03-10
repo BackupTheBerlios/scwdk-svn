@@ -80,9 +80,9 @@ protected:
 protected:
     virtual event_t ProcessEvent( Event* _ev );
     event_t DispatchEvents();
-    virtual event_t _keyInput( KeyPressEvent* Kev );
-    virtual event_t _mouseEvent( MouseEvent* Mev );
-    virtual event_t _messageEvent(MessageEvent* msg );
+    virtual event_t _KeyInput( KeyPressEvent* Kev );
+    virtual event_t _MouseEvent( MouseEvent* Mev );
+    virtual event_t _MessageEvent(MessageEvent* msg );
 private:
     // Slots( delegates ):
     bool _KeyFn(Event*);

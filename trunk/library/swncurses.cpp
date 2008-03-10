@@ -126,7 +126,7 @@ int swNCurses::Init()
     mousemask( ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, 0 );
     getmaxyx( ScrWin, y, x );
     Dbg << " screen size: " << x << "x" << y;
-    _scrSize(x,y); 
+    _scrSize(x,y);
     meta(ScrWin, true);
     Dbg<<   " Good to GO!!!" << DEND;
     swMain* Main = swMain::Instance();
@@ -260,11 +260,18 @@ KeyPressEvent* swNCurses::_inKey(int nc, bool m)
 Event* swNCurses::_preProcess( int nce, bool m )
 {
     Event* _e = 0l;
+    int x, y;
     switch( nce ){
     // Pre-process the ncurses event ( input events such as keyin or mouse
         case KEY_MOUSE:
             return _mouseEvent( 0 );
         // there are other kind of input events to pre process here ( terminal cmds, stdio, etc... )
+        case KEY_RESIZE:
+            _e = new Event(event::MessageEvent, event::TermResize );
+            getmaxyx( ScrWin, y, x );
+            _scrSize(x,y);
+            return _e;
+        case -1: return 0;
         default:
             return _inKey( nce, m );
     }

@@ -179,3 +179,12 @@ swUiControl* swUiControl::_mouseSelect( const pxy& xy )
     for(; child; child = NextChild<swUiControl>() ) if( ( child = child->_mouseSelect( xy )) ) return child;
     return this;
 }
+
+
+/*!
+    \fn swUiControl::Resize( const Size& newSize )
+ */
+void swUiControl::Resize( const Size& newSize )
+{
+    SetGeometry(Rect ( m_geometry.x(), m_geometry.y(), newSize.width(), newSize.height() ));
+}

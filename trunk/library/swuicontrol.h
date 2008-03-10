@@ -132,6 +132,7 @@ public:
         else _uiflags &= ~uiflags::visible;
         return 0;
     }
+    virtual void Resize( const Size& newSize );
 
 
     

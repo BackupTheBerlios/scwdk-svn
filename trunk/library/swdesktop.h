@@ -60,6 +60,7 @@ public:
     bool _peerPoint( const pxy& xy );
     virtual int Init();
     int _drawControl ( UNode* u );
+    virtual void Resize( const Size& newSize );
 private:
     swUiControl::list _toplevels;
     UNode::list _unode_priv;

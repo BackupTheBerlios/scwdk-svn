@@ -21,6 +21,10 @@
 #include "swwriter.h"
 #include "swmain.h"
 
+//-------------- TEST -- REMOVE WHEN FINISHED ---------------
+#include "swtext.h"
+// ----------------------------------------------------------
+
 swDesktop::swDesktop()
 {
 }
@@ -41,7 +45,31 @@ swDesktop::~swDesktop()
 }
 
 
-
+/*!
+    \fn swDesktop::Resize( const Size& newSize )
+ */
+void swDesktop::Resize( const Size& newSize )
+{
+    swUiControl::Resize( newSize );
+    _wr = StartWrite();
+    _wr->Clear();
+    _wr->Fill( Geometry(), swTAttr(4, 6, 0), ACS_CKBOARD);
+    // ------------------------------------------------- TESTS
+    swText T;
+    T << "<fgcolor red;bgcolor white; /strong;>     Desktop initializecd...<fgcolor black;>Good To GO!!! <fgcolor blue;> Actual size: <fgcolor black;>"
+      << Width() << "<fgcolor blue;>:<fgcolor black;>" << Height() << "     ";
+    T << swText::END;
+    PStr p = T.Data();
+    //mvaddchstr( 0, 3, p);// Height()-2, p );
+    swWriter* wr = StartWrite();
+    (*wr)<< pxy(0,0) << swWriter::text << p;
+    delete [] p;
+    T.ReleaseData();
+    // -----------------------------------------------------
+    EndWrite();
+    //Update();
+    
+}
 
 /*!
     \fn swDesktop::RefreshControl( swWriter* wr )
@@ -164,9 +192,6 @@ swUiControl::iterator swDesktop::_locateControl( swUiControl* ui )
 
 
 
-//-------------- TEST -- REMOVE WHEN FINISHED ---------------
-#include "swtext.h"
-// ----------------------------------------------------------
 
 /*!
     \fn swDesktop::Init()
@@ -190,13 +215,16 @@ int swDesktop::Init()
     }
     SetGeometry( Rect(0,0, _n->Width(), _n->Height()) );
     _wr->Clear();
+    _wr->Fill( Rect(0,0, _n->Width(), _n->Height()), swTAttr(4, 6, 0), ACS_CKBOARD);
     // ------------------------------------------------- TESTS
     swText T;
-    T << " <fgcolor red;bgcolor white; /strong;>     Desktop initializecd...<fgcolor black;>Good To GO!!! <fgcolor blue;> Actual size: <fgcolor black;>"
+    T << "<fgcolor red;bgcolor white; /strong;>     Desktop initializecd...<fgcolor black;>Good To GO!!! <fgcolor blue;> Actual size: <fgcolor black;>"
       << Width() << "<fgcolor blue;>:<fgcolor black;>" << Height() << "     ";
     T << swText::END;
     PStr p = T.Data();
-    mvaddchstr( 0, 3, p);// Height()-2, p );
+    //mvaddchstr( 0, 3, p);// Height()-2, p );
+    swWriter* wr = StartWrite();
+    (*wr)<< pxy(0,0) << swWriter::text << p;
     delete [] p;
     T.ReleaseData();
     // -----------------------------------------------------
@@ -204,5 +232,8 @@ int swDesktop::Init()
     
     return 0;
 }
+
+
+
 
 

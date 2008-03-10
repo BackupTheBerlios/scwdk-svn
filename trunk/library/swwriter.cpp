@@ -125,6 +125,18 @@ int swWriter::Clear()
     return 0;
 }
 
+/*!
+    \fn swWriter::Fill( const Rect& r, swTAttr A )
+ */
+int swWriter::Fill( const Rect& r, swTAttr A, chtype C )
+{
+    PStr p;
+    for(int y=0; y<_r.height(); y ++ ){
+        if(! (p = Seek( pxy(0, y )) ) ) return -1;
+        for(int x = 0; x < _r.width(); x ++) *p++ = A.Data() | C;
+    }
+    return 0;
+}
 
 /*!
     \fn swWriter::operator <<( PStr )
@@ -337,3 +349,5 @@ void swWriter::DrawFrame3D( const Rect& r, const swTAttr& A )
     _A.SetAttr( A_BOLD, false );
     JoinAcs( r.topright(), direction::topright, A );/// @todo implement me
 }
+
+
