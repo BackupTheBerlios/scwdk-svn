@@ -61,6 +61,8 @@ public:
     virtual int Init();
     int _drawControl ( UNode* u );
     virtual void Resize( const Size& newSize );
+    bool AddTopLevel( swUiControl* ctl );
+    swUiControl::iterator _inToplevel( swUiControl* ctl );
 private:
     swUiControl::list _toplevels;
     UNode::list _unode_priv;

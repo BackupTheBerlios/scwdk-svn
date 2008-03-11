@@ -131,6 +131,8 @@ int swDesktop::_drawControl ( UNode* u )
             
         //}
     }
+    // Check z-order dirty controls
+    
     //::refresh();
     return 0;
 }
@@ -235,5 +237,29 @@ int swDesktop::Init()
 
 
 
+/*!
+    \fn swDesktop::AddTopLevel( swUiControl* ctl )
+ */
+bool swDesktop::AddTopLevel( swUiControl* ctl )
+{
+    
+    swUiControl::list::iterator it = _inToplevel( ctl );
+    if( it != _toplevels.end() ) return false;
+    _toplevels.push_back( ctl );
+    return true;
+}
 
 
+/*!
+    \fn swDesktop::_inToplevel( swUiControl* ctl )
+ */
+swUiControl::iterator swDesktop::_inToplevel( swUiControl* ctl )
+{
+    swUiControl::iterator it = _toplevels.begin();
+    if(_toplevels.empty() ) return _toplevels.end();
+    do{
+        if( (*it) == ctl ) return it;
+        it++;
+    }while( it != _toplevels.end() );
+    return it;
+}
