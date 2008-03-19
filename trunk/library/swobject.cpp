@@ -28,6 +28,7 @@ swObject::swObject(swObject* swParent):sigc::trackable(),
   m_flags(0)
 {
     m_ChildIT = m_children.end();
+    if( swParent ) LinkToParent( swParent );
 }
 
 
@@ -37,6 +38,7 @@ swObject::swObject(swObject* swParent, uint _flags, const char* _nameID):sigc::t
   m_flags(_flags)
 {
     m_ChildIT = m_children.end();
+    if( swParent ) LinkToParent( swParent );
 }
 
 

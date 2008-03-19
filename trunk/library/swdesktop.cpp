@@ -63,11 +63,12 @@ void swDesktop::Resize( const Size& newSize )
     //mvaddchstr( 0, 3, p);// Height()-2, p );
     swWriter* wr = StartWrite();
     (*wr)<< pxy(0,0) << swWriter::text << p;
+    
     delete [] p;
     T.ReleaseData();
     // -----------------------------------------------------
     EndWrite();
-    //Update();
+    RedrawTopLevels();
     
 }
 
@@ -109,9 +110,9 @@ int swDesktop::_drawControl ( UNode* u )
     Debug;
     swUiControl* w = u->Control();
     Dbg << " drawing control : "<< w->NameID();
-    Rect         r = u->Geometry();
+    Rect r = u->Geometry();
     Dbg << " Abs clipped region: " << r.tostring();
-    Rect         l = r;
+    Rect l = r;
     PStr p;
     Dbg << " Abs control position:" << w->TopLeft(true).tostring();
     l -= w->TopLeft(true); // Local area;
@@ -120,7 +121,7 @@ int swDesktop::_drawControl ( UNode* u )
     swWriter* wr = w->_wr;
     for( int y = 0; y < l.height(); y ++){
         p = wr->Seek( pxy(l.topleft().x(), l.topleft().y() + y) );
-        if(!p){
+        if( !p ){
             Dbg << "Seek(" << pxy(l.topleft().x(), l.topleft().y() + y).tostring() << ") : invalid: writer geometry:" << wr->Geometry().tostring(); DEND;
             return 128;
         }
@@ -143,6 +144,7 @@ int swDesktop::_drawControl ( UNode* u )
 int swDesktop::_do_Updates()
 {
     Debug << " Queu size is: " << _unode_priv.size();
+    UNode U(0l, Rect::nil);
     if( ! _unode_priv.size() ) return 0;
     for( UNode::iterator it = _unode_priv.begin(); it != _unode_priv.end(); it++){
         Dbg << (*it)->Control()->NameID();
@@ -150,6 +152,8 @@ int swDesktop::_do_Updates()
         delete (*it); // delete the node.
     }
     _unode_priv.clear();
+    Dbg << " Update queu finished -- > Size of toplevel list:" << _toplevels.size();
+    //RedrawTopLevels();
     DEND;
     return 0;
 }
@@ -243,6 +247,7 @@ int swDesktop::Init()
 bool swDesktop::AddTopLevel( swUiControl* ctl )
 {
     
+    Debug;
     swUiControl::list::iterator it = _inToplevel( ctl );
     if( it != _toplevels.end() ) return false;
     _toplevels.push_back( ctl );
@@ -262,4 +267,23 @@ swUiControl::iterator swDesktop::_inToplevel( swUiControl* ctl )
         it++;
     }while( it != _toplevels.end() );
     return it;
+}
+
+
+/*!
+    \fn swDesktop::RedrawTopLevels()
+ */
+int swDesktop::RedrawTopLevels()
+{
+    swUiControl* gui;
+    swWriter* wr;
+    for( swUiControl::iterator it = _toplevels.begin(); it != _toplevels.end(); it++){
+        gui  = *it;
+        wr = gui->StartWrite();
+        Debug << "Control: " << wr->Control()->NameID();
+        if(!wr) continue;
+        gui->EndWrite();
+    }
+    DEND;
+    return 0;
 }

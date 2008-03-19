@@ -26,6 +26,8 @@ swUiControl::swUiControl(swObject* swParent, uint _flags, const char* _nameID): 
     m_IoScrBuffer = 0l;
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
+    if((! swParent) && (!swParent->Class<swUiControl>()) ) swMain::Instance()->Desktop(0)->AddTopLevel( this );
+
 }
 
 
@@ -34,6 +36,7 @@ swUiControl::swUiControl(): swObject()
     m_IoScrBuffer = 0l;
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
+    //if((! swParent) || (swParent->Class<swUiControl>())) swMain::Instance()->Desktop(0)->AddTopLevel( this );
 }
 
 
@@ -42,6 +45,7 @@ swUiControl::swUiControl(swObject* swParent): swObject(swParent)
     m_IoScrBuffer = 0l;
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
+    if((! swParent) && (!swParent->Class<swUiControl>())) swMain::Instance()->Desktop(0)->AddTopLevel( this );
 }
 
 
