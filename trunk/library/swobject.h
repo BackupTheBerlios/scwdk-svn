@@ -148,6 +148,7 @@ public:
      */
     template<typename T> T* ParentOfClass( T* _type )
     {
+        if( !( (T*)m_parent )) return (T*)0l;
         return dynamic_cast<T*>(m_parent);
     }
     

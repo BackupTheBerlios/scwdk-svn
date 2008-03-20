@@ -31,7 +31,7 @@ The swWriter object is used such as a "Paint device on bitmaps"  in graphics use
 
 	@author Serge Lussier,,, <bretzel@pc-desktop>
 */
-class swWriter : public swObject
+class swWriter 
 {
 public:
     enum RTMode { plain=0, text };
@@ -70,19 +70,19 @@ public:
         //Debug;Dbg <<  "Seeking at " << C.tostring() << "inside "<< _r.tostring();
         if(!C) C = _c;
         if(!C){
-            Debug << " swWriter working pxy" << C.tostring() << " is invalid!";DEND;
+            gDebug << " swWriter working pxy" << C.tostring() << " is invalid!";DEND;
             std::cout << __PRETTY_FUNCTION__ << "\n\r \033[0;31mswWriter working pxy" << C.tostring() << " is invalid!\r\033[0m" << std::endl;
             abort();
             return 0l;
         }
         C += _r.topleft();
         if(! _r.contains(C) ){
-            Debug << C.tostring() << "outside " <<  _r.tostring();DEND;
+            gDebug << C.tostring() << "outside " <<  _r.tostring();DEND;
             return 0l;
         }
         P = _ioscr + ( C._y * _owner->Width() + C._x );
         if(!P){
-            Debug << " _ioscr + " << C._y <<"*"<<  _owner->Width() << "+" << C._x << " nil" ;DEND;
+            gDebug << " _ioscr + " << C._y <<"*"<<  _owner->Width() << "+" << C._x << " nil" ;DEND;
         }
         return P;
     }

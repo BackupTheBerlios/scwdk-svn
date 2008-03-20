@@ -37,12 +37,12 @@ swNCurses* swNCurses::Self=0l;
 
 
 
-swNCurses::swNCurses(swObject* swParent): swObject(swParent)
+swNCurses::swNCurses(swObject* swParent): swObject(swParent,0,"NCurses Terminal Instance")
 {
     Self = this;
 }
 
-swNCurses::swNCurses(){
+swNCurses::swNCurses():swObject(0l,0,"NCurses Terminal Instance"){
     Self = this;
 }
 

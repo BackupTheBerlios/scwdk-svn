@@ -42,6 +42,7 @@ swDesktop::swDesktop(swObject* swParent, uint _flags, const char* _nameID): swUi
 
 swDesktop::~swDesktop()
 {
+    Debug << "Being destroyed";DEND;
 }
 
 
@@ -67,9 +68,7 @@ void swDesktop::Resize( const Size& newSize )
     delete [] p;
     T.ReleaseData();
     // -----------------------------------------------------
-    EndWrite();
-    RedrawTopLevels();
-    
+    RedrawScreen();
 }
 
 /*!
@@ -249,9 +248,21 @@ bool swDesktop::AddTopLevel( swUiControl* ctl )
     
     Debug;
     swUiControl::list::iterator it = _inToplevel( ctl );
+    ctl->SetFlags( uiflags::toplevel,true );
     if( it != _toplevels.end() ) return false;
     _toplevels.push_back( ctl );
     return true;
+}
+
+
+/*!
+    \fn swDesktop::RemoveToplevel( swUiControl* control )
+ */
+int swDesktop::RemoveToplevel( swUiControl* control )
+{
+    if( _inToplevel( control ) == _toplevels.end() ) return 0l;
+    _toplevels.remove( control );
+    return _toplevels.size();
 }
 
 
@@ -271,13 +282,13 @@ swUiControl::iterator swDesktop::_inToplevel( swUiControl* ctl )
 
 
 /*!
-    \fn swDesktop::RedrawTopLevels()
+    \fn swDesktop::RedrawTopLevels( swUiControl::iterator it )
  */
-int swDesktop::RedrawTopLevels()
+int swDesktop::RedrawTopLevels( swUiControl::iterator it )
 {
     swUiControl* gui;
     swWriter* wr;
-    for( swUiControl::iterator it = _toplevels.begin(); it != _toplevels.end(); it++){
+    for(; it != _toplevels.end(); it++){
         gui  = *it;
         wr = gui->StartWrite();
         Debug << "Control: " << wr->Control()->NameID();
@@ -286,4 +297,16 @@ int swDesktop::RedrawTopLevels()
     }
     DEND;
     return 0;
+}
+
+
+
+
+/*!
+    \fn swDesktop::RedrawScreen()
+ */
+void swDesktop::RedrawScreen()
+{
+    Update();
+    RedrawTopLevels( _toplevels.begin() );
 }

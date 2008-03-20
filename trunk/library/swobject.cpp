@@ -55,16 +55,25 @@ swObject::swObject():sigc::trackable(),
 swObject::~swObject()
 {
     Debug;
+    swObject* o;
     if( m_children.empty() ) return;
     for( Iterator it = m_children.begin(); it != m_children.end(); it++){
-        delete (*it);
+        o = *it;
+        if(o){
+            Dbg << "Destroying object:'" << o->NameID() << "'@[" << o << "]";
+            delete o;
+        }
     }
+    Dbg << " clear internal children list container";
     m_children.clear();
+    DEND;
 }
 
 
 /*!
-    \fn swObject::QMF( swObject::List& L, uint _flags ) 
+    \fn swObject::QMF( swObject::List& L, uint _flags )
+    \brief  "Query Match Flags"
+    \return Provided list that will contains children that matches the flags
  */
 int swObject::QMF( swObject::List& L, uint _flags ) 
 {
@@ -99,6 +108,7 @@ int swObject::LinkToParent( swObject* _parent )
  */
 int swObject::LinkChild( swObject* _child )
 {
+    Debug << "linking child object:'" << (_child ? _child->NameID() : "NULL") << " @[" << _child << "]";DEND;
     if(!_child) return m_children.size();
     m_children.push_back( _child );
     return m_children.size();

@@ -41,12 +41,13 @@ swMain::swMain( const std::string& _name, int argc, char** argv ): swObject( 0l,
 
 swMain::~swMain()
 {
-    _Self = 0l;
+    //_Self = 0l;
+    Debug << " Ending ncurses terminal" ; DEND;
     if(_nc){
         _nc->Finish();
-        delete _nc;
+        //delete _nc; //!! doh!!!! here again, DO NOT DELETE HERE, ~swObject will do!!!!!!
     }
-    if(_dsk) delete _dsk;
+    //if(_dsk) delete _dsk; !oops! don't destroy desktop instance yet!!! ~swObject will do though its children iteration
     delete _evq_x;
 }
 

@@ -31,7 +31,7 @@ swUiControl::swUiControl(swObject* swParent, uint _flags, const char* _nameID): 
 }
 
 
-swUiControl::swUiControl(): swObject()
+swUiControl::swUiControl(): swObject(0l,0,"unnamed swUiControl")
 {
     m_IoScrBuffer = 0l;
     _wr = 0l;
@@ -40,7 +40,7 @@ swUiControl::swUiControl(): swObject()
 }
 
 
-swUiControl::swUiControl(swObject* swParent): swObject(swParent)
+swUiControl::swUiControl(swObject* swParent): swObject(swParent, 0,"unnamed swUiControl with a parent")
 {
     m_IoScrBuffer = 0l;
     _wr = 0l;
@@ -53,8 +53,9 @@ swUiControl::~swUiControl()
 {
     Debug << " Releasing resources"; DEND;
     if (m_IoScrBuffer) delete [] m_IoScrBuffer;
+    if(_wr) delete _wr;
 
-    DestroyChildren();
+    //DestroyChildren(); // !no let ~swObject do the job
 }
 
 
@@ -202,3 +203,27 @@ swMain* swUiControl::Main() {
 }
 
 
+
+
+/*!
+    \fn swUiControl::TopLevelParent()
+ */
+swUiControl* swUiControl::TopLevelParent()
+{
+    swUiControl* p = this;
+    if( UiFlag(uiflags::toplevel) ) return 0l; // null== we are toplevel
+    while( (p = p->ParentT<swUiControl>()) ){
+        if( p->UiFlag( uiflags::toplevel ) ) return p;
+    };
+    return 0l;
+}
+
+
+/*!
+    \fn swUiControl::SetUiFlags( uint f, bool seton )
+ */
+uint swUiControl::SetUiFlags( uint f, bool seton )
+{
+    _uiflags = ( seton ? _uiflags | f : _uiflags & ~f );
+    return _uiflags;
+}

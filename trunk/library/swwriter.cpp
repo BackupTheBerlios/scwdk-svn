@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "swwriter.h"
 #include "swtext.h"
-swWriter::swWriter(swUiControl* swParent, uint,  const char*): swObject(),
+swWriter::swWriter(swUiControl* swParent, uint,  const char*):
 _owner( swParent )
 {
     if(! _owner ) return;
@@ -29,13 +29,13 @@ _owner( swParent )
 }
 
 
-swWriter::swWriter(swUiControl* swOwner, PStr _scriobuf, const Rect& _initialSubRect ): swObject(),
+swWriter::swWriter(swUiControl* swOwner, PStr _scriobuf, const Rect& _initialSubRect ):
 _owner(swOwner), _ioscr(_scriobuf ), _r( _initialSubRect )
 {
     _a = _owner->DefAttr();
 }
 
-swWriter::swWriter(): swObject()
+swWriter::swWriter()
 {
 }
 
@@ -59,7 +59,7 @@ pxy swWriter::Position( int x, int y )
         _c(x,y);
         return C;
     }
-    Debug <<  x << ":" << y << " out of region!!" ; DEND;
+    gDebug <<  x << ":" << y << " out of region!!" ; DEND;
     return pxy::invalid;
 }
 
@@ -98,7 +98,7 @@ pxy swWriter::operator ++()
     _c += pxy(1,0);
     //Dbg << "After += pxy(1,0):" << _c.tostring();
     if( !_r.contains( _c +_r.topleft() ) ){
-        Debug << _c.tostring() << " outside boundaries";DEND;
+        gDebug << _c.tostring() << " outside boundaries";DEND;
         if( _owner->UiFlag( uiflags::wrap ) )
             if(! Position( 0, _c._y+1) ) return C;
             _c = C;
@@ -183,12 +183,12 @@ int swWriter::WriteStr( const std::string& _str )
 int swWriter::WriteRT( const char* _str)
 {
     PStr pStr;
-    swText T(this, _owner->DefAttr(), " ");
+    swText T(0l, _owner->DefAttr(), " ");
     //Debug << " ( " << _str << ") " << _c.tostring(); DEND;
     T << _str << swText::END;
     _a = T.CurAttr();
     if( (pStr = T.Data() ) == 0l ){
-        Debug << " swText::Transform failed!!!" ; DEND;
+        gDebug << " swText::Transform failed!!!" ; DEND;
         return -1;
     }
     

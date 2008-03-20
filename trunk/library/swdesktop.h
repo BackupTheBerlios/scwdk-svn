@@ -63,7 +63,9 @@ public:
     virtual void Resize( const Size& newSize );
     bool AddTopLevel( swUiControl* ctl );
     swUiControl::iterator _inToplevel( swUiControl* ctl );
-    int RedrawTopLevels();
+    int RedrawTopLevels(swUiControl::iterator it);
+    void RedrawScreen();
+    int RemoveToplevel( swUiControl* control );
 private:
     swUiControl::list _toplevels;
     UNode::list _unode_priv;

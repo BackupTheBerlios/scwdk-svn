@@ -135,6 +135,8 @@ public:
     virtual void Resize( const Size& newSize );
 
     swMain* Main();
+    swUiControl* TopLevelParent();
+    uint SetUiFlags( uint f, bool seton );
 
 
     
