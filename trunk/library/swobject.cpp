@@ -57,6 +57,7 @@ swObject::~swObject()
     Debug;
     swObject* o;
     if( m_children.empty() ) return;
+    if( m_children.size()<=0 ) return;
     for( Iterator it = m_children.begin(); it != m_children.end(); it++){
         o = *it;
         if(o){
@@ -93,6 +94,7 @@ int swObject::QMF( swObject::List& L, uint _flags )
  */
 int swObject::LinkToParent( swObject* _parent )
 {
+    Debug << "Linking self to parent";DEND;
     if( !_parent ){
         m_parent = 0;
         return 0;

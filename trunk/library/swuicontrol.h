@@ -138,6 +138,14 @@ public:
     swUiControl* TopLevelParent();
     uint SetUiFlags( uint f, bool seton );
 
+    /*!
+        \fn swUiControl::InitView()
+     */
+    int InitView()
+    {
+        /// @todo implement me
+    }
+
 
     
 protected:

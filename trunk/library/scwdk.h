@@ -133,6 +133,10 @@ namespace uiflags{
     const int con      = 0x20;
     const int autoscroll  = 0x40;
     const int toplevel    = 0x80;
+    const int menubar     = 0x100;
+    const int caption     = 0x200;
+    const int status      = 0x400;
+    const int dialog      = 0x700;
 }
 
 

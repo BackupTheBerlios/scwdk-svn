@@ -26,6 +26,7 @@ swWindow::swWindow(swObject* swParent): swUiControl(swParent)
 
 swWindow::swWindow(swObject* swParent, uint _flags, const char* _nameID): swUiControl(swParent, _flags, _nameID)
 {
+    SetuiFlags( uiflags::toplevel|uiflags::caption|uiflags::frame );
 }
 
 
@@ -41,17 +42,22 @@ int swWindow::SetGeometry(const Rect& r)
 
 swUiControl* swWindow::TopLevelParent()
 {
-    return swUiControl::TopLevelParent();
+    // We are toplevel, return null 
+    return 0l;
 }
 
 uint swWindow::SetUiFlags(uint f, bool seton)
 {
-    return swUiControl::SetUiFlags(f, seton);
+    swUiControl::SetUiFlags(f, seton);
+    // react on the new flags
+    return _uiflags;
 }
 
 bool swWindow::Activate(bool b)
 {
-    return swUiControl::Activate(b);
+    swUiControl::Activate(b);
+    // react on activation/de-activation
+    return b;
 }
 
 swUiControl* swWindow::_mouseSelect(const pxy& xy)
@@ -61,11 +67,26 @@ swUiControl* swWindow::_mouseSelect(const pxy& xy)
 
 uint swWindow::SetFlags(uint _flags, bool seton)
 {
-    return swUiControl::SetFlags(_flags, seton);
+    swUiControl::SetFlags(_flags, seton);
+    //react on new flags
+    return _flags;
 }
 
 void swWindow::Resize(const Size& newSize)
 {
     swUiControl::Resize(newSize);
+    //if( UiFlag( uiflags::caption ) ) {
+    //}
+
+    // 
 }
 
+
+
+/*!
+    \fn swWindow::InitView()
+ */
+int swWindow::InitView()
+{
+    return 0;
+}

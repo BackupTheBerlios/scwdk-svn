@@ -42,6 +42,7 @@ public:
     virtual bool Activate(bool b);
     virtual uint SetFlags(uint _flags, bool seton);
     virtual void Resize(const Size& newSize);
+    virtual int InitView();
 
 protected:
     virtual swUiControl* _mouseSelect(const pxy& xy);
