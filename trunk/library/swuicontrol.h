@@ -46,11 +46,11 @@ class swUiControl : public swObject
 public:
     typedef std::list< swUiControl* > list;
     typedef swUiControl::list::iterator iterator;
-    
+
     swUiControl(swObject* swParent, uint _flags, const char* _nameID);
-    
+
     swUiControl();
-    
+
     swUiControl(swObject* swParent);
 
     virtual ~swUiControl();
@@ -67,7 +67,7 @@ public:
         \fn swUiControl::Width()
      */
     int Width() { return m_geometry.width(); }
-    
+
     swWriter* StartWrite( Rect _r = Rect::_void );
     int EndWrite( );
 
@@ -143,11 +143,11 @@ public:
      */
     int InitView()
     {
-        /// @todo implement me
+        return 0;
     }
 
 
-    
+
 protected:
     /// Relative position (from parent UI) and geometry of this UI control
     Rect m_geometry;
@@ -156,8 +156,11 @@ protected:
     LayoutBase* m_layout;
     swTAttr m_DefTextAttr;
     int _uiflags;
+    //// The back buffer is used for saving screen contents under the toplevel widget
+    //PStr m_BackBuffer;
+    ////////// For now no back buffer unnecessary with
 private:
-    /// Own screen surface data buffer - which IO operations are done using the swWriter interface
+    /// screen surface data buffer - which IO operations are done using the swWriter interface
     PStr m_IoScrBuffer;
     swWriter* _wr;
 

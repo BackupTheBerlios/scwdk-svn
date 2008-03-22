@@ -28,6 +28,7 @@ swUiControl::swUiControl(swObject* swParent, uint _flags, const char* _nameID): 
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
     if((! swParent) && (!swParent->Class<swUiControl>()) ) swMain::Instance()->Desktop(0)->AddTopLevel( this );
 
+
 }
 
 
@@ -37,6 +38,7 @@ swUiControl::swUiControl(): swObject(0l,0,"unnamed swUiControl")
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
     //if((! swParent) || (swParent->Class<swUiControl>())) swMain::Instance()->Desktop(0)->AddTopLevel( this );
+    //m_BackBuffer = 0l;
 }
 
 
@@ -46,6 +48,7 @@ swUiControl::swUiControl(swObject* swParent): swObject(swParent, 0,"unnamed swUi
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
     if((! swParent) && (!swParent->Class<swUiControl>())) swMain::Instance()->Desktop(0)->AddTopLevel( this );
+    //m_BackBuffer = 0l;
 }
 
 
@@ -53,6 +56,7 @@ swUiControl::~swUiControl()
 {
     Debug << " Releasing resources"; DEND;
     if (m_IoScrBuffer) delete [] m_IoScrBuffer;
+
     if(_wr) delete _wr;
 
     //DestroyChildren(); // !no let ~swObject do the job
@@ -82,7 +86,7 @@ int swUiControl::SetGeometry( const Rect& r )
     m_IoScrBuffer = new TCell[ Height() * Width() + Width() ];
     if( _wr ) delete _wr;
     _wr = new swWriter( this, m_IoScrBuffer, r );
-    
+
     Debug << " Geometry of " << NameID() << " Set to " << m_geometry.tostring() ;DEND;
     return 0;
 }
@@ -127,7 +131,7 @@ int swUiControl::Update( )
         else
             Dbg << w->NameID() << " is not of a Control type!";
     }
-    
+
     return I;
 }
 
@@ -178,7 +182,7 @@ swUiControl* swUiControl::_mouseSelect( const pxy& xy )
 
     // Still have to check if we are visible "targetable" - that is immuable rule
     if( ! ( Visible() || Enabled() ) ) return 0l;//UiFlag( uiflags::visible ) ) return 0l;
-    
+
     if(! (child = FirstChild<swUiControl>()) ) return this;
     if( ( child = child->_mouseSelect( xy )) ) return child;
     for(; child; child = NextChild<swUiControl>() ) if( ( child = child->_mouseSelect( xy )) ) return child;
@@ -199,7 +203,7 @@ void swUiControl::Resize( const Size& newSize )
         \fn swUiControl::Main()
      */
 swMain* swUiControl::Main() {
-    return swMain::Instance(); 
+    return swMain::Instance();
 }
 
 
