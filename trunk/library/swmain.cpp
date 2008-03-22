@@ -59,7 +59,7 @@ swMain::~swMain()
     \brief Calls all registered object to be notified of the exit request.
     \param swObject* _sender : The object that requests the exit - ( modifiable, receives the address of the object that cancels the request )
     \return bool true: go ahead and exit; false: exit request cancelled by one of the connected delegates
-    
+
  */
 bool swMain::QueryExit(swObject* _sender )
 {
@@ -77,7 +77,7 @@ bool swMain::QueryExit(swObject* _sender )
 
 /*!
     \fn swMain::PostEvent( Event* _e )
-    
+
  */
 int swMain::PostEvent( Event* _e )
 {
@@ -86,7 +86,7 @@ int swMain::PostEvent( Event* _e )
     _evq.push_back( _e );
     _evq_x->unlock();
     return _evq.size();
-    
+
 }
 
 
@@ -202,7 +202,7 @@ int swMain::Init()
         return r;
     }
     //InitEVD();
-    
+
     _dsk = new swDesktop( this, 0, "swMain::Desktop = default");
     if( ( r = _dsk->Init() ) ){
         Dbg << " Desktop failed to init ???";DEND;
@@ -264,9 +264,9 @@ event_t swMain::_MessageEvent(MessageEvent* msg )
 }
 
 
-/*!
+/*
     \fn swMain::InitEVD()
- 
+
 bool swMain::InitEVD()
 {
     EventDelegate& evd = EventsPropagator["keyinput"];
@@ -274,13 +274,13 @@ bool swMain::InitEVD()
     /*
     evd[event::KeyPress]     += sigc::mem_fun(this, &swMain::_KeyInput);
     evd[event::DirectionKey] += sigc::mem_fun(this, &swMain::_ArrowKey);
-    
+
     evd = EventsPropagator["MouseEvent"];
     evd[event::MouseButtonPress] += sigc::mem_fun(this, &swMain::_MouseButtonPress);
     evd[event::MouseButtonClick] += sigc::mem_fun(this, &swMain::_MouseButtonClick);
     evd[event::MouseButtonDblClick] += sigc::mem_fun(this, &swMain::_MouseButtonDblClick);
     evd[event::MouseButtonRelease] += sigc::mem_fun(this, &swMain::_MouseButtonRelease);
-    
+
 }
 
 
@@ -291,8 +291,8 @@ bool swMain::_KeyFn(Event* ev)
 {
     KeyPressEvent* kev;
     Debug ;DEND;
-    
-    ///@todo process the functionkey 
+
+    ///@todo process the functionkey
     return true;
 }
 */

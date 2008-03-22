@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "swwindow.h"
-
+#include "swwriter.h"
 swWindow::swWindow(swObject* swParent): swUiControl(swParent)
 {
 }
@@ -26,7 +26,7 @@ swWindow::swWindow(swObject* swParent): swUiControl(swParent)
 
 swWindow::swWindow(swObject* swParent, uint _flags, const char* _nameID): swUiControl(swParent, _flags, _nameID)
 {
-    SetuiFlags( uiflags::toplevel|uiflags::caption|uiflags::frame );
+    SetUiFlags( uiflags::toplevel|uiflags::caption,true );
 }
 
 
@@ -42,7 +42,7 @@ int swWindow::SetGeometry(const Rect& r)
 
 swUiControl* swWindow::TopLevelParent()
 {
-    // We are toplevel, return null 
+    // We are toplevel, return null
     return 0l;
 }
 
@@ -78,15 +78,24 @@ void swWindow::Resize(const Size& newSize)
     //if( UiFlag( uiflags::caption ) ) {
     //}
 
-    // 
+    //
 }
 
 
 
 /*!
     \fn swWindow::InitView()
+    \brief Create  and init the frame and the caption
  */
 int swWindow::InitView()
 {
+    swWriter* w = StartWrite();
+    if(! w ){
+        Dbg << "OOps!! I have no geometry!!! please, setup my dimensions and return.";DEND;
+        return -1;
+    }
+    w->Clear();
+    w->DrawFrame( w->Geometry(), swTAttr( swcolor::blue, swcolor::yellow, A_BOLD) );
+    //Update();
     return 0;
 }

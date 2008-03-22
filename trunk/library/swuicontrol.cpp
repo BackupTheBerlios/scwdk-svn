@@ -26,9 +26,6 @@ swUiControl::swUiControl(swObject* swParent, uint _flags, const char* _nameID): 
     m_IoScrBuffer = 0l;
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
-    if((! swParent) && (!swParent->Class<swUiControl>()) ) swMain::Instance()->Desktop(0)->AddTopLevel( this );
-
-
 }
 
 
@@ -37,8 +34,6 @@ swUiControl::swUiControl(): swObject(0l,0,"unnamed swUiControl")
     m_IoScrBuffer = 0l;
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
-    //if((! swParent) || (swParent->Class<swUiControl>())) swMain::Instance()->Desktop(0)->AddTopLevel( this );
-    //m_BackBuffer = 0l;
 }
 
 
@@ -47,8 +42,6 @@ swUiControl::swUiControl(swObject* swParent): swObject(swParent, 0,"unnamed swUi
     m_IoScrBuffer = 0l;
     _wr = 0l;
     m_DefTextAttr = swTAttr(4,7, A_BOLD);
-    if((! swParent) && (!swParent->Class<swUiControl>())) swMain::Instance()->Desktop(0)->AddTopLevel( this );
-    //m_BackBuffer = 0l;
 }
 
 
@@ -229,5 +222,6 @@ swUiControl* swUiControl::TopLevelParent()
 uint swUiControl::SetUiFlags( uint f, bool seton )
 {
     _uiflags = ( seton ? _uiflags | f : _uiflags & ~f );
+    if( _uiflags&uiflags::toplevel ) Main()->Desktop(0)->AddTopLevel(this);
     return _uiflags;
 }

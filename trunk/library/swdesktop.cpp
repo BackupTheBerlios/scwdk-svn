@@ -64,7 +64,7 @@ void swDesktop::Resize( const Size& newSize )
     //mvaddchstr( 0, 3, p);// Height()-2, p );
     swWriter* wr = StartWrite();
     (*wr)<< pxy(0,0) << swWriter::text << p;
-    
+
     delete [] p;
     T.ReleaseData();
     // -----------------------------------------------------
@@ -80,7 +80,7 @@ int swDesktop::RefreshControl( swWriter* wr )
     Dbg << "Control: " << wr->Control()->NameID();
     swUiControl* w;
     Rect r;
-    
+
     if(!wr) return -1;
     w = wr->Control();
     r = wr->Geometry();
@@ -91,7 +91,7 @@ int swDesktop::RefreshControl( swWriter* wr )
     Dbg << " In Absolute coords: " << r.tostring();
     w->Clip( r );
     Dbg << " Clipped result: " << r.tostring() << " Desktop rect: " << Geometry().tostring();
-    
+
     r &= Geometry();
     Dbg << " visible Region on screen: " << r.tostring();
     if(!r) return -1;
@@ -115,7 +115,7 @@ int swDesktop::_drawControl ( UNode* u )
     PStr p;
     Dbg << " Abs control position:" << w->TopLeft(true).tostring();
     l -= w->TopLeft(true); // Local area;
-    
+
     Dbg << "Local area:" << l.tostring() << "<-> abs area" << r.tostring();DEND;
     swWriter* wr = w->_wr;
     for( int y = 0; y < l.height(); y ++){
@@ -128,11 +128,11 @@ int swDesktop::_drawControl ( UNode* u )
         ///@todo get pinpoints of the current line.
         //for( int x = 0; x < l.width(); x ++){
             ///@todo check pinpoints then draw visible cells
-            
+
         //}
     }
     // Check z-order dirty controls
-    
+
     //::refresh();
     return 0;
 }
@@ -220,10 +220,10 @@ int swDesktop::Init()
     }
     SetGeometry( Rect(0,0, _n->Width(), _n->Height()) );
     _wr->Clear();
-    _wr->Fill( Rect(0,0, _n->Width(), _n->Height()), swTAttr(4, 6, 0), ACS_CKBOARD);
+    _wr->Fill( Rect(0,0, _n->Width(), _n->Height()), swTAttr(7, 0, A_BOLD), ACS_CKBOARD);
     // ------------------------------------------------- TESTS
     swText T;
-    T << "<fgcolor red;bgcolor white; /strong;>     Desktop initializecd...<fgcolor black;>Good To GO!!! <fgcolor blue;> Actual size: <fgcolor black;>"
+    T << "<fgcolor red;bgcolor white; /strong;>     Desktop initialized...<fgcolor black;>Good To GO!!! <fgcolor blue;> Actual size: <fgcolor black;>"
       << Width() << "<fgcolor blue;>:<fgcolor black;>" << Height() << "     ";
     T << swText::END;
     PStr p = T.Data();
@@ -234,7 +234,7 @@ int swDesktop::Init()
     T.ReleaseData();
     // -----------------------------------------------------
     Update();
-    
+
     return 0;
 }
 
@@ -245,7 +245,7 @@ int swDesktop::Init()
  */
 bool swDesktop::AddTopLevel( swUiControl* ctl )
 {
-    
+
     Debug;
     swUiControl::list::iterator it = _inToplevel( ctl );
     ctl->SetFlags( uiflags::toplevel,true );
@@ -291,7 +291,7 @@ int swDesktop::RedrawTopLevels( swUiControl::iterator it )
     for(; it != _toplevels.end(); it++){
         gui  = *it;
         wr = gui->StartWrite();
-        Debug << "Control: " << wr->Control()->NameID();
+        Debug << "Control: " << gui->NameID();
         if(!wr) continue;
         gui->EndWrite();
     }
