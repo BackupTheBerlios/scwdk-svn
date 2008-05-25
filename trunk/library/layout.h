@@ -75,7 +75,6 @@ public:
     /*!
         \fn initialize()
         @return bool true if all initialisation components went true
-        \note Instanciate ALL methods ( virtual, static, normal ) or else the linker will fails to find the vtable of the bas class
      */
     virtual bool initialize(){return true;}
     virtual bool SetGeometry( const Rect& R );
@@ -94,7 +93,7 @@ protected:
 
 /*!
     \class Layout<int>
-    \brief Base template layout class - not used - see specialized layout subclasses
+    \brief Base template layout class - not used - see specialized layout subclasses below
     \author Serge Lussier <serge@tuxadmin.net>
 */
 template <int> class Layout : public LayoutBase{
@@ -112,6 +111,11 @@ public:
     }
 };
 
+/*!
+    \class Layout<0>
+    \brief Directional Layout base implementation class
+    \author Serge Lussier <serge@tuxadmin.net>
+*/
 template<> class Layout<0> : public LayoutBase {
 public:
     Layout( swObject* parent, int yd ): LayoutBase((swObject*)0), _nitems(yd){
@@ -129,12 +133,18 @@ public:
     virtual swUiControl* ClientControl( int position );
     LayoutBase* operator[](int);
     virtual bool SetGeometry( const Rect& R );
+    virtual int Add( swUiControl* , int );
 protected:
     int _nitems;
     int _widgets;
     std::vector<LayoutBase*> _sublayouts;
 };
 
+/*!
+    \class Layout<direction::horizontal>
+    \brief Horizontal Layout implementation class
+    \author Serge Lussier <serge@tuxadmin.net>
+*/
 template<> class Layout<direction::horizontal> : public Layout<0> {
 public:
     Layout( swObject* parent, int nitems ): Layout<0>( parent, nitems){
@@ -146,7 +156,11 @@ public:
     bool SetUiControl( int position, swUiControl* W );
 
 };
-
+/*!
+    \class Layout<direction::vertical>
+    \brief Vertical Layout implementation class
+    \author Serge Lussier <serge@tuxadmin.net>
+*/
 template<> class Layout<direction::vertical> : public Layout<0> {
 public:
     Layout( swObject* parent, int yd=0 ): Layout<0>(parent,yd){

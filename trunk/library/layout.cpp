@@ -274,3 +274,17 @@ bool Layout< direction :: table >::SetUiControl( int col , int row , swUiControl
     B->SetUiControl(W);
     return true;
 }
+
+int Layout< 0 >::Add( int x )
+{
+    LayoutBase* L;
+    if(!x) return _sublayouts.size();
+    do{
+        L =  new LayoutBase(this);
+        _sublayouts.push_back( L );
+        L->initialize();
+        --x;
+    }while(x);
+    return _sublayouts.size();
+}
+
