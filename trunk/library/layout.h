@@ -133,7 +133,7 @@ public:
     virtual swUiControl* ClientControl( int position );
     LayoutBase* operator[](int);
     virtual bool SetGeometry( const Rect& R );
-    virtual int Add( swUiControl* , int );
+    virtual int Add( int );
 protected:
     int _nitems;
     int _widgets;
