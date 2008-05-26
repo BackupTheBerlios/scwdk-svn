@@ -39,3 +39,67 @@ swLabel::~swLabel()
 }
 
 
+
+
+/*!
+    \fn swLabel::operator = ( const std::string& str )
+ */
+bool swLabel::operator = ( const std::string& str )
+{
+    bool result=false;
+    swWriter* w = StartWrite();
+    w->Clear();
+    result = _renderText( str );
+    EndWrite();
+    return result;
+}
+
+
+/*!
+    \fn swLabel::operator = ( const String& str )
+ */
+bool swLabel::operator = ( const String& str )
+{
+    bool result=false;
+    swWriter* w = StartWrite();
+    w->Clear();
+    result = _renderText( str.std() );
+    EndWrite();
+    return result;
+}
+
+
+/*!
+    \fn swLabel::operator << ( String& str )
+ */
+swLabel& swLabel::operator << ( String& str )
+{
+    swWriter* w = StartWrite();
+    w->Clear();
+    (void)_renderText( str.std() );
+    EndWrite();
+    return *this;
+    
+}
+
+
+/*!
+    \fn swLabel::operator << ( std::string& str )
+ */
+swLabel& swLabel::operator << ( std::string& str )
+{
+    swWriter* w = StartWrite();
+    w->Clear();
+    (void)_renderText( str );
+    EndWrite();
+    return *this;
+}
+
+
+/*!
+    \fn swLabel::_renderText( const std::String& str )
+ */
+bool swLabel::_renderText( const std::String& str )
+{
+    
+}

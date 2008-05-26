@@ -30,7 +30,8 @@ Simple and limited to ncwk text embedded attributes parser.
 class swText : public swObject
 {
 public:
-    enum StreamCmd { END, ARG }; // Force specific type used for operator << 
+    enum StreamCmd { END, ARG }; // Force specific type used for operator <<
+    enum TxStyle { plain, text }; 
     typedef sigc::signal< bool, std::string::const_iterator& > Delegator;
     typedef sigc::slot< bool, std::string::const_iterator& > Delegate;
 
@@ -175,6 +176,7 @@ private:
     bool TrySwitchToLongFormat( std::string::const_iterator, std::string::const_iterator);
     int _len;
     static swTAttr _defaultAttributes;
+    TxStyle mTxStyle;
 protected:
     int EncodeAttr( const std::string& str );
     int EncodeComponent( const std::string& str );

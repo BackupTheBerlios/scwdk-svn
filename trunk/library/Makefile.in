@@ -55,8 +55,9 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libscwdk_la_DEPENDENCIES =
 am_libscwdk_la_OBJECTS = events.lo exstring.lo layout.lo linuxdl.lo \
 	mutex.lo pxy.lo rect.lo size.lo swcommand.lo swcontrol.lo \
-	swdesktop.lo swmain.lo swncurses.lo swobject.lo swtattr.lo \
-	swtext.lo swthread.lo swuicontrol.lo swwindow.lo swwriter.lo
+	swdesktop.lo swlabel.lo swmain.lo swncurses.lo swobject.lo \
+	swtattr.lo swtext.lo swthread.lo swuicontrol.lo swwindow.lo \
+	swwriter.lo
 libscwdk_la_OBJECTS = $(am_libscwdk_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -190,15 +191,15 @@ METASOURCES = AUTO
 lib_LTLIBRARIES = libscwdk.la
 libscwdk_la_LIBADD = -lncurses -ldl -lpthread -lsigc-2.0
 libscwdk_la_SOURCES = events.cpp exstring.cpp layout.cpp linuxdl.cpp mutex.cpp \
-	pxy.cpp rect.cpp size.cpp swcommand.cpp swcontrol.cpp swdesktop.cpp swmain.cpp \
-	swncurses.cpp swobject.cpp swtattr.cpp swtext.cpp swthread.cpp swuicontrol.cpp \
-	swwindow.cpp swwriter.cpp
+	pxy.cpp rect.cpp size.cpp swcommand.cpp swcontrol.cpp swdesktop.cpp swlabel.cpp \
+	swmain.cpp swncurses.cpp swobject.cpp swtattr.cpp swtext.cpp swthread.cpp \
+	swuicontrol.cpp swwindow.cpp swwriter.cpp
 
 include_HEADERS = events.h exstring.h layout.h linuxdl.h msgdefs.h mutex.h \
 	pxy.h rect.h scwdk.h size.h swcommand.h swcontrol.h swdesktop.h swmain.h \
 	swobject.h swtattr.h swtext.h swthread.h swuicontrol.h swwriter.h
 
-noinst_HEADERS = swcommand.h swwindow.h
+noinst_HEADERS = swcommand.h swlabel.h swwindow.h
 all: all-am
 
 .SUFFIXES:
@@ -279,6 +280,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcontrol.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swdesktop.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swlabel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swmain.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swncurses.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swobject.Plo@am__quote@

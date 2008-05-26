@@ -21,6 +21,7 @@
 #define SWLABEL_H
 
 #include <swuicontrol.h>
+#include <swtext.h>
 
 /**
 	@author Serge Lussier,,, <bretzel@pc-desktop>
@@ -35,7 +36,21 @@ public:
     swLabel(swObject* swParent, uint _flags, const char* _nameID);
 
     virtual ~swLabel();
+    bool operator = ( const std::string& );
+    bool operator = ( const String& str );
 
+    swLabel& operator << ( swText::TxStyle st ){
+        mTxStyle = st;
+        return *this;
+    }
+    swLabel& operator << ( String& str );
+    swLabel& operator << ( std::string& str );
+    
+    
+private:
+    swText::TxStyle mTxStyle;
+protected:
+    bool _renderText( const std::String& str );
 };
 
 #endif
