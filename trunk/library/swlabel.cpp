@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "swlabel.h"
+#include "swwriter.h"
 
 swLabel::swLabel(swObject* swParent): swUiControl(swParent)
 {
@@ -99,7 +100,7 @@ swLabel& swLabel::operator << ( std::string& str )
 /*!
     \fn swLabel::_renderText( const std::String& str )
  */
-bool swLabel::_renderText( const std::String& str )
+bool swLabel::_renderText( const std::string& str )
 {
     
 }

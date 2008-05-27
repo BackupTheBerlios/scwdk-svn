@@ -50,7 +50,7 @@ public:
 private:
     swText::TxStyle mTxStyle;
 protected:
-    bool _renderText( const std::String& str );
+    bool _renderText( const std::string& str );
 };
 
 #endif
