@@ -12,11 +12,12 @@
 #include "swtext.h"
 
 
-swTAttr swText::_defaultAttributes;
+//swTAttr swText::_defaultAttributes;
 
 //const char* swText::opref="bF/_nB";
-std::map< char, swText::Operator* > swText::operators;
-std::map< std::string, swText::Operator*> swText::lfoperators;
+//std::map< char, swText::Operator* > swText::operators;
+//std::map< std::string, swText::Operator*> swText::lfoperators;
+//bool swText::init_done = false;
 
 
 
@@ -425,6 +426,11 @@ bool swText::lfop_nul( const std::list<std::string>& L )
 bool swText::Initialize()
 {//bF/_nB";
     gDebug ; DEND;
+//     if(swText::init_done){
+//         gDebug << "Already init - skipping...\n" ; DEND;
+//         return true;
+//     }
+    //swText::init_done = true;
     //(*this) << new swText::Operator('b', sigc::mem_fun( this, &swText::op_bold))
     //        << new swText::Operator('F', sigc::mem_fun( this, &swText::op_fg  ))
     //        << new swText::Operator('/', sigc::mem_fun( this, &swText::op_not))

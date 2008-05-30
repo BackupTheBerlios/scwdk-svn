@@ -76,7 +76,7 @@ public:
     /*!
         \fn swText::SetDefaultAttributes( const swTAttr& _attr )
      */
-    static swTAttr SetDefaultAttributes( const swTAttr& _attr ) { swText::_defaultAttributes = _attr; }
+    swTAttr SetDefaultAttributes( const swTAttr& _attr ) { swText::_defaultAttributes = _attr; }
 
     /*!
         \fn swText::Data()
@@ -125,15 +125,15 @@ public:
         instring.clear();
     }
 private:
-    static char* optokens;
+    char* optokens;
     std::list<std::string> components;
     String instring;
     swTAttr attr;
     PStr result;
     bool _clear;
     
-    static std::map< char, Operator* > operators;
-    static std::map< std::string, Operator*> lfoperators;
+    std::map< char, Operator* > operators;
+    std::map< std::string, Operator*> lfoperators;
     //static const char* opref;
     swText::Delegator delegator;
     int _pos;
@@ -175,9 +175,10 @@ private:
     int op_calclength();
     bool TrySwitchToLongFormat( std::string::const_iterator, std::string::const_iterator);
     int _len;
-    static swTAttr _defaultAttributes;
+    swTAttr _defaultAttributes;
     TxStyle mTxStyle;
 protected:
+    bool init_done;
     int EncodeAttr( const std::string& str );
     int EncodeComponent( const std::string& str );
 };
