@@ -48,10 +48,7 @@ swLabel::~swLabel()
 bool swLabel::operator = ( const std::string& str )
 {
     bool result=false;
-    swWriter* w = StartWrite();
-    w->Clear();
     result = _renderText( str );
-    EndWrite();
     return result;
 }
 
@@ -62,10 +59,7 @@ bool swLabel::operator = ( const std::string& str )
 bool swLabel::operator = ( const String& str )
 {
     bool result=false;
-    swWriter* w = StartWrite();
-    w->Clear();
     result = _renderText( str.std() );
-    EndWrite();
     return result;
 }
 
@@ -75,10 +69,7 @@ bool swLabel::operator = ( const String& str )
  */
 swLabel& swLabel::operator << ( String& str )
 {
-    swWriter* w = StartWrite();
-    w->Clear();
     (void)_renderText( str.std() );
-    EndWrite();
     return *this;
     
 }
@@ -89,10 +80,7 @@ swLabel& swLabel::operator << ( String& str )
  */
 swLabel& swLabel::operator << ( std::string& str )
 {
-    swWriter* w = StartWrite();
-    w->Clear();
     (void)_renderText( str );
-    EndWrite();
     return *this;
 }
 
@@ -102,5 +90,11 @@ swLabel& swLabel::operator << ( std::string& str )
  */
 bool swLabel::_renderText( const std::string& str )
 {
+    swWriter* sw = StartWrite();
+    sw->Clear();
+    /// @todo Have to render the text inside the label from the rules{ justification|wrapping|clipping } for now just write the text
+    (*sw) << mTxStyle << str;
+    EndWrite();
+    return true;
     
 }

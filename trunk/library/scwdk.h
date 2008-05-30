@@ -141,6 +141,7 @@ namespace uiflags{
 
 
 
+// template<typename T> T& Reference(T* t ){ return *T; }
 
 
 #ifndef uint
