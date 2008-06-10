@@ -41,21 +41,32 @@ public:
 
     struct Operator {
 
-        swText::Delegator delegator;
-        swText::LFDelegator lfdelegator;        
+        swText::Delegator *delegator;
+        swText::LFDelegator *lfdelegator;        
 
         Operator( const char _tk ):tk(_tk){}
         Operator( const char _tk, swText::Delegate delegate ):tk(_tk){
-            delegator.connect( delegate );
+            delegator = new Delegator;
+            lfdelegator = 0l;
+            delegator->connect( delegate );
         }
 
         Operator ( const std::string& _key, swText::LFDelegate delegate ): _keyword(_key){
-            lfdelegator.connect( delegate );
+            lfdelegator = new LFDelegator;
+            delegator = 0l;
+            lfdelegator->connect( delegate );
         }
-        Operator& operator += (swText::Delegate& delegate){
-            delegator.connect( delegate );
+        Operator& operator += (swText::LFDelegate& delegate){
+
+            lfdelegator = new LFDelegator; 
+            lfdelegator->connect( delegate );
             return *this;
         }
+        ~Operator(){
+            if(lfdelegator) delete lfdelegator;
+            if(delegator) delete delegator;
+        }
+
         char tk;
         std::string _keyword;
     };

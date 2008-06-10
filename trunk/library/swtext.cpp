@@ -79,6 +79,12 @@ swText::swText(swObject* parent, const String& _text)
 
 swText::~swText()
 {
+    swText::Operator* op;
+    for( lfop_iterator I = lfoperators.begin(); I != lfoperators.end(); I++){
+        op = I->second;
+        delete op;
+    }
+    lfoperators.clear();
 }
 
 
@@ -562,7 +568,7 @@ bool swText::TrySwitchToLongFormat( std::string::const_iterator istart, std::str
       //  Dbg << "Attribute command '" << str << "' not found or not implemented yet" ; DEND;
         return false;
     }
-    if(! Op->lfdelegator( L ) ){
+    if(! (*(Op->lfdelegator))( L ) ){
         //Dbg << "Attribute command '" << str << "' failed - maybe syntax error"; DEND;
         return false;
     }

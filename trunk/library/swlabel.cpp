@@ -92,8 +92,9 @@ bool swLabel::_renderText( const std::string& str )
 {
     swWriter* sw = StartWrite();
     sw->Clear();
+    sw->Position(0,0);
     /// @todo Have to render the text inside the label from the rules{ justification|wrapping|clipping } for now just write the text
-    (*sw) << mTxStyle << str;
+    (*sw) << swWriter::text << str;
     EndWrite();
     return true;
     
