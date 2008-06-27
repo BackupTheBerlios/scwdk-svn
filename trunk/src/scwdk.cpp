@@ -60,8 +60,6 @@ int Main::Init(){
     if(r) return r;
     swNCurses* nc = CursesInstance();
     if(!nc) return 128; // not supposed to be;
-    swText T(0l, swTAttr(4,3, 0),"swText long format tests");
-
 
     tc = new swWindow(this, 0, "Test of swWindow");
     tc->SetGeometry( Rect(1,8, 100,8 ) );
