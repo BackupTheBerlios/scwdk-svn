@@ -70,26 +70,16 @@ int Main::Init(){
 
     (*wr) << pxy( 1,1 ) << "swWriter::plain: "<< swWriter::plain <<  "<fgcolor red; bgcolor white; /strong; underline;>   uicontrol!!!   </underline;>";
     (*wr) << pxy( 1,2 ) << "swWriter::text : "  <<swWriter::text  << "<fgcolor red; bgcolor white; /strong; underline;>   uicontrol!!!   </underline;>";
-    (*wr) << " UiControl's def text attributes: " << (const char*)A;
-    //wr->DrawFrame( wr->Geometry(), tc->DefAttr() );
-    // test:
-    //wr->JoinAcs( pxy (wr->Geometry().width()/2, 0), direction::down, tc->DefAttr() );
-    //wr->JoinAcs( pxy (wr->Geometry().width()/2, tc->Height()-1), direction::up, tc->DefAttr() );
-    //wr->JoinAcs( pxy (wr->Geometry().x(), tc->Height()-3) , direction::right, tc->DefAttr() );
-    //wr->JoinAcs( pxy (wr->Geometry().width()-1, tc->Height()-3) , direction::left, tc->DefAttr() );
-    //wr->AscLine( pxy(1,tc->Height()-3), tc->Width()-2, direction::right, tc->DefAttr() );
+    (*wr) << pxy( 1, tc->Height()-2) <<  "<fgcolor cyan;strong;underline;>texte dans une zone encadree.";
 
-    (*wr) << pxy( 1, tc->Height()-2) << swWriter::text << "<fgcolor cyan;strong;underline;>texte dans une zone encadree.";
-    //tc->EndWrite();
-
-
+    (*wr) << pxy( 10, tc->Height()-1) <<  "<fgcolor white;strong;>I am somwhere on the bottom frame.";
+    
     swUiControl* ct = new swUiControl(tc, 0, "child of tc");
     ct->SetGeometry(Rect( 5,3 , 40,3 ) );
     wr = ct->StartWrite();
     wr->Clear();
     (*wr) << pxy(1,1) << swWriter::text << "<bgcolor black;fgcolor yellow; strong;>[ child control embbeded in parent   ]";
     wr->DrawFrame( wr->Geometry(), swTAttr( 2,swcolor::cyan, A_BOLD) );
-    //ct->EndWrite();
     tc->EndWrite();
     return 0;
 }
