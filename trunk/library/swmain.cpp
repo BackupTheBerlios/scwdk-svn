@@ -23,6 +23,8 @@
 
 swMain* swMain::_Self=0l;
 
+swText* swMain::g_mTextProcessor = 0l;
+
 swMain::swMain()
  : swObject()
 {
@@ -202,6 +204,9 @@ int swMain::Init()
         return r;
     }
     //InitEVD();
+
+    swMain::g_mTextProcessor = new swText(this, swTAttr(0,7,A_NORMAL), "main::TextProcessor");
+    swMain::g_mTextProcessor->Initialize();
 
     _dsk = new swDesktop( this, 0, "swMain::Desktop = default");
     if( ( r = _dsk->Init() ) ){

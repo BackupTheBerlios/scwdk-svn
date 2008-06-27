@@ -135,6 +135,14 @@ public:
     {
         instring.clear();
     }
+
+    /*!
+        \fn swText::Clear()
+     */
+    void Clear()
+    {
+        ReleaseData();
+    }
 private:
     char* optokens;
     std::list<std::string> components;

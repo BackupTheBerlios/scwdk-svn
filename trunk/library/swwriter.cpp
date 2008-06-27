@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "swwriter.h"
-#include "swtext.h"
+#include "swmain.h"
 swWriter::swWriter(swUiControl* swParent, uint,  const char*):
 _owner( swParent )
 {
@@ -183,7 +183,8 @@ int swWriter::WriteStr( const std::string& _str )
 int swWriter::WriteRT( const char* _str)
 {
     PStr pStr;
-    swText T(0l, _owner->DefAttr(), " ");
+    swText& T = swMain::TextProcessor();
+    T.SetDefaultAttributes(_owner->DefAttr() );
     //Debug << " ( " << _str << ") " << _c.tostring(); DEND;
     T << _str << swText::END;
     _a = T.CurAttr();
@@ -194,7 +195,8 @@ int swWriter::WriteRT( const char* _str)
     
     //Debug << "pStr=" <<  pStr  ;DEND;
     int r = WritePStr( pStr );
-    delete [] pStr;
+    //delete [] pStr;
+    T.Clear();
     return r;
 }
 

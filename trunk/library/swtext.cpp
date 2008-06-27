@@ -33,13 +33,12 @@
 swText::swText(swObject* parent, const swTAttr defAttr, const std::string idname): swObject(parent, 0,idname.c_str())
 {
     swText::_defaultAttributes = defAttr;
-    Initialize();
 }
 
 
 swText::swText(): swObject()
 {
-    Initialize();
+    
 }
 
 
@@ -48,14 +47,12 @@ swText::swText(const std::string& _text)
  :
     swObject(0l,0,"")
 {
-    Initialize();
 }
 
 swText::swText(const String& _text)
 :
     swObject()
 {
-    Initialize();
     //instring << _text;
 }
 
@@ -63,7 +60,7 @@ swText::swText(swObject* parent, const std::string& _text)
 :
     swObject(parent,0,"")
 {
-    Initialize();
+ 
     //instring << _text;
 }
 
@@ -71,7 +68,7 @@ swText::swText(swObject* parent, const String& _text)
 :
     swObject(parent,0,"")
 {
-    Initialize();
+ 
     //instring << _text;
 }
 
@@ -519,7 +516,7 @@ void swText::init_result()
 void swText::ReleaseData()
 {
     if( result ){
-        //delete [] result;
+        delete [] result;
         result = 0l;
     }
     instring.clear();

@@ -26,8 +26,7 @@
 #include "swncurses.h"
 #include "swdesktop.h"
 #include "mutex.h"
-
-
+#include "swtext.h"
 
 
 /**
@@ -57,8 +56,7 @@ public:
     }
 
     static swMain* Instance() { return swMain::_Self; }
-
-    
+    static swText& TextProcessor() { return *(swMain::g_mTextProcessor); }
     swNCurses* CursesInstance() { return _nc; }
     swDesktop* Desktop( int =0 /* Desktop # - for future use*/) { return _dsk; }
     bool QueryExit(swObject* _sender );
@@ -86,6 +84,7 @@ protected:
 private:
     // Slots( delegates ):
     bool _KeyFn(Event*);
+    static swText* g_mTextProcessor;
 };
 
 #endif
