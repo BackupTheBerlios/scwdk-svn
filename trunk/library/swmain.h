@@ -56,7 +56,10 @@ public:
     }
 
     static swMain* Instance() { return swMain::_Self; }
-    static swText& TextProcessor() { return *(swMain::g_mTextProcessor); }
+    static swText& TextProcessor() {
+        //g_mTextProcessor->init_result();
+        return *(swMain::g_mTextProcessor);
+    }
     swNCurses* CursesInstance() { return _nc; }
     swDesktop* Desktop( int =0 /* Desktop # - for future use*/) { return _dsk; }
     bool QueryExit(swObject* _sender );

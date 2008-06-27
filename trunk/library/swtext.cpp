@@ -516,7 +516,7 @@ void swText::init_result()
 void swText::ReleaseData()
 {
     if( result ){
-        delete [] result;
+        //delete [] result;
         result = 0l;
     }
     instring.clear();

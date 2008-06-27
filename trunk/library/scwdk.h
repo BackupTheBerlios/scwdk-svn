@@ -30,7 +30,7 @@
 
 
 #define gDebug std::cerr << "\ndbg trace: in function: \n" << __PRETTY_FUNCTION__ << "\n(not swObject subclass):->"
-#define Debug std::cerr << "\ndbg trace: in function: \n" << __PRETTY_FUNCTION__ << "\n   NameID:[" << NameID() << "] :->"
+#define Debug  std::cerr << "\ndbg trace: in function: \n" << __PRETTY_FUNCTION__ << "\n   NameID:[" << NameID() << "] :->"
 #define NDebug std::cerr << "dbg trace: in function: \n" << __PRETTY_FUNCTION__ << "\n (not swObject subclass):->"
 #define DEND std::cerr << "\ndbg trace end" <<  std::endl
 #define Dbg std::cerr << "\n  :->"

@@ -163,9 +163,13 @@ swWriter& swWriter::operator << (String _str)
  */
 int swWriter::WriteStr( const std::string& _str )
 {
+    gDebug << " write str[" << _str << "] start"; DEND;
     PStr p, s;
     int r=0;
-    if( _rtmode == text ) return WriteRT( _str.c_str() );
+    if( _rtmode == text ){
+        Dbg << "Invoquing WriteRT as style::text requested for str[" << _str << "]"; DEND;
+        return WriteRT( _str.c_str() );
+    }
     p = new TCell[  _str.length() +1 ];
     s = p;
     std::string::const_iterator i = _str.begin();
@@ -182,20 +186,24 @@ int swWriter::WriteStr( const std::string& _str )
  */
 int swWriter::WriteRT( const char* _str)
 {
+gDebug << " str[" << _str << "] start"; DEND;
     PStr pStr;
     swText& T = swMain::TextProcessor();
     T.SetDefaultAttributes(_owner->DefAttr() );
     //Debug << " ( " << _str << ") " << _c.tostring(); DEND;
     T << _str << swText::END;
     _a = T.CurAttr();
-    if( (pStr = T.Data() ) == 0l ){
+    pStr = T.Data();
+    gDebug << " PStr pStr@(" << pStr << ")"; DEND;
+    if( !pStr ){
         gDebug << " swText::Transform failed!!!" ; DEND;
         return -1;
     }
     
     //Debug << "pStr=" <<  pStr  ;DEND;
     int r = WritePStr( pStr );
-    //delete [] pStr;
+    Dbg << "Deleting pStr@(" << pStr << ")"; DEND;
+    delete [] pStr;
     T.Clear();
     return r;
 }
@@ -206,6 +214,7 @@ int swWriter::WriteRT( const char* _str)
  */
 int swWriter::WritePStr( PStr pStr)
 {
+    gDebug << " -- "; DEND;
     pxy xy = _c;
     PStr p = pStr, _pos = Seek( _c );
     if( ! (p||_pos) )return 0;
