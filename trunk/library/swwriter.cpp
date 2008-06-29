@@ -352,13 +352,13 @@ void swWriter::DrawFrame3D( const Rect& r, const swTAttr& A )
     AscLine( pxy(r.width()-1,r.height()-2), r.height()-2, direction::up, _A );
 
     _A.SetAttr( A_BOLD, true );
-    JoinAcs( r.topleft(), direction::topleft, A );
+    JoinAcs( r.topleft(), direction::topleft, _A );
     _A.SetAttr( A_BOLD, false );
-    JoinAcs( r.bottomright(), direction::bottomright, A );
-    _A.SetAttr( A_BOLD, true );
-    JoinAcs( r.bottomleft(), direction::bottomleft, A );
+    JoinAcs( r.bottomright(), direction::bottomright, _A );
     _A.SetAttr( A_BOLD, false );
-    JoinAcs( r.topright(), direction::topright, A );/// @todo implement me
+    JoinAcs( r.bottomleft(), direction::bottomleft, _A );
+    _A.SetAttr( A_BOLD, false );
+    JoinAcs( r.topright(), direction::topright, _A );/// @todo implement me
 }
 
 
