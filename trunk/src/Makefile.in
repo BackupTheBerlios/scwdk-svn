@@ -119,6 +119,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
@@ -171,6 +172,8 @@ program_transform_name = @program_transform_name@
 psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+sigc_CFLAGS = @sigc_CFLAGS@
+sigc_LIBS = @sigc_LIBS@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
@@ -179,9 +182,7 @@ top_srcdir = @top_srcdir@
 scwdk_SOURCES = scwdk.cpp
 
 # set the include path found by configure
-INCLUDES = -I$(top_srcdir)/library -I/usr/lib/sigc++-2.0/include \
-	-I/usr/include/sigc++-2.0 $(all_includes)
-
+INCLUDES = -I$(top_srcdir)/library $(sigc_CFLAGS) $(all_includes)
 
 # the library search path.
 scwdk_LDFLAGS = $(all_libraries) 

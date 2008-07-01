@@ -52,7 +52,8 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libscwdk_la_DEPENDENCIES =
+am__DEPENDENCIES_1 =
+libscwdk_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libscwdk_la_OBJECTS = events.lo exstring.lo layout.lo linuxdl.lo \
 	mutex.lo pxy.lo rect.lo size.lo swcommand.lo swcontrol.lo \
 	swdesktop.lo swlabel.lo swmain.lo swncurses.lo swobject.lo \
@@ -129,6 +130,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
@@ -181,15 +183,16 @@ program_transform_name = @program_transform_name@
 psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+sigc_CFLAGS = @sigc_CFLAGS@
+sigc_LIBS = @sigc_LIBS@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-INCLUDES = -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include
 METASOURCES = AUTO
 lib_LTLIBRARIES = libscwdk.la
-libscwdk_la_LIBADD = -lncurses -ldl -lpthread -lsigc-2.0
+libscwdk_la_LIBADD = $(sigc_LIBS) -ldl -lncurses -lpthread
 libscwdk_la_SOURCES = events.cpp exstring.cpp layout.cpp linuxdl.cpp mutex.cpp \
 	pxy.cpp rect.cpp size.cpp swcommand.cpp swcontrol.cpp swdesktop.cpp swlabel.cpp \
 	swmain.cpp swncurses.cpp swobject.cpp swtattr.cpp swtext.cpp swthread.cpp \
@@ -200,6 +203,7 @@ include_HEADERS = events.h exstring.h layout.h linuxdl.h msgdefs.h mutex.h \
 	swobject.h swtattr.h swtext.h swthread.h swuicontrol.h swwriter.h
 
 noinst_HEADERS = swcommand.h swlabel.h swwindow.h
+INCLUDES = $(sigc_CFLAGS)
 all: all-am
 
 .SUFFIXES:
