@@ -81,6 +81,34 @@ int Main::Init(){
     (*wr) << pxy(1,1) << swWriter::text << "<bgcolor black;fgcolor yellow; strong;>[ child control embbeded in parent   ]";
     wr->DrawFrame( wr->Geometry(), swTAttr( 2,swcolor::cyan, A_BOLD) );
     tc->EndWrite();
+
+    
+
+
+
+
+//------------------------------------------------------------
+    swWindow* ttc = new swWindow(this, 0, "Test II  of swWindow");
+    ttc->SetGeometry( Rect(19,13, 100,10 ) );
+    ttc->InitView();
+    wr = ttc->StartWrite( );
+    //wr->Clear();
+    A = wr->Control()->DefAttr();
+
+    (*wr) << pxy( 1,1 ) << "swWriter::plain: "<< swWriter::plain <<  "<strong; fgcolor red; bgcolor black; underline;>   uicontrol!!!   </underline;>";
+    (*wr) << pxy( 1,2 ) << "swWriter::text : "  <<swWriter::text  << "<strong; fgcolor red ; bgcolor black; underline;>   uicontrol!!!   </underline;>";
+    (*wr) << pxy( 1, ttc->Height()-2) <<  "<fgcolor cyan;strong;underline;>texte dans une zone encadree.";
+
+    (*wr) << pxy( 10, ttc->Height()-1) <<  "<fgcolor white;strong;>I am somwhere on the bottom frame.";
+    
+    swUiControl* ctt = new swUiControl(ttc, 0, "child of tc");
+    ctt->SetGeometry(Rect( 5,3 , 40,3 ) );
+    wr = ctt->StartWrite();
+    wr->Clear();
+    (*wr) << pxy(1,1) << swWriter::text << "<bgcolor black;fgcolor yellow; strong;>[ child control embbeded in parent   ]";
+    wr->DrawFrame( wr->Geometry(), swTAttr( 2,swcolor::cyan, A_BOLD) );
+    ttc->EndWrite();
+
     return 0;
 }
 using namespace std;
@@ -93,24 +121,3 @@ int main(int argc, char *argv[])
     gDebug << " finished exiting with 0";DEND;
     return EXIT_SUCCESS;
 }
-//     T << "<fgcolor black; bgcolor cyan;> This is scwdk"
-//       << "<fgcolor red;> ( Simple Console Widget DevKit )"
-//         <<"<fgcolor black;> Version <fgcolor yellow;>0.1<fgcolor black;>a<fgcolor yellow; strong;> WIP "
-//         << swText::END;
-//
-//     PStr pstr = T.Data();
-//     Debug << " longueur de pstr: " << T.length( pstr ); DEND;
-//     mvaddchstr( 1,1, pstr);
-//     delete [] pstr;
-//     T.ReleaseData();
-//
-//     T << "< bgcolor blue; fgcolor white; strong; > Allo le monde!"
-//         "<underline; fgcolor yellow;> ///todo </underline; fgcolor white;>\""
-//         "< cr; br; nl;>\"  <fgcolor cyan;>This is called Text processing </StRoNg;> low cyan on blue...?"
-//         "<region 2 2 60 20; GRID 10 5; FRAME; FRAMETITLE;> Plug proper delegates to swText to enable commands </FRAMETITLE;>" << swText::END;
-//     pstr = T.Data();
-//     mvaddchstr( 5,0, pstr );
-//     T.ReleaseData();
-//     delete [] pstr;
-
-
