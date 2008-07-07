@@ -153,6 +153,7 @@ protected:
     Rect m_geometry;
     /// This is the absolute topleft position of this UI control
     pxy m_topleft;
+    /// Root layout
     LayoutBase* m_layout;
     swTAttr m_DefTextAttr;
     int _uiflags;

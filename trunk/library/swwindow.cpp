@@ -95,7 +95,7 @@ int swWindow::InitView()
         return -1;
     }
     w->Clear();
-    w->DrawFrame3D( w->Geometry(), swTAttr( swcolor::blue, swcolor::white, 0) );
+    w->DrawFrame3D( w->Geometry(), swTAttr( swcolor::blue, swcolor::cyan, 0) );
     //Update();
     return 0;
 }
