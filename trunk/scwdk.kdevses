@@ -2,20 +2,20 @@
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
  <DocsAndViews NumberOfDocuments="5" >
-  <Doc0 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/src/scwdk.cpp" >
-   <View0 Encoding="" line="78" Type="Source" />
+  <Doc0 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swwriter.h" >
+   <View0 Encoding="UTF-8" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/library/swncurses.h" >
-   <View0 Encoding="" line="69" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/src/scwdk.cpp" >
+   <View0 Encoding="" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/library/swmain.cpp" >
-   <View0 Encoding="" line="87" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swwindow.cpp" >
+   <View0 Encoding="" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/bretzel/Projects/c%2B%2B/scwdk/library/swncurses.cpp" >
-   <View0 Encoding="" line="209" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swdesktop.cpp" >
+   <View0 Encoding="" line="57" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/bretzel/Projects/napplication.cpp" >
-   <View0 Encoding="UTF-8" line="0" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swwriter.cpp" >
+   <View0 Encoding="" line="130" Type="Source" />
   </Doc4>
  </DocsAndViews>
  <pluginList>
