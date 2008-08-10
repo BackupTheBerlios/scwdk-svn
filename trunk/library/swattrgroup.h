@@ -20,15 +20,37 @@
 #ifndef SWATTRGROUP_H
 #define SWATTRGROUP_H
 
+#include "scwdk.h"
+
+#include <string>
+#include <map>
+
 /**
 	@author Serge Lussier,,, <bretzel@pc-desktop>
 */
-class swAttrGroup{
-public:
+
+struct swAttrGroup{
+    typedef std::map<const string, swAttrGroup*> List;
     swAttrGroup();
 
     ~swAttrGroup();
-
+    // Totaly accessible and modifiable node.
+    swTAttr& operator [](int st ){
+        switch(st){
+            case state::disable:
+                return _disabled;
+            case state::active:
+                return _active;
+            case state::normal:
+                return _normal;
+            default:
+                return normal;
+        }
+        return _normal;
+    }
+    swTAttr _normal;
+    swTAttr _active;
+    swTAttr _disabled;
 };
 
 #endif
