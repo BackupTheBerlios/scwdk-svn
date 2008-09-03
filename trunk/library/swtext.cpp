@@ -442,6 +442,7 @@ bool swText::Initialize()
     //        << new swText::Operator('B', sigc::mem_fun( this, &swText::op_bg));
     //        // Long format
     AddLfOperator(new swText::Operator("STRONG",    sigc::mem_fun( this, &swText::lfop_bold)));
+    AddLfOperator(new swText::Operator("BOLD",      sigc::mem_fun( this, &swText::lfop_bold)));
     AddLfOperator(new swText::Operator("FGCOLOR",   sigc::mem_fun( this, &swText::lfop_fg  )));
     AddLfOperator(new swText::Operator("/",         sigc::mem_fun( this, &swText::lfop_not)));
     AddLfOperator(new swText::Operator("UNDERLINE", sigc::mem_fun( this, &swText::lfop_underline)));
@@ -472,17 +473,19 @@ swText::Operator* swText::op_locate( std::string::const_iterator _e )
 
 /*!
     \fn swText::op_locate( std::string::const_iterator _e )
+    \todo Change method return type to " const swText::Operator" 
  */
 swText::Operator* swText::lfop_locate( const std::string& _key )
 {
     //Debug << "Finding key:" << _key << "...\n";
     swText::lfop_iterator it = swText::lfoperators.find(_key);
     if (it == swText::lfoperators.end() ){
-        Dbg << _key << " Not found!@!! return 0l;"; DEND;
+        Dbg << _key << " Not found! return 0;"; DEND;
         return 0l;
     }
     //DEND;
     return it->second;
+    ///@todo return *(it->second);
 }
 
 /*!
@@ -551,7 +554,7 @@ bool swText::TrySwitchToLongFormat( std::string::const_iterator istart, std::str
     std::list<std::string> L;
     String::split(L,str," " ,false,false);
     if(! L.size() ){
-        Dbg << "Error splitting attributes comand text";DEND;
+        Dbg << "Error splitting attributes command text";DEND;
         return false;
     }
     //Dbg << "Number of tokens in the attribute command: " << L.size() << "\n";

@@ -27,6 +27,7 @@
 #include "swdesktop.h"
 #include "mutex.h"
 #include "swtext.h"
+#include "swattrgroup.h"
 
 
 /**
@@ -55,6 +56,10 @@ public:
         return *this;
     }
 
+    void addDelegate( event_t e, EventDelegate::Client d ){
+        swMain::_delegates[e] += d;
+    }
+    
     static swMain* Instance() { return swMain::_Self; }
     static swText& TextProcessor() {
         //g_mTextProcessor->init_result();
@@ -84,10 +89,14 @@ protected:
     virtual event_t _KeyInput( KeyPressEvent* Kev );
     virtual event_t _MouseEvent( MouseEvent* Mev );
     virtual event_t _MessageEvent(MessageEvent* msg );
+
+    static swAttrGroup::List _ColorsList;
+    
 private:
     // Slots( delegates ):
     bool _KeyFn(Event*);
     static swText* g_mTextProcessor;
+    static EventDelegate::Delegates _delegates;
 };
 
 #endif

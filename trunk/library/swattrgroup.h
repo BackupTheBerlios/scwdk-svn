@@ -24,13 +24,14 @@
 
 #include <string>
 #include <map>
+#include "swtattr.h"
 
 /**
 	@author Serge Lussier,,, <bretzel@pc-desktop>
 */
 
 struct swAttrGroup{
-    typedef std::map<const string, swAttrGroup*> List;
+    typedef std::map<const std::string, swAttrGroup*> List;
     swAttrGroup();
 
     ~swAttrGroup();
@@ -44,7 +45,7 @@ struct swAttrGroup{
             case state::normal:
                 return _normal;
             default:
-                return normal;
+                return _normal;
         }
         return _normal;
     }

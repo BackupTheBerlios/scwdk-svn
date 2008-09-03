@@ -1,22 +1,19 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="5" >
-  <Doc0 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swwriter.h" >
-   <View0 Encoding="UTF-8" Type="Source" />
+ <DocsAndViews NumberOfDocuments="4" >
+  <Doc0 NumberOfViews="1" URL="file:///usr/local/src/projects/c%2B%2B/scwdk/library/swmain.cpp" >
+   <View0 Encoding="" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/src/scwdk.cpp" >
+  <Doc1 NumberOfViews="1" URL="file:///usr/local/src/projects/c%2B%2B/scwdk/library/events.h" >
    <View0 Encoding="" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swwindow.cpp" >
+  <Doc2 NumberOfViews="1" URL="file:///usr/local/src/projects/c%2B%2B/scwdk/library/events.cpp" >
    <View0 Encoding="" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swdesktop.cpp" >
-   <View0 Encoding="" line="57" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///usr/local/src/projects/c%2B%2B/scwdk/library/swmain.h" >
+   <View0 Encoding="" line="59" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///iShare/Developement/c%2B%2B/scwdk/library/swwriter.cpp" >
-   <View0 Encoding="" line="130" Type="Source" />
-  </Doc4>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>

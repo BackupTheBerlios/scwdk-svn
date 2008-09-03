@@ -341,119 +341,38 @@ public:
 
 
 
-// /*!
-//    \class EventDelegator
-//    \brief Events propagation system
-//    \note just a design test -- not to really be implemented unless it's worth it and really usefull.
-// */
+/*!
+   \class EventDelegator
+   \brief Events propagation system<br /> An instance of EventDelegate holds a signal class that calls connected slots.
+   \note just a design test -- not to really be implemented unless it's worth it and really usefull.
+*/
 
 
-/*
+
 class EventDelegate : public swObject{
 public:
 
     typedef sigc::signal<bool, Event*>::accumulated< swObject::interruptible> Delegate;
     typedef sigc::slot<bool, Event*> Client;
 
-    struct DelegateNode{
-        EventDelegate::Delegate Delegate;
-        DelegateNode() {}
-        int operator += (EventDelegate::Client client ){
-            Delegate.connect( client );
-            return 0;
-        }
-        bool operator ( ) (Event* E){
-            return Delegate(E);
-        }
-        bool operator !(){ return this == &DelegateNode::nul; }
-        static DelegateNode nul;
-    };
+    typedef std::map<event_t, EventDelegate*> Delegates;
 
-    typedef std::map< event_t, EventDelegate::DelegateNode* > DelegateMap;
+    EventDelegate& operator += ( Client d ){
+        delegator.connect(d);
+        return *this;
+    }
+    bool propagateEvent( Event* e ){
+        return delegator(e);
+    }
     EventDelegate() { }
     virtual ~EventDelegate() {}
 
-    /*!
-    \fn EventDelegate::operator []( event:event_t ev)
-    
-    DelegateNode& operator []( event_t ev)
-    {   
-        gDebug;
-        DelegateMap::iterator it = Delegates.find( ev );
-        if( it == Delegates.end() ){
-            Dbg << "Registering event #" << ev;DEND;
-            Delegates[ev] = new DelegateNode;
-            it = Delegates.find( ev );
-        }else
-        Dbg << "Providing existing DelegateNode #" << ev;DEND;
-        return *(it->second);
-    }
+
     static EventDelegate nul;
-    //static DelegateNode& Select( const std::string& _path );
     
 private:
-    friend class EventDelegateGroup;
-    DelegateMap Delegates;
-    DelegateNode& _find( event_t e ){
-        gDebug;
-        DelegateMap::iterator it = Delegates.find( e );
-        if( it == Delegates.end() ){
-            Dbg << "#" << e << " not found!@" ; DEND;
-            return  DelegateNode::nul;
-        }
-        else
-            Dbg << "#" << e << " found into this group!@" ;DEND;
-        return *(it->second );
-    }
+    Delegate delegator;
 };
 
-
-class EventDelegateGroup : public swObject{
-public:
-    typedef std::map<std::string, EventDelegate* > DelegateGroup;
-    typedef DelegateGroup::iterator iterator;
-    
-    EventDelegateGroup( ) {}
-    virtual ~EventDelegateGroup() {}
-    
-    //EventDelegateGroup& operator +=( const std::string& );
-    //EventDelegateGroup& operator +=( EventDelegate* evd );
-    /*!
-        \fn EventDelegateGroup::operator [](const std::string& _name )
-    
-    EventDelegate& operator [](const std::string& _name )
-    {
-        DelegateGroup::iterator it = Groups.find( _name );
-        if( it == Groups.end() ){
-            gDebug << "Registering event group" << _name.c_str() ; DEND;
-            Groups[ _name ] = new EventDelegate;
-            it = Groups.find( _name );
-        }else
-        Dbg << "Providing event group " << _name.c_str(); DEND;
-        return *(it->second);
-        
-    }
-    EventDelegate::DelegateNode& operator [] ( event_t e ){
-        gDebug;
-        DelegateGroup::iterator it;
-        EventDelegate* ev;
-        
-        for( it = Groups.begin(); it != Groups.end(); it ++ ) {
-            std::string s( it->first );
-            Dbg << "Searching for event #" << e << " into " << s.c_str();DEND;
-            ev = it->second;
-            EventDelegate::DelegateNode& dn = ev->_find( e );
-            if(!dn) continue;
-            Dbg << " Got a DelegateNode for event #"<< e ;DEND;
-            return dn;
-        }
-        Dbg << " event #" << e << " not found!!" ; DEND;
-        return EventDelegate::DelegateNode::nul;
-    }
-    
-    DelegateGroup Groups;
-
-};
-*/
 
 #endif

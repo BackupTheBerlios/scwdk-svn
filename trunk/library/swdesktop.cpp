@@ -214,7 +214,7 @@ int swDesktop::Init()
     // ------------------------------------------------- TESTS
 
     swLabel* label = new swLabel(this,0,"desk label test");
-    label->SetGeometry( Rect( 0,0, Width()-4, 1));
+    label->SetGeometry( Rect( 0,0, Width(), 1));
     String S;
     S << "<fgcolor yellow; strong;>Label</strong; fgcolor white;> test in desktop: my W=" << Width() << ": my H=" << Height();
     (*label)<< S;

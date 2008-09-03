@@ -55,10 +55,10 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libscwdk_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libscwdk_la_OBJECTS = events.lo exstring.lo layout.lo linuxdl.lo \
-	mutex.lo pxy.lo rect.lo size.lo swcommand.lo swcontrol.lo \
-	swdesktop.lo swlabel.lo swmain.lo swncurses.lo swobject.lo \
-	swtattr.lo swtext.lo swthread.lo swuicontrol.lo swwindow.lo \
-	swwriter.lo
+	mutex.lo pxy.lo rect.lo size.lo swattrgroup.lo swcommand.lo \
+	swcontrol.lo swdesktop.lo swlabel.lo swmain.lo swncurses.lo \
+	swobject.lo swtattr.lo swtext.lo swthread.lo swuicontrol.lo \
+	swwindow.lo swwriter.lo
 libscwdk_la_OBJECTS = $(am_libscwdk_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -194,15 +194,15 @@ METASOURCES = AUTO
 lib_LTLIBRARIES = libscwdk.la
 libscwdk_la_LIBADD = $(sigc_LIBS) -ldl -lncurses -lpthread
 libscwdk_la_SOURCES = events.cpp exstring.cpp layout.cpp linuxdl.cpp mutex.cpp \
-	pxy.cpp rect.cpp size.cpp swcommand.cpp swcontrol.cpp swdesktop.cpp swlabel.cpp \
-	swmain.cpp swncurses.cpp swobject.cpp swtattr.cpp swtext.cpp swthread.cpp \
-	swuicontrol.cpp swwindow.cpp swwriter.cpp
+	pxy.cpp rect.cpp size.cpp swattrgroup.cpp swcommand.cpp swcontrol.cpp \
+	swdesktop.cpp swlabel.cpp swmain.cpp swncurses.cpp swobject.cpp swtattr.cpp \
+	swtext.cpp swthread.cpp swuicontrol.cpp swwindow.cpp swwriter.cpp
 
 include_HEADERS = events.h exstring.h layout.h linuxdl.h msgdefs.h mutex.h \
 	pxy.h rect.h scwdk.h size.h swcommand.h swcontrol.h swdesktop.h swmain.h \
 	swobject.h swtattr.h swtext.h swthread.h swuicontrol.h swwriter.h
 
-noinst_HEADERS = swcommand.h swlabel.h swwindow.h
+noinst_HEADERS = swattrgroup.h swcommand.h swlabel.h swwindow.h
 INCLUDES = $(sigc_CFLAGS)
 all: all-am
 
@@ -281,6 +281,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pxy.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rect.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/size.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swattrgroup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swcontrol.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/swdesktop.Plo@am__quote@

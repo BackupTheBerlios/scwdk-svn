@@ -89,6 +89,8 @@ protected:
     Rect _geometry;
     swUiControl* _uicontrol;
     LayoutBase* _childLayout;
+
+    float _layoutsize;
 };
 
 /*!

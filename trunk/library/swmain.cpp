@@ -21,9 +21,14 @@
 
 //EventDelegateGroup swMain::EventsPropagator;
 
+
+EventDelegate::Delegates swMain::_delegates;
+
 swMain* swMain::_Self=0l;
 
 swText* swMain::g_mTextProcessor = 0l;
+
+swAttrGroup::List swMain::_ColorsList;
 
 swMain::swMain()
  : swObject()
@@ -208,6 +213,15 @@ int swMain::Init()
     swMain::g_mTextProcessor = new swText(this, swTAttr(0,7,A_NORMAL), "main::TextProcessor");
     swMain::g_mTextProcessor->Initialize();
 
+    swMain::_ColorsList["panel"] = new swAttrGroup();
+    swMain::_ColorsList["label"] = new swAttrGroup();
+    swMain::_ColorsList["inputfield"] = new swAttrGroup();
+    swMain::_ColorsList["frame"] = new swAttrGroup();
+    swMain::_ColorsList["framecaption"] = new swAttrGroup();
+    swMain::_ColorsList["fieldset"] = new swAttrGroup();
+    swMain::_ColorsList["scroll"] = new swAttrGroup();
+    swMain::_ColorsList[""] = new swAttrGroup();
+    
     _dsk = new swDesktop( this, 0, "swMain::Desktop = default");
     if( ( r = _dsk->Init() ) ){
         Dbg << " Desktop failed to init ???";DEND;

@@ -137,6 +137,8 @@ namespace uiflags{
     const int caption     = 0x200;
     const int status      = 0x400;
     const int dialog      = 0x700;
+    const int frame       = 0x800;
+    
 }
 
 
