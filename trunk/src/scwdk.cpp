@@ -62,14 +62,14 @@ int Main::Init(){
     if(!nc) return 128; // not supposed to be;
 
     tc = new swWindow(this, 0, "Test of swWindow");
-    tc->SetGeometry( Rect(1,8, 100,8 ) );
+    tc->SetGeometry( Rect(1,8, 100,20 ) );
     tc->InitView();
     swWriter* wr = tc->StartWrite( );
     //wr->Clear();
     swTAttr A = wr->Control()->DefAttr();
 
-    (*wr) << pxy( 1,1 ) << "swWriter::plain: "<< swWriter::plain <<  "<fgcolor red; bgcolor white; /strong; underline;>   uicontrol!!!   </underline;>";
-    (*wr) << pxy( 1,2 ) << "swWriter::text : "  <<swWriter::text  << "<fgcolor red; bgcolor white; /strong; underline;>   uicontrol!!!   </underline;>";
+    (*wr) << pxy( 1,1 ) << "swWriter::plain: "<< swWriter::plain <<  "<fgcolor red; bgcolor white; /strong; underline;>   Window!!!   </underline;>";
+    (*wr) << pxy( 1,2 ) << "swWriter::text : "  <<swWriter::text  << "<fgcolor red; bgcolor white; /strong; underline;>   Window!!!   </underline;>";
     (*wr) << pxy( 1, tc->Height()-2) <<  "<fgcolor cyan;strong;underline;>texte dans une zone encadree.";
 
     (*wr) << pxy( 10, tc->Height()-1) <<  "<fgcolor white;strong;>I am somwhere on the bottom frame.";
@@ -95,8 +95,8 @@ int Main::Init(){
     //wr->Clear();
     A = wr->Control()->DefAttr();
 
-    (*wr) << pxy( 1,1 ) << "swWriter::plain: "<< swWriter::plain <<  "<strong; fgcolor red; bgcolor black; underline;>   uicontrol!!!   </underline;>";
-    (*wr) << pxy( 1,2 ) << "swWriter::text : "  <<swWriter::text  << "<strong; fgcolor red ; bgcolor black; underline;>   uicontrol!!!   </underline;>";
+    (*wr) << pxy( 1,1 ) << "swWriter::plain: "<< swWriter::plain <<  "<strong; fgcolor red; bgcolor black; underline;>   Window II!!!   </underline;>";
+    (*wr) << pxy( 1,2 ) << "swWriter::text : "  <<swWriter::text  << "<strong; fgcolor red ; bgcolor black; underline;>   Window II!!!   </underline;>";
     (*wr) << pxy( 1, ttc->Height()-2) <<  "<fgcolor cyan;strong;underline;>texte dans une zone encadree.";
 
     (*wr) << pxy( 10, ttc->Height()-1) <<  "<fgcolor white;strong;>I am somwhere on the bottom frame.";
@@ -109,6 +109,8 @@ int Main::Init(){
     wr->DrawFrame( wr->Geometry(), swTAttr( 2,swcolor::cyan, A_BOLD) );
     ttc->EndWrite();
 
+
+    
     return 0;
 }
 using namespace std;

@@ -71,7 +71,7 @@ public:
     virtual int RunOptions();
     virtual int Init();
     int Run();
-    int PostEvent( Event* _e );
+    int SendEvent( Event* _e );
 protected:
 
     typedef std::list< swWriter * > UQ; // Update Queu
@@ -85,7 +85,7 @@ protected:
     //static EventDelegateGroup EventsPropagator;
 protected:
     virtual event_t ProcessEvent( Event* _ev );
-    event_t DispatchEvents();
+    event_t PropagateEvents();
     virtual event_t _KeyInput( KeyPressEvent* Kev );
     virtual event_t _MouseEvent( MouseEvent* Mev );
     virtual event_t _MessageEvent(MessageEvent* msg );

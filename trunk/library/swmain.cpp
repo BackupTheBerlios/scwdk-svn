@@ -86,7 +86,7 @@ bool swMain::QueryExit(swObject* _sender )
     \fn swMain::PostEvent( Event* _e )
 
  */
-int swMain::PostEvent( Event* _e )
+int swMain::SendEvent( Event* _e )
 {
     /// @todo Implement threading protection ( mutex )
     _evq_x->lock();
@@ -100,8 +100,8 @@ int swMain::PostEvent( Event* _e )
 
 /*!
     \fn swMain::ProcessEvent( Event* _ev )
-    \brief This is the central event action that is dispatched to the target(s)
-    through one of the transport methods
+    \brief This is the central event action that is propagated through/from the target(s)
+    with one of the transport methods
  */
 event_t swMain::ProcessEvent( Event* _ev )
 {
@@ -127,6 +127,7 @@ event_t swMain::ProcessEvent( Event* _ev )
         case event::TimerEvent:
             break;
         case event::MessageEvent:
+            // one of { 'Timers', 'IOListeners:files/sockets', 'Terminal:control commands', 'Processes :Session controler groups, jobs, children processes )' }
             Dbg << " A Message ( '" << _ev->What() << "') received...";
             if( _ev->What() == event::TermResize ){
                 Dbg << " Termresize event received !!!!";
@@ -141,9 +142,9 @@ event_t swMain::ProcessEvent( Event* _ev )
 }
 
 /*!
-    \fn swMain::DispatchEvents()
+    \fn swMain::PropagateEvents()
  */
-event_t swMain::DispatchEvents()
+event_t swMain::PropagateEvents()
 {
     // no need to lock the queu since new events can be generated from within this thread and from other thread and PostEvent does protect the queu
     _evq_x->lock();
@@ -190,7 +191,7 @@ int swMain::Run()
             //if( (e = _preProcessEvent( e )) ){
             PostEvent( e );
         //}
-        ev = DispatchEvents();
+        ev = PropagateEvents();
     }while( ev != event::Quit );
     return 0;
 }
@@ -257,6 +258,25 @@ int swMain::RunOptions()
  */
 event_t swMain::_KeyInput( KeyPressEvent* Kev )
 {
+    bool cond=true;
+    swUiControl* control=0l;
+    switch(Kev->KeyClass()){
+        case FUNCTIONKEY:
+            // Trigger FnKEY signal so that object which captures this class
+            // will receive the event until one cancel propagation or bubble is finished.
+            cond = swMain::FnKEY_( Kev );
+        case DIRECTIONKEY:
+            //...
+            break;
+        default: break;
+    }
+    if(!cond) return (event_t)0;
+    if( _uiTarget ){
+        if(_uiTarget->hasEvent( event::keypress ) ){
+            cond = _uiTarget->Message( Kev );
+            if(!cond) return 0;
+        }else{
+
     return event::Quit;
 }
 

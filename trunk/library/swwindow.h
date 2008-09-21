@@ -22,6 +22,12 @@
 
 #include "swuicontrol.h"
 
+
+// Forward icon-like class
+
+class swWinIcon;
+
+
 /**
 Just a subclass of the ui control base - Manages the toplevel related behaviours automatically
 
@@ -46,7 +52,26 @@ public:
 
 protected:
     virtual swUiControl* _mouseSelect(const pxy& xy);
-
+private:
+    /// @see class swWinIcon
+    swWinIcon* _icon;
 };
+
+
+/*!
+ * \class swWinIcon
+ * \brief Icon - like mini window that has one short-line of text to represent the Window Caption or optional specific label text, and has the apropriate
+ * usual control buttons to restore/maximize/close (kill ) the owner (associated) Window.
+ */
+
+class swWinIcon : public swLabel{
+private:
+    explicit swWinIcon( swWindow* pr, const std::string& caption="", uint btnWinflags );
+    explicit swWinIcon(){}
+    
+
+    virtual ~swWinIcon();
+
+
 
 #endif
