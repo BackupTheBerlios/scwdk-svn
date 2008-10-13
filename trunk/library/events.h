@@ -21,7 +21,7 @@
 #define NCDKNEVENT_H
 
 #include "scwdk.h"
-#include "swobject.h"
+//#include "swobject.h"
 
 //#include <ncurses.h>
 
@@ -341,38 +341,6 @@ public:
 
 
 
-/*!
-   \class EventDelegator
-   \brief Events propagation system<br /> An instance of EventDelegate holds a signal class that calls connected slots.
-   \note just a design test -- not to really be implemented unless it's worth it and really usefull.
-*/
-
-
-
-class EventDelegate : public swObject{
-public:
-
-    typedef sigc::signal<bool, Event*>::accumulated< swObject::interruptible> Delegate;
-    typedef sigc::slot<bool, Event*> Client;
-
-    typedef std::map<event_t, EventDelegate*> Delegates;
-
-    EventDelegate& operator += ( Client d ){
-        delegator.connect(d);
-        return *this;
-    }
-    bool propagateEvent( Event* e ){
-        return delegator(e);
-    }
-    EventDelegate() { }
-    virtual ~EventDelegate() {}
-
-
-    static EventDelegate nul;
-    
-private:
-    Delegate delegator;
-};
 
 
 #endif

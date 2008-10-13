@@ -28,7 +28,7 @@ using std::endl;
 
 
 
-EventDelegate EventDelegate::nul;
+
 
 namespace event{
 

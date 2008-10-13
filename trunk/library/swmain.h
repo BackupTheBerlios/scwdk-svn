@@ -29,6 +29,7 @@
 #include "swtext.h"
 #include "swattrgroup.h"
 
+#include "eventdelegate.h"
 
 /**
 The swMain class is the main object of the program ( or application ).
@@ -40,63 +41,64 @@ the "main" desktop onto which the toplevel windows / or desktop owned child widg
 */
 class swMain : public swObject
 {
-    sigc::signal<bool, swObject*&>::accumulated< swObject::interruptible> QueryExit_;
-public:
+   sigc::signal<bool, swObject*&>::accumulated< swObject::interruptible> QueryExit_;
+   public:
 
-    typedef sigc::slot<bool, swObject*&> QueryExitT;
-    
-    
-    swMain();
-    swMain( const std::string& _name, int argc, char** argv );
-    virtual ~swMain();
-    
+      typedef sigc::slot<bool, swObject*&> QueryExitT;
 
-    swMain& operator += ( QueryExitT _f ){
-        QueryExit_.connect( _f );
-        return *this;
-    }
 
-    void addDelegate( event_t e, EventDelegate::Client d ){
-        swMain::_delegates[e] += d;
-    }
-    
-    static swMain* Instance() { return swMain::_Self; }
-    static swText& TextProcessor() {
-        //g_mTextProcessor->init_result();
-        return *(swMain::g_mTextProcessor);
-    }
-    swNCurses* CursesInstance() { return _nc; }
-    swDesktop* Desktop( int =0 /* Desktop # - for future use*/) { return _dsk; }
-    bool QueryExit(swObject* _sender );
-    virtual int RunOptions();
-    virtual int Init();
-    int Run();
-    int SendEvent( Event* _e );
-protected:
+      swMain();
+      swMain( const std::string& _name, int argc, char** argv );
+      virtual ~swMain();
 
-    typedef std::list< swWriter * > UQ; // Update Queu
-    swNCurses* _nc;
-    std::list<std::string> _args;
-    swDesktop* _dsk;
 
-    static swMain* _Self;
-    std::list<Event*> _evq;
-    mutex* _evq_x;
-    //static EventDelegateGroup EventsPropagator;
-protected:
-    virtual event_t ProcessEvent( Event* _ev );
-    event_t PropagateEvents();
-    virtual event_t _KeyInput( KeyPressEvent* Kev );
-    virtual event_t _MouseEvent( MouseEvent* Mev );
-    virtual event_t _MessageEvent(MessageEvent* msg );
+      swMain& operator += ( QueryExitT _f ){
+         QueryExit_.connect( _f );
+         return *this;
+      }
 
-    static swAttrGroup::List _ColorsList;
-    
-private:
-    // Slots( delegates ):
-    bool _KeyFn(Event*);
-    static swText* g_mTextProcessor;
-    static EventDelegate::Delegates _delegates;
+      void addDelegate( event_t e, EventDelegate::Client d ){
+         swMain::_delegates[e] += d;
+      }
+
+      static swMain* Instance() { return swMain::_Self; }
+      static swText& TextProcessor() {
+         //g_mTextProcessor->init_result();
+         return *(swMain::g_mTextProcessor);
+      }
+      swNCurses* CursesInstance() { return _nc; }
+      swDesktop* Desktop( int =0 /* Desktop # - for future use*/) { return _dsk; }
+      bool QueryExit(swObject* _sender );
+      virtual int RunOptions();
+      virtual int Init();
+      int Run();
+      int SendEvent( Event* _e );
+   protected:
+
+      typedef std::list< swWriter * > UQ; // Update Queu
+      swNCurses* _nc;
+      std::list<std::string> _args;
+      swDesktop* _dsk;
+
+      static swMain* _Self;
+      std::list<Event*> _evq;
+      mutex* _evq_x;
+      //static EventDelegateGroup EventsPropagator;
+   protected:
+      virtual event_t ProcessEvent( Event* _ev );
+      event_t PropagateEvents();
+      virtual event_t _KeyInput( KeyPressEvent* Kev );
+      virtual event_t _MouseEvent( MouseEvent* Mev );
+      virtual event_t _MessageEvent(MessageEvent* msg );
+
+      static swAttrGroup::List _ColorsList;
+
+   private:
+      // Slots( delegates ):
+      bool _KeyFn(Event*);
+      static swText* g_mTextProcessor;
+      static EventDelegate::Delegates _delegates;
+      swUiControl* _uiTarget;
 };
 
-#endif
+   #endif

@@ -22,6 +22,8 @@
 
 #include "scwdk.h"
 #include <list>
+#include "events.h"
+
 //#include <sigc++/sigc++.h>
 
 
@@ -42,7 +44,7 @@ public:
             return true;
         }
     };
-
+    bool hasEvent( event_t ){ return false;}
     typedef std::list<swObject*> List;
     typedef List::iterator Iterator;
     swObject();

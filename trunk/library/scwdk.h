@@ -21,6 +21,7 @@
 #define __scwdk__
 
 
+//#warning following compilation errors are intentionaly left as reminders. -- real work needed...
 
 //////// Generaly used in all sources
 #include <iostream>

@@ -19,6 +19,7 @@
  ***************************************************************************/
 #ifndef SWWINDOW_H
 #define SWWINDOW_H
+#include "swlabel.h"
 
 #include "swuicontrol.h"
 
@@ -66,12 +67,12 @@ private:
 
 class swWinIcon : public swLabel{
 private:
-    explicit swWinIcon( swWindow* pr, const std::string& caption="", uint btnWinflags );
+    swWinIcon( swWindow* pr, const std::string& caption="", uint btnWinflags=0 );
     explicit swWinIcon(){}
     
 
-    virtual ~swWinIcon();
-
+    virtual ~swWinIcon(){}
+};
 
 
 #endif

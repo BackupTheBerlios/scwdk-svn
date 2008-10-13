@@ -54,11 +54,11 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libscwdk_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
-am_libscwdk_la_OBJECTS = events.lo exstring.lo layout.lo linuxdl.lo \
-	mutex.lo pxy.lo rect.lo size.lo swattrgroup.lo swcommand.lo \
-	swcontrol.lo swdesktop.lo swlabel.lo swmain.lo swncurses.lo \
-	swobject.lo swtattr.lo swtext.lo swthread.lo swuicontrol.lo \
-	swwindow.lo swwriter.lo
+am_libscwdk_la_OBJECTS = eventdelegate.lo events.lo exstring.lo \
+	layout.lo linuxdl.lo mutex.lo pxy.lo rect.lo size.lo \
+	swattrgroup.lo swcommand.lo swcontrol.lo swdesktop.lo \
+	swlabel.lo swmain.lo swncurses.lo swobject.lo swtattr.lo \
+	swtext.lo swthread.lo swuicontrol.lo swwindow.lo swwriter.lo
 libscwdk_la_OBJECTS = $(am_libscwdk_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -193,16 +193,16 @@ top_srcdir = @top_srcdir@
 METASOURCES = AUTO
 lib_LTLIBRARIES = libscwdk.la
 libscwdk_la_LIBADD = $(sigc_LIBS) -ldl -lncurses -lpthread
-libscwdk_la_SOURCES = events.cpp exstring.cpp layout.cpp linuxdl.cpp mutex.cpp \
-	pxy.cpp rect.cpp size.cpp swattrgroup.cpp swcommand.cpp swcontrol.cpp \
-	swdesktop.cpp swlabel.cpp swmain.cpp swncurses.cpp swobject.cpp swtattr.cpp \
-	swtext.cpp swthread.cpp swuicontrol.cpp swwindow.cpp swwriter.cpp
+libscwdk_la_SOURCES = eventdelegate.cpp events.cpp exstring.cpp layout.cpp \
+	linuxdl.cpp mutex.cpp pxy.cpp rect.cpp size.cpp swattrgroup.cpp swcommand.cpp \
+	swcontrol.cpp swdesktop.cpp swlabel.cpp swmain.cpp swncurses.cpp swobject.cpp \
+	swtattr.cpp swtext.cpp swthread.cpp swuicontrol.cpp swwindow.cpp swwriter.cpp
 
 include_HEADERS = events.h exstring.h layout.h linuxdl.h msgdefs.h mutex.h \
 	pxy.h rect.h scwdk.h size.h swcommand.h swcontrol.h swdesktop.h swmain.h \
 	swobject.h swtattr.h swtext.h swthread.h swuicontrol.h swwriter.h
 
-noinst_HEADERS = swattrgroup.h swcommand.h swlabel.h swwindow.h
+noinst_HEADERS = eventdelegate.h swattrgroup.h swcommand.h swlabel.h swwindow.h
 INCLUDES = $(sigc_CFLAGS)
 all: all-am
 
@@ -273,6 +273,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventdelegate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/events.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exstring.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/layout.Plo@am__quote@

@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "swwindow.h"
 #include "swwriter.h"
+
 swWindow::swWindow(swObject* swParent): swUiControl(swParent)
 {
 }
