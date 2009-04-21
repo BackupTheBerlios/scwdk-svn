@@ -264,6 +264,8 @@ namespace wcurses
     {
         Event* _e = 0l;
         int x, y;
+        // Test commit scwdk
+
         switch ( nce )
         {
                 // Pre-process the ncurses event ( input events such as keyin or mouse
