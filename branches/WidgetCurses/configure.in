@@ -1,0 +1,24 @@
+AC_INIT()
+AM_INIT_AUTOMAKE(widgetcurses,0.1)
+
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
+AC_CONFIG_MACRO_DIR([m4])
+
+PKG_CHECK_MODULES([CCDELEGATES], [sigc++-2.0])
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+AC_CHECK_HEADER([ncurses.h], [],
+	AC_MSG_ERROR([Couldn't find ncurses headers.]))
+
+AC_CHECK_LIB(ncurses, refresh, , AC_ERROR([Couldn't find ncurses library]), -lncurses, -ldl)
+
+AC_LANG_RESTORE
+
+
+AC_OUTPUT(Makefile src/Makefile src/libWidgetCurses/Makefile)

@@ -1,0 +1,81 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by Serge Lussier,,,   *
+ *   tuxadmin.dev@gmail.com   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+#ifndef WCURSESCURSESTERM_H
+#define WCURSESCURSESTERM_H
+
+#include <object.h>
+#include "rect.h"
+#include "cursesattr.h"
+
+
+namespace wcurses
+{
+
+    /**
+    Initialise and sets the ncurses terminal and adapt the  routines for the WidgetCurses API
+
+
+        @author Serge Lussier,,, <tuxadmin.dev@gmail.com>
+    */
+    class CursesTerm : public Object
+    {
+        public:
+            CursesTerm ( Object* swParent );
+
+            CursesTerm();
+
+            virtual ~CursesTerm();
+            const std::string& NameID();
+            int Init();
+
+            /*!
+                \fn CursesTerm::Height()
+             */
+            int Height() { return _scrSize.Height(); }
+            /*!
+                \fn CursesTerm::Width()
+             */
+            int Width() { return _scrSize.Width(); }
+//     linuxdl::LinuxDL D;
+            void CursesAbort ( int );
+            void CursesAbort ( const std::string& _erstr );
+            WINDOW* ScrWin;
+
+            int Finish();
+            static CursesTerm* Self;
+            static CursesTerm* Instance() { return CursesTerm::Self; }
+
+
+            bool _CanExit ( Object*& _sender );
+            Event* WaitEvent();
+        protected:
+            Size _scrSize;
+            bool bMeta;
+
+
+            Event* _preProcess ( int nce, bool m );
+            MouseEvent* _mouseEvent ( int nc );
+            KeyPressEvent* _inKey ( int nc, bool m );
+
+    };
+
+}
+
+#endif

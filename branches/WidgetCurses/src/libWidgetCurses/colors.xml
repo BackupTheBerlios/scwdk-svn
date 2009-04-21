@@ -1,0 +1,40 @@
+<themes>
+    <Widget>
+        <name>Default</name>
+        <state>
+            <id>active</id>
+            <data>
+                <bgcolor>white</bgcolor>
+                <fgcolor>black</fgcolor>
+                <style>normal</style>
+            </data>
+        </state>
+        <state>
+            <id>normal</id>
+            <data>
+                <bgcolor>white</bgcolor>
+                <fgcolor>black</fgcolor>
+                <style>normal</style>
+            </data>
+        </state>
+        <state>
+            <id>disabled</id>
+            <data>
+                <bgcolor>white</bgcolor>
+                <fgcolor>black</fgcolor>
+                <style>normal</style>
+            </data>
+        </state>
+        <state>
+            <id>move</id>
+            <data>
+                <bgcolor>white</bgcolor>
+                <fgcolor>black</fgcolor>
+                <style>normal</style>
+            </data>
+        </state>
+    </Widget>
+    <Label>
+
+
+

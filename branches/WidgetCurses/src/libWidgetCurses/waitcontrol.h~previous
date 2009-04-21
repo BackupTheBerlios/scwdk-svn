@@ -1,0 +1,74 @@
+/***************************************************************************
+ *   Copyright (C) 2005 by Serge Lussier   *
+ *   serge@tuxadmin.net   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
+#ifndef control_hxx
+#define control_hxx
+
+//#include <mutex.h>
+#include <thread.h>
+
+
+
+
+
+namespace controlstate
+{
+    const int terminate = 0;
+    const int proceed   = 1;
+    const int pause     = 2;
+}
+
+namespace wcurses
+{
+#define Delegate( T, X ) boost::bind( &(T), this, (X) )
+
+    class WaitControl: public mutex, public Thread
+    {
+        public:
+            typedef sigc::signal<bool> TWorkDelegator;
+            typedef sigc::slot<bool> TWorkDelegate;
+            WaitControl();
+            WaitControl ( const std::string& nameid );
+            virtual ~WaitControl();
+            int wait();
+            void signal();
+
+            TWorkDelegator::iterator delegate ( WaitControl::TWorkDelegate _work ) { return proceed_.connect ( _work ); }
+            virtual bool start();
+            virtual int init();
+
+            int state() { return _state; }
+            void terminate();
+            void release();
+            bool noop() { return true; }
+
+        private:
+            bool _cond;
+            pthread_cond_t* _cv;
+            TWorkDelegator proceed_;
+        protected:
+            virtual bool controller_loop();
+            int _state;
+    };
+
+}
+
+#endif

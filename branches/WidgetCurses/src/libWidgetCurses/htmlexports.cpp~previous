@@ -1,0 +1,8 @@
+Painter::Painter(Widget* swParent, uint,  const char*):
+_owner( swParent )
+{
+    if(! _owner ) return;
+    _ioscr  = _owner->DC();
+    _r.assign( 0,0, _owner->Width(), _owner->Height() );
+    _a = _owner->DefAttr();
+}

@@ -1,0 +1,430 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by Serge Lussier,,,   *
+ *   tuxadmin.dev@gmail.com   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+#include <Application>
+#include <Widget>
+#include <painter.h>
+#include <String>
+namespace wcurses
+{
+    CursesTerm* Application::_terminal = 0l;
+    Application* Application::_self=0l;
+    StyledString Application::_textProc;
+    StyleComponents::ComponentsMap Application::StyleThemes;
+
+    std::map<std::string, Screen*> Application::_screens;
+    Screen* Application::_curscreen = 0l;
+
+    Application::Application()
+            : Object()
+    {
+        Application::_terminal = 0l;
+        Application::_self = this;
+    }
+
+
+    Application::~Application()
+    {
+        //delete Application::_terminal; // Done in deleting self from main call
+    }
+
+    /*!
+        \fn wcurses::Application::Init()
+     */
+    int Application::Init()
+    {
+        Application::_terminal = new CursesTerm ( this );
+        Application::_terminal->Init();
+        Application::_textProc.Initialize();
+        Application::InitializeStyles();
+        Application::_curscreen = new Screen ( this, 0, "Main" );
+        Application::_curscreen->Initialize ( Application::_terminal );
+        return InitializeUI();
+    }
+
+    /*!
+        \fn wcurses::Application::Quit()
+     */
+    bool Application::Quit()
+    {
+        Debug << "Finishing curses terminal:";
+        if ( Application::_terminal ) Application::_terminal->Finish();
+        return true;
+    }
+
+
+    /*!
+        \fn wcurses::Application::InitializeUI()
+     */
+    int Application::InitializeUI()
+    {
+        Widget* W = Application::_curscreen->Root ( "" );
+        W->Update();
+        return 0;
+    }
+
+
+    /*!
+        \fn wcurses::Application::Run()
+     */
+    int Application::Run()
+    {
+        Debug << " Launching app loop -- just writing message...";
+        Application::_curscreen->StartUpdatesThread();
+        //Application::_curscreen->Update();
+        Widget* R = Application::_curscreen->Root ( "" );
+        Painter* P = R->DCPainter();
+        P->CPosition ( 1,1 );
+        Event* E;
+        KeyPressEvent* key;
+        String S;
+        MouseEvent* ME;
+        xyCoords xy(1,1);
+        do
+        {
+            E = Application::_terminal->WaitEvent();
+//             if(!E){
+//                 Dbg << "Event is nil! ...continue";DEND;
+//                 E = &Event::nil;
+//                 continue;
+//             }
+            //PushEvent(E);
+            //_doEvents();
+
+            switch ( E->Type() )
+            {
+                case event::MouseEvent:
+                    ME = E->toEventType<MouseEvent>();
+                    if ( !ME )
+                    {
+                        Application::_textProc << " MouseEvent : cannot cast to MouseEvent!!"  << StyledString::END;
+                        break;
+                    }
+                    S = String("");
+                    S << "<strong; bgcolor blue; fgcolor cyan;>";
+                    S << ME->ToString();
+                    //PStr pstr = Application::_textProc.Data();
+                    P->WriteRT ( S.std().c_str() );
+                    xy += xyCoords(0,1);
+                    P->CPosition(xy);
+                    R->Update();
+                    break;
+                case event::KeyEvent:
+                    key = E->toEventType<KeyPressEvent>();
+                    switch ( key->KeyValue() )
+                    {
+                        case 'q':
+                            if ( key->isMeta() ) key->SetEvent ( event::Quit );
+                            else goto nk;
+                            break;
+                        default:
+                        nk:
+                            S = String ( "" );
+                            S << '[' << (key->isMeta() ? "M":"-") << ">"<< ( char ) key->KeyValue() << '|' << (int)key->KeyValue();
+                            P->WriteStr ( S.std().c_str() );
+
+                            xy += xyCoords(0,1);
+                            P->CPosition(xy);
+                            R->Update();
+                            break;
+                    }
+                    break;
+            }
+
+        }
+        while ( E->What() != event::Quit );
+        return 0;
+    }
+
+
+
+
+
+    /*!
+        \fn wcurses::Application::StyleTheme(const std::string& StyleName)
+     */
+    StyleComponents* Application::StyleTheme ( const std::string& StyleName )
+    {
+        if ( Application::StyleThemes.find ( StyleName ) ==  Application::StyleThemes.end() ) return 0l;
+        return Application::StyleThemes[StyleName];
+
+    }
+
+
+    /*!
+        \fn wcurses::Application::AddTheme( const std::string& stylename )
+     */
+    StyleComponents* Application::AddTheme ( const std::string& StyleName )
+    {
+        Application::StyleThemes[StyleName] = new StyleComponents();
+        return Application::StyleThemes[StyleName];
+    }
+
+
+
+
+
+    /*!
+        \fn wcurses::Application::InitializeStyles()
+     */
+    int Application::InitializeStyles()
+    {
+        /// @todo implement me
+        StyleComponents* sc = Application::AddTheme ( "Widget.Default" );
+        ( *sc ) << states::active  << Style ( colors::cyan,colors::black, Style::normal )
+        << states::normal  << Style ( colors::black,colors::white, Style::normal )
+        << states::disable << Style ( colors::black,colors::white, Style::bold )
+        << states::move    << Style ( colors::black,colors::white, Style::bold );
+        gDebug << "Size of the data:" << sc->Size();
+        sc = Application::AddTheme ( "Widget.Label" );
+        ( *sc ) << states::active  << Style ( colors::white,colors::black, Style::normal )
+        << states::normal  << Style ( colors::blue,colors::white, Style::normal )
+        << states::disable << Style ( colors::blue,colors::white, Style::bold )
+        << states::move    << Style ( colors::blue,colors::white, Style::bold );
+
+        sc = Application::AddTheme ( "Window.Frame" );
+        ( *sc ) << states::active  << Style ( colors::blue,colors::yellow, Style::normal )
+        << states::normal  << Style ( colors::blue,colors::white, Style::normal )
+        << states::disable << Style ( colors::blue,colors::black, Style::bold )
+        << states::move    << Style ( colors::blue,colors::blue, Style::bold );
+
+        sc = Application::AddTheme ( "Frame.Caption" );
+        ( *sc ) << states::active  << Style ( colors::blue,colors::white, Style::normal )
+        << states::normal  << Style ( colors::blue,colors::yellow, Style::bold )
+        << states::disable << Style ( colors::blue,colors::black, Style::bold )
+        << states::move    << Style ( colors::blue,colors::blue, Style::bold );
+
+        return 0; // Nombre de styles crees
+    }
+    /*!
+        \fn wcurses::Application::Update( Widget* w, const Rect& _interior )
+     */
+    int Application::Update ( Widget* w, const Rect& _interior )
+    {
+        ( void ) Application::_curscreen->UpdateWidget ( w,_interior );
+        gDebug << "tracing crash : Update: " << w->NameID();
+        return 0;
+
+    }
+
+
+    /*!
+        \fn wcurses::Application::GetScreen(const std::string& _name)
+     */
+    Screen* Application::GetScreen ( const std::string& _name )
+    {
+        //if(Application::_screens.find(_name) == Application::_screens.end()) return (Screen*)0l;
+        //return Application::_screens[_name];
+        return Application::_curscreen;
+    }
+    /*!
+        \fn wcurses::Application::PushEvent( Event* E )
+     */
+    int Application::PushEvent ( Event* E )
+    {
+        Lock();
+        _eventsQueu.push_back ( E );
+        Unlock();
+        return _eventsQueu.size();
+    }
+
+    /*!
+        \fn wcurses::Application::_doEvents()
+     */
+    int Application::_doEvents()
+    {
+        if ( !_eventsQueu.size() ) return 0;
+
+        Event* E;
+        MessageEvent* Message;
+        KeyPressEvent* Key;
+        MouseEvent* Mouse;
+
+        Event::iterator it = _eventsQueu.begin();
+        for ( it; it != _eventsQueu.end(); it++ )
+        {
+            Lock();
+            E = *it;
+            Unlock();
+            ProcessEvent ( E );
+        }
+    }
+
+
+    /*!
+        \fn wcurses::Application::ProcessEvent(Event* E)
+     */
+    void Application::ProcessEvent ( Event* E )
+    {
+        Event::EVT e;
+        switch ( E->Type() )
+        {
+            case event::KeyEvent:
+                e.K = E->toEventType<KeyPressEvent>();
+                keyPressCaptured_ ( e.K );
+                ProcessKeyEvent ( e.K );
+                break;
+            case event::MouseEvent:
+                e.M = E->toEventType<MouseEvent>();
+                mouseCaptured_ ( e.M );
+
+                break;
+            case event::MessageEvent:
+                e.G = E->toEventType<MessageEvent>();
+                messageListeners_ ( e.G );
+
+                break;
+
+        }
+    }
+
+    /*!
+        \fn wcurses::Application::QueryTarget( MouseEvent* M )
+     */
+    Widget* Application::QueryTarget ( MouseEvent* M )
+    {
+        Widget* top = _curscreen->Toplevel();
+        Widget* _newTarget = _activeWidget;
+        // Determiner le contexte du widget actif
+        if ( ! _activeWidget )
+        {
+            // pas de widget actif -- on part de l'ecran avec ses toplevels
+            _newTarget = _curscreen->Toplevel();
+            if ( !_newTarget )
+            {
+                _newTarget = Screen::Root ( "" )->QueryMouseTarget ( M );
+                if ( !_newTarget )
+                {
+                    // impossible mais proceder quand-meme...
+                    return 0l;
+                }
+            }
+        }
+        return _newTarget->QueryMouseTarget ( M );
+    }
+    /*!
+        \fn wcurses::Application::ProcessKeyEvent( KeyPressevent* K )
+     */
+    bool Application::ProcessKeyEvent ( KeyPressEvent* K )
+    {
+        // ( les object qui capturent le clavier sont executes
+        // ici va etre le moteur du clavier qui va pre-processer l'evenement - le traduire en commande ou
+        // passer les valeurs au widget actif.
+        if(K->isMeta()){
+            // ALT-{clef}
+            // Le traitement a ce niveau-ci est asser simple en fait de traduction puisque les clef meta
+            // sont passees au widget actif qui va repondre ou passer a son parent...
+
+            // Avant-tout, intercepter les commande globales du clavier - soit
+            // [ CTRL-{C|V|Z|A|E|TAB} ] pour les commande globales
+
+        }
+    }
+
+
+    /*!
+        \fn wcurses::Application::ProcessMessageEvent( MessageEvent* G )
+     */
+    bool Application::ProcessMessageEvent ( MessageEvent* G )
+    {
+        /// @todo implement me
+    }
+
+
+    /*!
+        \fn wcurses::Application::ProcessMouseEvent( MouseEvent* M )
+     */
+    bool Application::ProcessMouseEvent ( MouseEvent* M )
+    {
+        Widget * _newTarget=0l;
+        if ( M->What() == event::MouseButtonClick ) return MouseButtonClick ( M );
+        if ( M->What() == event::MouseButtonPress ) return MouseButtonPress ( M );
+        if ( M->What() == event::MouseButtonDblClick ) return MouseButtonDblClick ( M );
+        if ( _activeWidget )
+            if ( _activeWidget != _newTarget ) _activeWidget->Blur();
+
+        _newTarget->Activate();
+
+    }
+
+
+    /*!
+        \fn wcurses::Application::MouseButtonClick( MouseEvent* M )
+     */
+    int Application::MouseButtonClick ( MouseEvent* M )
+    {
+        Widget* _newTarget = QueryTarget(M);
+        if(!_newTarget || _newTarget != _activeWidget) return 0;
+        return _newTarget->RespondEvent(M);
+    }
+
+    /*!
+            \fn wcurses::Application::MouseButtonPress( MouseEvent* M )
+         */
+    int Application::MouseButtonPress ( MouseEvent* M )
+    {
+        Widget* _newTarget = 0l;
+        // Two events: left press and right press
+        // Dans tous les cas, il faut cibler le target
+         _newTarget = QueryTarget(M);
+        if(M->isLeft()){
+            // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
+            if(!_newTarget) return 0; // Impossible mais traiter quand-meme...
+            if(_activeWidget != _newTarget)  _newTarget->Activate();
+            if(_activeWidget){
+                _activeWidget->Blur();
+                _activeWidget = _newTarget;
+            }
+        }
+        if(M->isRight()){
+            // traitement special ici - normalement c'est une commande d'activation du menu contextuel
+            // le click droit ne fait pas perde la focus au widget actif, mais active le menu contextuel
+            // du target si applicable - ce que le target va determiner... s'il y a lieu...
+
+            // ... Sauf que a ce niveau-ci, c'est le target qui va se charger d'activer son menu contextuel...
+            // Simplement envoyer l'evenement de la souris au target...
+            if(! _newTarget) return 0;
+        }
+        return _activeWidget->RespondEvent(M);
+    }
+
+    /*!
+        \fn wcurses::Application::MouseButtonRelease( MouseEvent* M )
+     */
+    int Application::MouseButtonRelease ( MouseEvent* M )
+    {
+        Widget* _newTarget = QueryTarget(M);
+        if(!_newTarget || _newTarget != _activeWidget) return 0;
+        return _newTarget->RespondEvent(M);
+    }
+
+    /*!
+        \fn wcurses::Application::MouseButtonDblClick(MouseEvent* M )
+     */
+    int Application::MouseButtonDblClick ( MouseEvent* M )
+    {
+        Widget* _newTarget = QueryTarget(M);
+        if(!_newTarget || _newTarget != _activeWidget) return 0;
+        return _newTarget->RespondEvent(M);
+    }
+}
+
+
+
+
