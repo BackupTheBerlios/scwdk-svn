@@ -457,14 +457,21 @@ namespace wcurses
         //        << new StyledString::Operator('_', sigc::mem_fun( this, &StyledString::op_underline))
         //        << new StyledString::Operator('n', sigc::mem_fun( this, &StyledString::op_newline))
         //        << new StyledString::Operator('B', sigc::mem_fun( this, &StyledString::op_bg));
-        //        // Long format
+
+        // Long format
+        // Linear result
         AddLfOperator ( new StyledString::Operator ( "STRONG",    sigc::mem_fun ( this, &StyledString::lfop_bold ) ) );
         AddLfOperator ( new StyledString::Operator ( "BOLD",      sigc::mem_fun ( this, &StyledString::lfop_bold ) ) );
         AddLfOperator ( new StyledString::Operator ( "FGCOLOR",   sigc::mem_fun ( this, &StyledString::lfop_fg ) ) );
         AddLfOperator ( new StyledString::Operator ( "/",         sigc::mem_fun ( this, &StyledString::lfop_not ) ) );
         AddLfOperator ( new StyledString::Operator ( "UNDERLINE", sigc::mem_fun ( this, &StyledString::lfop_underline ) ) );
         AddLfOperator ( new StyledString::Operator ( "BR",        sigc::mem_fun ( this, &StyledString::lfop_newline ) ) );
+        AddLfOperator ( new StyledString::Operator ( "BREAK",     sigc::mem_fun ( this, &StyledString::lfop_newline ) ) );
         AddLfOperator ( new StyledString::Operator ( "BGCOLOR",   sigc::mem_fun ( this, &StyledString::lfop_bg ) ) );
+
+        // Rectangular/multi-lines result:
+        // The following operators will use the PainterDC object for the rectangular result
+        // -- not yet implemented - only planned
         AddLfOperator ( new StyledString::Operator ( "REGION",    sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
         AddLfOperator ( new StyledString::Operator ( "CENTER",    sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
         AddLfOperator ( new StyledString::Operator ( "RIGHT",     sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
@@ -473,6 +480,9 @@ namespace wcurses
         AddLfOperator ( new StyledString::Operator ( "FRAME",     sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
         AddLfOperator ( new StyledString::Operator ( "FRAMETITLE",sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
         AddLfOperator ( new StyledString::Operator ( "CLEAR",     sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
+        // -- WIDTH | HEIGHT not needed - usage will be '<region {w h};> or '<frame {w h};>' insteaad
+        //AddLfOperator ( new StyledString::Operator ( "WIDTH",     sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
+        //AddLfOperator ( new StyledString::Operator ( "HEIGHT",     sigc::mem_fun ( this, &StyledString::lfop_nul ) ) );
 
 
         return true;
