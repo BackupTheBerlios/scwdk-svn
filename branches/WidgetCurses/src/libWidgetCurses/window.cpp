@@ -89,6 +89,7 @@ namespace wcurses
     void Window::Show ( int state )
     {
         Widget::Show ( state );
+        Application::GetScreen("")->AddTopLevel(this);
     }
 
 
@@ -99,7 +100,9 @@ namespace wcurses
      */
     void Window::Hide()
     {
-        /// @todo implement me
+        //SetState(states::visible, false);
+        Visible(false);
+        Application::GetScreen("")->RemoveTopLevel(this);
     }
 
 
