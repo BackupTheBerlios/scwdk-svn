@@ -55,6 +55,8 @@ namespace wcurses
         Application::InitializeStyles();
         Application::_curscreen = new Screen ( this, 0, "Main" );
         Application::_curscreen->Initialize ( Application::_terminal );
+        _glock = new mutex();
+        _glock->init();
         return InitializeUI();
     }
 
@@ -104,8 +106,8 @@ namespace wcurses
 //                 E = &Event::nil;
 //                 continue;
 //             }
-            //PushEvent(E);
-            //_doEvents();
+            PushEvent(E);
+            _doEvents();
 
             switch ( E->Type() )
             {
@@ -273,25 +275,29 @@ namespace wcurses
     void Application::ProcessEvent ( Event* E )
     {
         Event::EVT e;
+        Debug;
         switch ( E->Type() )
         {
             case event::KeyEvent:
                 e.K = E->toEventType<KeyPressEvent>();
                 keyPressCaptured_ ( e.K );
+                Dbg << "Key event"; 
                 ProcessKeyEvent ( e.K );
                 break;
             case event::MouseEvent:
                 e.M = E->toEventType<MouseEvent>();
                 mouseCaptured_ ( e.M );
-
+                Dbg << "Mouse event...";
+                ProcessMouseEvent(e.M);
                 break;
             case event::MessageEvent:
                 e.G = E->toEventType<MessageEvent>();
                 messageListeners_ ( e.G );
-
+                Dbg << "Message...";
                 break;
 
         }
+        DEND;
     }
 
     /*!
@@ -353,14 +359,15 @@ namespace wcurses
     bool Application::ProcessMouseEvent ( MouseEvent* M )
     {
         Widget * _newTarget=0l;
+        Debug ;
         if ( M->What() == event::MouseButtonClick ) return MouseButtonClick ( M );
         if ( M->What() == event::MouseButtonPress ) return MouseButtonPress ( M );
         if ( M->What() == event::MouseButtonDblClick ) return MouseButtonDblClick ( M );
-        if ( _activeWidget )
-            if ( _activeWidget != _newTarget ) _activeWidget->Blur();
 
-        _newTarget->Activate();
-
+        Dbg << "Error: no mouse event!!" << M->ToString().std();
+        DEND;
+        
+        return false;
     }
 
 
@@ -368,16 +375,6 @@ namespace wcurses
         \fn wcurses::Application::MouseButtonClick( MouseEvent* M )
      */
     int Application::MouseButtonClick ( MouseEvent* M )
-    {
-        Widget* _newTarget = QueryTarget(M);
-        if(!_newTarget || _newTarget != _activeWidget) return 0;
-        return _newTarget->RespondEvent(M);
-    }
-
-    /*!
-            \fn wcurses::Application::MouseButtonPress( MouseEvent* M )
-         */
-    int Application::MouseButtonPress ( MouseEvent* M )
     {
         Widget* _newTarget = 0l;
         // Two events: left press and right press
@@ -405,13 +402,48 @@ namespace wcurses
     }
 
     /*!
+            \fn wcurses::Application::MouseButtonPress( MouseEvent* M )
+         */
+    int Application::MouseButtonPress ( MouseEvent* M )
+    {
+        Debug "at:" << M->Position().tostring();
+        Widget* _newTarget = 0l;
+        // Two events: left press and right press
+        // Dans tous les cas, il faut cibler le target
+         _newTarget = QueryTarget(M);
+        if(M->isLeft()){
+            // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
+            if(!_newTarget) return 0; // Impossible mais traiter quand-meme...
+            Dbg << "_newTarget=" << _newTarget->NameID();
+            if(_activeWidget != _newTarget)  _newTarget->Activate();
+            if(_activeWidget){
+                Dbg << "Blurring " << _activeWidget->NameID();
+                _activeWidget->Blur();
+                _activeWidget = _newTarget;
+                _activeWidget->Activate();
+            }
+        }
+        if(M->isRight()){
+            // traitement special ici - normalement c'est une commande d'activation du menu contextuel
+            // le click droit ne fait pas perde la focus au widget actif, mais active le menu contextuel
+            // du target si applicable - ce que le target va determiner... s'il y a lieu...
+
+            // ... Sauf que a ce niveau-ci, c'est le target qui va se charger d'activer son menu contextuel...
+            // Simplement envoyer l'evenement de la souris au target...
+            if(! _newTarget) return 0;
+        }
+        return _activeWidget->RespondEvent(M);
+    }
+
+    /*!
         \fn wcurses::Application::MouseButtonRelease( MouseEvent* M )
      */
     int Application::MouseButtonRelease ( MouseEvent* M )
     {
         Widget* _newTarget = QueryTarget(M);
         if(!_newTarget || _newTarget != _activeWidget) return 0;
-        return _newTarget->RespondEvent(M);
+        if( _newTarget == _activeWidget) return _newTarget->RespondEvent(M);
+        return 0;
     }
 
     /*!
@@ -419,9 +451,29 @@ namespace wcurses
      */
     int Application::MouseButtonDblClick ( MouseEvent* M )
     {
-        Widget* _newTarget = QueryTarget(M);
-        if(!_newTarget || _newTarget != _activeWidget) return 0;
-        return _newTarget->RespondEvent(M);
+        Widget* _newTarget = 0l;
+        // Two events: left press and right press
+        // Dans tous les cas, il faut cibler le target
+         _newTarget = QueryTarget(M);
+        if(M->isLeft()){
+            // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
+            if(!_newTarget) return 0; // Impossible mais traiter quand-meme...
+            if(_activeWidget != _newTarget)  _newTarget->Activate();
+            if(_activeWidget){
+                _activeWidget->Blur();
+                _activeWidget = _newTarget;
+            }
+        }
+        if(M->isRight()){
+            // traitement special ici - normalement c'est une commande d'activation du menu contextuel
+            // le click droit ne fait pas perde la focus au widget actif, mais active le menu contextuel
+            // du target si applicable - ce que le target va determiner... s'il y a lieu...
+
+            // ... Sauf que a ce niveau-ci, c'est le target qui va se charger d'activer son menu contextuel...
+            // Simplement envoyer l'evenement de la souris au target...
+            if(! _newTarget) return 0;
+        }
+        return _activeWidget->RespondEvent(M);
     }
 }
 
