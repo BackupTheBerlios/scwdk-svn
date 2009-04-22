@@ -268,6 +268,7 @@ namespace wcurses
         SetState ( states::normal, true );
         _style = ( *_StyleComponents ) [_state];
         _painter->SetStyle ( _style );
+        Repaint();
     }
 
 
@@ -279,6 +280,9 @@ namespace wcurses
         SetState ( states::active, true );
         _style = ( *_StyleComponents ) [_state];
         _painter->SetStyle ( _style );
+        Widget* W = FirstParentAs<Widget();
+        if(W) W->SetActiveChild(this);
+        Repaint();
     }
     /*!
         \fn wcurses::Widget::Repaint()
@@ -286,6 +290,13 @@ namespace wcurses
     void Widget::Repaint()
     {
         _painter->Clear();
+        // Iterer les child widgets
+        Widget::list L;
+        int nw = QMClass(L);
+        if(!nw) return;
+        for (Widget::Iterator I = L.begin(); I != L.end(); I++){
+            (*I)->Repaint();
+        }
     }
 
 
