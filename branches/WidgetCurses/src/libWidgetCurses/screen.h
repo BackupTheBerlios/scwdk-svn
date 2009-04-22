@@ -71,6 +71,14 @@ namespace wcurses
             int AddTopLevel ( Widget* w );
     Widget* Toplevel();
 
+    /*!
+        \fn wcurses::Screen::Toplevels()
+     */
+    Widget::list& Toplevels()
+    {
+        return _toplevels;
+    }
+
         private:
             friend class Application;
             CursesTerm* _term;
