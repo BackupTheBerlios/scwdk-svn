@@ -123,7 +123,7 @@ namespace wcurses
         Rect r = Interior();
         _layout = new LayoutBase ( this );
         r.resizecenter ( pxy ( -1,-1 ) );
-        Debug << " layout interior rect:" << r.tostring();
+        // Debug << " layout interior rect:" << r.tostring();
         _layout->SetGeometry ( r );
         Dbg << "Layout geometry:" << r.tostring() << " Window: " << Interior().tostring(); /// @todo implement me
         return 0;

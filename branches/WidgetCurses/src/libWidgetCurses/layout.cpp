@@ -106,7 +106,7 @@ namespace wcurses
      */
     Layout< directions :: horizontal >* Layout< directions :: table >::Row ( int row )
     {
-        Debug << " Request for Row#" << row ;
+        ////// Debug << " Request for Row#" << row ;
         if ( row >= Count() )
         {
             Dbg << " Row " << row << " is out of bounds! - returning (Layout< directions :: horizontal >*)0l(NULL)!"; DEND;
@@ -157,7 +157,7 @@ namespace wcurses
         int dx,i;
         Rect r[_nitems];// unless using _sublayuts.push_back...
         int N = _nitems;
-        Debug << "testing vector::size with push_back: then that  size is: " << _sublayouts.size(); DEND;
+        ////// Debug << "testing vector::size with push_back: then that  size is: " << _sublayouts.size(); DEND;
         int lw = R.Width() / N;
 
         LayoutBase* L;
@@ -239,7 +239,7 @@ namespace wcurses
 
     Layout<0>::~Layout()
     {
-        Debug << "Cleaup time!";
+        ////// Debug << "Cleaup time!";
         for ( int i =0 ; i < _nitems ; i++ )
         {
             LayoutBase* L = _sublayouts[i];

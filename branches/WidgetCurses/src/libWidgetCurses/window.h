@@ -45,7 +45,7 @@ namespace wcurses
 			bool Visible ( bool e );
 			virtual bool InitView();
 			void SetState ( int e, bool y );
-			void Show ( int state );
+			void Show ( int state=states::normal );
     void Hide();
     String IconText();
 

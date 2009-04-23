@@ -53,7 +53,7 @@ namespace wcurses
 
     Object::~Object()
     {
-        Debug;
+        ////// Debug;
         Object* o;
         if ( _children.empty() ) return;
         if ( _children.size() <=0 ) return;
@@ -98,7 +98,7 @@ namespace wcurses
      */
     int Object::LinkToParent ( Object* parent )
     {
-        Debug << "Linking self to parent";DEND;
+        ////// Debug << "Linking self to parent";DEND;
         if ( !parent )
         {
             _parent = 0;
@@ -115,7 +115,7 @@ namespace wcurses
      */
     int Object::LinkChild ( Object* child )
     {
-        Debug << "linking child object:'" << ( child ? child->NameID() : "undefined" ) << " @[" << child << "]";DEND;
+        ////// Debug << "linking child object:'" << ( child ? child->NameID() : "undefined" ) << " @[" << child << "]";DEND;
         if ( !child ) return _children.size();
         _children.push_back ( child );
         return _children.size();

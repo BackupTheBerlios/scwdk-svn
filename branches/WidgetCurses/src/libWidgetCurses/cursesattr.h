@@ -226,7 +226,7 @@ namespace wcurses
             }
 
             StyleComponents& operator << (int K) {
-                gDebug << " Key=" << K; DEND;
+                
                 _inKey = K;
                 return *this;
             }

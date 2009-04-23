@@ -105,7 +105,7 @@ namespace wcurses
         _pos = 0;
         result = 0l;
         //////// DEBUG TRACE TESTS
-        //Debug << " splitting contents:\n" <<
+        //////// Debug << " splitting contents:\n" <<
 //             " \"" << CHigh << CRed << instring.data() << CReset << "\"";
         ///////////////////////////////////
 
@@ -114,7 +114,7 @@ namespace wcurses
 
 
         //////// DEBUG TRACE TESTS
-        //Dbg << "Number of components:" << CBrown << components.size() << CReset;
+        
         /////////////////////////////
         std::list<std::string>::iterator it;
         _len  = instring.len();
@@ -123,12 +123,12 @@ namespace wcurses
         for ( it = components.begin(); it != components.end(); it++ )
         {
             s = *it;
-            //  Dbg << "Encoding " << "'" << CCyan << s << CReset << "' @pos=" << _pos;
+            
             ( void ) EncodeComponent ( *it ); // return value is no use here.
         }
 
         ///////////////////////////////////
-        //Dbg << "Clearing unneeded components list items. Not destroying result since it will by the owner";
+        
         if ( components.size() ) components.clear();
         //DEND;
         result[_pos] = ( TCell ) 0; //
@@ -141,7 +141,7 @@ namespace wcurses
      */
     int StyledString::EncodeComponent ( const std::string& str )
     {
-        //Debug << str;
+        //////// Debug << str;
         int r =-1;
         std::string::const_iterator e;
         e = str.begin();
@@ -162,13 +162,13 @@ namespace wcurses
             if(  (Op = op_locate( e ) )){
                 if(!Op->delegator( e )) return -1;
             } else{
-                Dbg << "Failed to get a delegate for '" << *e << '\'';
+                
                 DEND;
                 while( *e == 0x20 && ( e != str.end() ) && ( *e != ';') ) ++e;
                 lfBegin = e;
                 while( (e != str.end() ) && ( *e != ';') ) ++e;
                 if( e == str.end() ){
-                    Dbg << " Unexpected EOSstr " ; DEND;
+                    
                     return -1;
                 }
 
@@ -220,9 +220,9 @@ namespace wcurses
      */
     bool StyledString::op_bold ( std::string::const_iterator& _e )
     {
-        //Debug << "Clear: " << _clear << "\n";
+        //////// Debug << "Clear: " << _clear << "\n";
         attr.SetAttr ( Style::bold, _clear ? false :true );
-        //gDebug << (const char*)attr; DEND;
+        //g////// Debug << (const char*)attr; DEND;
         _clear = false;
         return true;
     }
@@ -233,16 +233,16 @@ namespace wcurses
      */
     bool StyledString::op_fg ( std::string::const_iterator& _e )
     {
-        //Debug;
+        //////// Debug;
         Style::Color C ( 0,0 );
         ++_e;
         int v;
         stripws ( _e );
         if ( ( v=cnum ( *_e ) ) < 0 ) return false;
         int bg = attr.BgColor();
-        //Dbg << "CUrrent bg=" << bg;DEND;
+        
         C.fg = v;
-        //Dbg "Expected fg: " << v;
+        
         C.bg = bg;
         attr << C;
         _clear = false;
@@ -275,8 +275,8 @@ namespace wcurses
      */
     bool StyledString::op_underline ( std::string::const_iterator& _e )
     {
-        //Debug;
-        //Dbg << " _clear set ?" << (char*)(_clear ? " Yes " : " No " );DEND;
+        //////// Debug;
+        
         attr.SetAttr ( Style::underline, _clear ? false:true );
         _clear = false;
         return true;
@@ -300,7 +300,7 @@ namespace wcurses
         ++_e;
         int v;
         stripws ( _e );
-        // gDebug << *_e;
+        // g////// Debug << *_e;
         if ( ( v=cnum ( *_e ) ) < 0 )
         {
             Dbg << "Illegal value:" << *_e << " <=> " << v ; DEND;
@@ -310,7 +310,7 @@ namespace wcurses
         C.bg = v;
         C.fg = fg;
         attr << C;
-        // Dbg << " Bg set to " << v; DEND;
+        
         _clear = false;
         return true;
     }
@@ -322,9 +322,9 @@ namespace wcurses
      */
     bool StyledString::lfop_bold ( const std::list<std::string>& L )
     {
-        //Debug << "Clear: " << _clear << "\n";
+        //////// Debug << "Clear: " << _clear << "\n";
         attr.SetAttr ( Style::bold, _clear ? false :true );
-        //gDebug << (const char*)attr; DEND;
+        //g////// Debug << (const char*)attr; DEND;
         _clear = false;
         return true;
     }
@@ -335,17 +335,17 @@ namespace wcurses
      */
     bool StyledString::lfop_fg ( const std::list<std::string>& L )
     {
-        //Debug << " construct is: " << L.size() << "\n";
+        //////// Debug << " construct is: " << L.size() << "\n";
         if ( L.size() != 2 ) return false;
         Style::Color C ( 0,0 );
         std::list< std::string >::const_iterator it = L.begin();
         ++it;
-        //Dbg << "Color name to get:" << *it << "\n";
+        
         int v = Style::ColorNames[*it];
         int bg = attr.BgColor();
-        // Dbg << "Current bg=" << bg;DEND;
+        
         C.fg = v;
-        // Dbg "Expected fg: " << v;
+        
         C.bg = bg;
         attr << C;
         _clear = false;
@@ -378,8 +378,8 @@ namespace wcurses
      */
     bool StyledString::lfop_underline ( const std::list<std::string>& L )
     {
-        //Debug;
-        //Dbg << " _clear set ?" << (char*)(_clear ? " Yes " : " No " );DEND;
+        //////// Debug;
+        
         attr.SetAttr ( Style::underline, _clear ? false:true );
         _clear = false;
         return true;
@@ -401,19 +401,19 @@ namespace wcurses
             return true;
         }
 
-        //Debug << " construct is: " << L.size() << "\n";
+        //////// Debug << " construct is: " << L.size() << "\n";
         if ( L.size() != 2 ) return false;
         std::list< std::string >::const_iterator it = L.begin();
         ++it;
-        //Dbg << "Color name to get:" << *it << "\n";
+        
         int v = Style::ColorNames[*it];
         int fg = attr.FgColor();
-        //Dbg << "Current fg=" << fg;DEND;
+        
         C.bg = v;
-        //Dbg "Expected bg: " << v;
+        
         C.fg = fg;
         attr << C;
-        //Dbg << " Bg set to " << v; DEND;
+        
         _clear = false;
         return true;
     }
@@ -424,9 +424,9 @@ namespace wcurses
     bool StyledString::lfop_nul ( const std::list<std::string>& L )
     {
         std::list<std::string >::const_iterator Str;
-        //Debug;
+        //////// Debug;
         for ( Str = L.begin(); Str != L.end(); Str++ ) std::cerr << *Str <<';';
-        //Dbg << " This command is not implemented yet";DEND;
+        
         return true;
 
     }
@@ -444,22 +444,6 @@ namespace wcurses
      */
     bool StyledString::Initialize()
     {
-        //bF/_nB";
-        gDebug ; DEND;
-//     if(StyledString::init_done){
-//         gDebug << "Already init - skipping...\n" ; DEND;
-//         return true;
-//     }
-        //StyledString::init_done = true;
-        //(*this) << new StyledString::Operator('b', sigc::mem_fun( this, &StyledString::op_bold))
-        //        << new StyledString::Operator('F', sigc::mem_fun( this, &StyledString::op_fg  ))
-        //        << new StyledString::Operator('/', sigc::mem_fun( this, &StyledString::op_not))
-        //        << new StyledString::Operator('_', sigc::mem_fun( this, &StyledString::op_underline))
-        //        << new StyledString::Operator('n', sigc::mem_fun( this, &StyledString::op_newline))
-        //        << new StyledString::Operator('B', sigc::mem_fun( this, &StyledString::op_bg));
-
-        // Long format
-        // Linear result
         AddLfOperator ( new StyledString::Operator ( "STRONG",    sigc::mem_fun ( this, &StyledString::lfop_bold ) ) );
         AddLfOperator ( new StyledString::Operator ( "BOLD",      sigc::mem_fun ( this, &StyledString::lfop_bold ) ) );
         AddLfOperator ( new StyledString::Operator ( "FGCOLOR",   sigc::mem_fun ( this, &StyledString::lfop_fg ) ) );
@@ -504,7 +488,7 @@ namespace wcurses
      */
     StyledString::Operator* StyledString::lfop_locate ( const std::string& _key )
     {
-        //Debug << "Finding key:" << _key << "...\n";
+        //////// Debug << "Finding key:" << _key << "...\n";
         StyledString::lfop_iterator it = StyledString::lfoperators.find ( _key );
         if ( it == StyledString::lfoperators.end() )
         {
@@ -531,7 +515,7 @@ namespace wcurses
      */
     void StyledString::init_result()
     {
-        //Dbg << "Allocating to PStr buffer: " << CHigh << CGreen << _len*( sizeof(TCell) ) << CReset << " bytes" ;
+        
         if(result) delete [] result;
         result = new TCell[_len];
         //StyledString::_defaultAttributes._d  = Style::normal|Style::ptbl[swcolor::black][swcolor::white]|' ';
@@ -579,17 +563,17 @@ namespace wcurses
     bool StyledString::TrySwitchToLongFormat ( std::string::const_iterator istart, std::string::const_iterator iend )
     {
 
-        //Debug ;
+        //////// Debug ;
         std::string str ( istart, iend );
         str = String::Upcase ( str );
         std::list<std::string> L;
         String::split ( L,str," " ,false,false );
         if ( ! L.size() )
         {
-            Debug << "Error splitting attributes command text";DEND;
+            ////// Debug << "Error splitting attributes command text";DEND;
             return false;
         }
-        //Dbg << "Number of tokens in the attribute command: " << L.size() << "\n";
+        
         str = * ( L.begin() );
         if ( *str.begin() =='/' )
         {
@@ -599,12 +583,12 @@ namespace wcurses
         Operator* Op = lfop_locate ( str );
         if ( ! Op )
         {
-            Debug << "Attribute command '" << str << "' not found or not implemented yet" ; DEND;
+            ////// Debug << "Attribute command '" << str << "' not found or not implemented yet" ; DEND;
             return false;
         }
         if ( ! ( * ( Op->lfdelegator ) ) ( L ) )
         {
-            Debug << "Attribute command '" << str << "' failed - maybe syntax error"; DEND;
+            ////// Debug << "Attribute command '" << str << "' failed - maybe syntax error"; DEND;
             return false;
         }
         return true;

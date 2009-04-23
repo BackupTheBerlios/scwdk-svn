@@ -103,7 +103,7 @@ namespace wcurses
                 else _state &= ~e;
                 _state = e;
             }
-            virtual void Show ( int state );
+            virtual void Show ( int state=states::normal );
             virtual bool ChangeTheme ( const std::string& strTheme ) ;
 
             /*!
@@ -148,6 +148,20 @@ namespace wcurses
             virtual void Blur();
             virtual void Activate();
             virtual void Repaint();
+
+            /*!
+                \fn wcurses::Widget::SetActiveChild( Widget * W)
+                \brief Set the child widget as the active widget used to set the chain between parent<->links
+             */
+            bool SetActiveChild ( Widget * W )
+            {
+                _activeChild = W;
+                if(Visible()) return false;
+                if(!State(states::visible)) Activate();
+
+                return true;
+            }
+
         protected:
             /// Screen IO engine
             Painter* _painter;
@@ -158,6 +172,7 @@ namespace wcurses
             virtual bool UpdateChild ( Widget* cw, const Rect& _interior=Rect::nil );
             virtual int SetupLayout();
             virtual Widget* QueryMouseTarget ( MouseEvent* M );
+            Widget* _activeChild;
         private:
             friend class Application;
             /// Widget UI class @see uiclass namespace

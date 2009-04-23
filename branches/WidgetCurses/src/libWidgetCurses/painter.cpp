@@ -65,7 +65,7 @@ namespace wcurses
             _c ( x,y );
             return C;
         }
-        gDebug <<  x << ":" << y << " out of region!!" ; DEND;
+        
         return pxy::invalid;
     }
 
@@ -101,12 +101,12 @@ namespace wcurses
     pxy Painter::operator ++()
     {
         pxy C = _c;
-        //Debug << _c.tostring();DEND;
+        
         _c += pxy ( 1,0 );
-        //Dbg << "After += pxy(1,0):" << _c.tostring();
+        
         if ( !_r.contains ( _c +_r.topleft() ) )
         {
-            gDebug << _c.tostring() << " outside boundaries";DEND;
+            
             if ( _owner->WidgetClass ( wclass::wrap ) )
                 if ( ! CPosition ( 0, _c._y+1 ) ) return C;
             _c = C;
@@ -173,12 +173,12 @@ namespace wcurses
      */
     int Painter::WriteStr ( const std::string& _str )
     {
-        gDebug << " write str[" << _str << "] start"; DEND;
+        
         PStr p, s;
         int r=0;
         if ( _rtmode == text )
         {
-            Dbg << "Invoquing WriteRT as style::text requested for str[" << _str << "]"; DEND;
+            
             return WriteRT ( _str.c_str() );
         }
         p = new TCell[  _str.length() +1 ];
@@ -197,24 +197,24 @@ namespace wcurses
      */
     int Painter::WriteRT ( const char* _str )
     {
-        gDebug << " str[" << _str << "] start"; DEND;
+        
         PStr pStr;
         StyledString& T = Application::TextProcessor();
         T.SetDefaultAttributes ( _owner->CurrentStyle() );
-        //Debug << " ( " << _str << ") " << _c.tostring(); DEND;
+        
         T << _str << StyledString::END;
         _a = T.CurAttr();
         pStr = T.Data();
-        gDebug << " PStr pStr@(" << pStr << ")"; DEND;
+        
         if ( !pStr )
         {
-            gDebug << " StyledString::Transform failed!!!" ; DEND;
+            
             return -1;
         }
 
-        //Debug << "pStr=" <<  pStr  ;DEND;
+        
         int r = WritePStr ( pStr );
-        Dbg << "Deleting pStr@(" << pStr << ")"; DEND;
+        
         delete [] pStr;
         T.Clear();
         return r;
@@ -226,11 +226,11 @@ namespace wcurses
      */
     int Painter::WritePStr ( PStr pStr )
     {
-        gDebug << " -- @" << _c.tostring()<<  DEND;
+        
         pxy xy = _c;
         PStr p = pStr, _pos = Seek ( _c );
         if ( ! ( p||_pos ) ){
-            gDebug << "Data null or illegal seek in buffer!";
+            
             return 0;
         }
         do
@@ -324,7 +324,7 @@ namespace wcurses
         AscLine ( pxy ( r.Width()-1,r.Height()-2 ), r.Height()-2, directions::up, A );
 
         JoinAcs ( r.topleft(), directions::topleft, A );
-        gDebug << "Now at bottomright:" << r.bottomright().tostring();
+        
         JoinAcs ( r.bottomright(), directions::bottomright, A );
         JoinAcs ( r.bottomleft(), directions::bottomleft, A );
         JoinAcs ( r.topright(), directions::topright, A );
@@ -404,14 +404,14 @@ namespace wcurses
 
         PCell OwnerIO = Position ( xyOffset );
         PCell ChildIO = ChildPainter->Position ( childRect.topleft() );
-        gDebug;
+        
         for ( int y = 0; y < childRect.Height(); y ++ )
         {
-            Dbg << "y loop at:" << xyOffset.tostring() << " -- in child at:" << childRect.tostring();
+            
             OwnerIO = Position ( pxy(xyOffset.x(), xyOffset.y() +y) );
             ChildIO = ChildPainter->Position ( pxy ( childRect.topleft().x(), childRect.topleft().y() +y ) );
             for ( int x = 0; x < childRect.Width(); x++ ){
-                //Dbg << (int)(*ChildIO & 0xFFFFFF00) << "|" << (unsigned char)(*ChildIO & 0xFF);
+                
                 *OwnerIO++ = *ChildIO++;
             }
 

@@ -54,7 +54,7 @@ namespace wcurses
         _term = TermBind;
         _root = new Widget ( this, 0, "WidgetCurses::Screen #n" );
         r.assign ( 0,0, _term->Width(), _term->Height() );
-        Debug << "Setting RootWindow geometry:";
+        // Debug << "Setting RootWindow geometry:";
         Dbg << r.tostring();DEND;
         _root->SetGeometry ( r );
         _glock = new mutex();
@@ -129,7 +129,7 @@ namespace wcurses
         Rect obs;
         Widget* _p;
         Widget::Iterator wid;
-        //Debug << " Size of queu: " << Queu.size() ;
+        //// Debug << " Size of queu: " << Queu.size() ;
         if ( !Queu.size() ) return false;
         for ( qit=Queu.begin(); qit != Queu.end(); qit++ )
         {
@@ -160,14 +160,14 @@ namespace wcurses
             uarea = node._area & warea;
             if ( ! uarea )
             {
-                Debug; Debug; Debug; Debug;
+                // Debug; // Debug; // Debug; // Debug;
                 Dbg << " Serious error -- invalid interior -- ABORTING";
                 abort();
             }
             // re-ajuster la copie de l'intersection a l'offset de l'ecran
             warea += w->TopLeft();
             // Effectuer le dump de la region a rafraichir:
-            // Debug;Debug << "Start refresh at " << warea.topleft().tostring() << " for widget named: " << w->NameID() << " at" << uarea.tostring();
+            // // Debug;// Debug << "Start refresh at " << warea.topleft().tostring() << " for widget named: " << w->NameID() << " at" << uarea.tostring();
             for ( int y = 0; y < warea.Height(); y++ )
             {
                 io = dc->Position ( pxy ( uarea.x(),y+ uarea.y() ) );
@@ -203,7 +203,7 @@ namespace wcurses
      */
     int Screen::UpdateWidget ( Widget* w, const Rect& r )
     {
-        //Debug << "Preparing Widget update: " << w->NameID();
+        //// Debug << "Preparing Widget update: " << w->NameID();
         Lock();
         Queu.push_back ( _unode ( w,r ) );
         //Unlock();
@@ -224,7 +224,7 @@ namespace wcurses
      */
     int Screen::_GetToplevelsAbove ( Widget::list& L, Widget* w )
     {
-        Debug;
+        // Debug;
         Widget::list::iterator it=_toplevels.begin();
         Widget*p = 0l;
         // find w;

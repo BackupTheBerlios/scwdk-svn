@@ -42,7 +42,7 @@ namespace wcurses
 
     int WaitControl::wait()
     {
-        Debug;
+        // Debug;
         //lock();
         int CV_ERR =0;
         while ( ! _cond )
@@ -67,7 +67,7 @@ namespace wcurses
     }
     void WaitControl::signal()
     {
-        Debug ;
+        // Debug ;
         if ( _cond ) return;
         _cond = true;
         //lock();
@@ -112,7 +112,7 @@ namespace wcurses
 
     int WaitControl::init()
     {
-        Debug;
+        // Debug;
         mutex::init();
         _cv = new pthread_cond_t;
         pthread_cond_init ( _cv, 0l );
@@ -149,7 +149,7 @@ namespace wcurses
 
     bool WaitControl::controller_loop()
     {
-        Debug << "Entering loop...";
+        // Debug << "Entering loop...";
         do ; while ( this->wait() != controlstate::terminate );
         return controlstate::terminate == _state;
     }

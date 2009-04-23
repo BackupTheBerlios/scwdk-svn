@@ -197,7 +197,7 @@ namespace wcurses
      */
     void KeyPressEvent::_translate()
     {
-        gDebug ;
+        
         Dbg << "meta:" << ( bMeta ? " yes" : "no" ) << " key" << key ;DEND;
         cerr << "==> " << ( char* ) ( bMeta ? "meta-" : "key" ) << '[' << ( char ) key << "] (#" << key << ')'  << endl;
         if ( ( key >= KEY_F ( 1 ) ) && ( key <= KEY_F ( 12 ) ) ) SetEvent ( event::KeyFunction );

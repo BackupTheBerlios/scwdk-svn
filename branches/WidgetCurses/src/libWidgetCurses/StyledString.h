@@ -142,7 +142,7 @@ namespace wcurses
             // To make it possible to do: . . . Parser << "he<blah>llo</blah>" >> pResult; -- funny statements!! :-)
             template <typename arg> StyledString& operator<< ( arg A )
             {
-                //Debug;
+                //////// Debug;
                 instring << A;
                 // Dbg << " apeended str" << instring.std();DEND;
                 return *this;

@@ -65,7 +65,7 @@ namespace wcurses
      */
     bool Application::Quit()
     {
-        Debug << "Finishing curses terminal:";
+        // Debug << "Finishing curses terminal:";
         if ( Application::_terminal ) Application::_terminal->Finish();
         return true;
     }
@@ -87,7 +87,7 @@ namespace wcurses
      */
     int Application::Run()
     {
-        Debug << " Launching app loop -- just writing message...";
+        // Debug << " Launching app loop -- just writing message...";
         Application::_curscreen->StartUpdatesThread();
         //Application::_curscreen->Update();
         Widget* R = Application::_curscreen->Root ( "" );
@@ -102,7 +102,7 @@ namespace wcurses
         {
             E = Application::_terminal->WaitEvent();
 //             if(!E){
-//                 Dbg << "Event is nil! ...continue";DEND;
+
 //                 E = &Event::nil;
 //                 continue;
 //             }
@@ -193,7 +193,7 @@ namespace wcurses
         << states::normal  << Style ( colors::black,colors::white, Style::normal )
         << states::disable << Style ( colors::black,colors::white, Style::bold )
         << states::move    << Style ( colors::black,colors::white, Style::bold );
-        gDebug << "Size of the data:" << sc->Size();
+        //gDebug << "Size of the data:" << sc->Size();
         sc = Application::AddTheme ( "Widget.Label" );
         ( *sc ) << states::active  << Style ( colors::white,colors::black, Style::normal )
         << states::normal  << Style ( colors::blue,colors::white, Style::normal )
@@ -220,7 +220,7 @@ namespace wcurses
     int Application::Update ( Widget* w, const Rect& _interior )
     {
         ( void ) Application::_curscreen->UpdateWidget ( w,_interior );
-        gDebug << "tracing crash : Update: " << w->NameID();
+        
         return 0;
 
     }
@@ -275,7 +275,7 @@ namespace wcurses
     void Application::ProcessEvent ( Event* E )
     {
         Event::EVT e;
-        Debug;
+        // Debug;
         switch ( E->Type() )
         {
             case event::KeyEvent:
@@ -305,24 +305,19 @@ namespace wcurses
      */
     Widget* Application::QueryTarget ( MouseEvent* M )
     {
-        Widget* top = _curscreen->Toplevel();
-        Widget* _newTarget = _activeWidget;
-        // Determiner le contexte du widget actif
-        if ( ! _activeWidget )
+        Widget::list& L = _curscreen->Toplevels();
+        Widget* root = Screen::Root("");
+        //Widget* top = _curscreen->Toplevel();
+        Widget* _newTarget = root->QueryMouseTarget(M);
+        Debug << "_newTarget=" << _newTarget;
+        if(!_newTarget) _newTarget = _activeWidget;
+        else return _newTarget;
+
+        for(Widget::list::reverse_iterator I = L.rbegin(); I != L.rend(); I++)
         {
-            // pas de widget actif -- on part de l'ecran avec ses toplevels
-            _newTarget = _curscreen->Toplevel();
-            if ( !_newTarget )
-            {
-                _newTarget = Screen::Root ( "" )->QueryMouseTarget ( M );
-                if ( !_newTarget )
-                {
-                    // impossible mais proceder quand-meme...
-                    return 0l;
-                }
-            }
+            if( (_newTarget = (*I)->QueryMouseTarget(M)) ) return _newTarget;
         }
-        return _newTarget->QueryMouseTarget ( M );
+        return 0; // Impossible mais traiter quand-meme
     }
     /*!
         \fn wcurses::Application::ProcessKeyEvent( KeyPressevent* K )
@@ -363,8 +358,9 @@ namespace wcurses
         if ( M->What() == event::MouseButtonClick ) return MouseButtonClick ( M );
         if ( M->What() == event::MouseButtonPress ) return MouseButtonPress ( M );
         if ( M->What() == event::MouseButtonDblClick ) return MouseButtonDblClick ( M );
-
-        Dbg << "Error: no mouse event!!" << M->ToString().std();
+        if ( M->What() == event::MouseButtonRelease ) return MouseButtonRelease( M );
+        //if ( M->What() == event::MouseButtonMove ) return MouseButton( M );
+        Dbg << "Error: unknow  mouse event!!" << M->ToString().std();
         DEND;
         
         return false;
@@ -411,6 +407,7 @@ namespace wcurses
         // Two events: left press and right press
         // Dans tous les cas, il faut cibler le target
          _newTarget = QueryTarget(M);
+         Dbg << "QueryTarget retourne:" << _newTarget;
         if(M->isLeft()){
             // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
             if(!_newTarget) return 0; // Impossible mais traiter quand-meme...

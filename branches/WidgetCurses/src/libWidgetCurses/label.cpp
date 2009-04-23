@@ -91,7 +91,7 @@ namespace wcurses
                 xy ( 0,0 );
                 break;
         }
-        Debug << "Rendering text:" << _text.std();
+        ////// Debug << "Rendering text:" << _text.std();
         P->CPosition ( xy );
         P->WriteStr ( _text.std() );
     }

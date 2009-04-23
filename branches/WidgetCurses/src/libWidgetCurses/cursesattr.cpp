@@ -111,15 +111,6 @@ namespace wcurses
 
     int Style::init()
     {
-        gDebug;
-        //Curses* nc = Curses::Instance();
-
-        /*     if(! has_colors() ){
-                 Dbg << " has_colors() failed to be true...";
-                 DEND;
-                 return 0;
-             }*/
-        //start_color(); Already done in Curses::Init()
         int BG,FG, N=1;
         for ( BG=0; BG < 8; BG++ )
             for ( FG = 0; FG < 8; FG++ )

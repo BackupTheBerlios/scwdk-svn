@@ -63,7 +63,7 @@ typedef PCell PStr;  // Just an alias to declare array of TCell.
 #define A_NEWLINE NCURSES_BITS(1UL,23)
 #endif
 
-// Defines standard ANSI commands for colors - used with the Debug macros
+// Defines standard ANSI commands for colors - used with the ////// Debug macros
 
 #define CHigh "\033[1m"
 #define CReset "\033[0m"

@@ -105,11 +105,11 @@ namespace wcurses
             {
                 pxy C = xy;
                 PStr P;
-                //Debug;Dbg <<  "Seeking at " << C.tostring() << "inside "<< _r.tostring();
+                
                 if ( !C ) C = _c;
                 if ( !C )
                 {
-                    gDebug << " Painter working pxy" << C.tostring() << " is invalid!";DEND;
+                    
                     std::cout << __PRETTY_FUNCTION__ << "\n\r \033[0;31mPainter working pxy" << C.tostring() << " is invalid!\r\033[0m" << std::endl;
                     abort();
                     return 0l;
@@ -117,7 +117,7 @@ namespace wcurses
                 C += _r.topleft();
                 if ( ! _r.contains ( C ) )
                 {
-                    gDebug << C.tostring() << "is outside in" <<  _r.tostring()<< " boundaries for Owner:" << _owner->NameID();DEND;
+                    
                     Dbg << "ABORTING!";DEND;
                     abort();
                     return 0l;
@@ -125,7 +125,7 @@ namespace wcurses
                 P = _ioscr + ( C._y * _owner->Width() + C._x );
                 if ( !P )
                 {
-                    gDebug << " _ioscr + " << C._y <<"*"<<  _owner->Width() << "+" << C._x << " nil" ;DEND;
+                    
                     abort();
                 }
                 return P;

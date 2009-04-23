@@ -71,7 +71,7 @@ namespace wcurses
     {
         Widget* _p = FirstParentAs<Widget>();
         _geometry = r;
-        //Debug << " recceived rect: " << r.tostring() << " <-> new geometry: "<<  _geometry.tostring();
+        //// Debug << " recceived rect: " << r.tostring() << " <-> new geometry: "<<  _geometry.tostring();
         _topLeft = _p ? _p->TopLeft() + r.topleft() : r.topleft();
         return Resize ( _geometry.size() );
     }
@@ -121,7 +121,7 @@ namespace wcurses
     bool Widget::UpdateChild ( Widget* cw, const Rect& _interior )
     {
         // in child rect
-        //Debug << cw->NameID();
+        //// Debug << cw->NameID();
         Rect r = _interior;
         if ( ! r ) r.assign ( 0,0, cw->Geometry().Width(), cw->Geometry().Height() );
         Rect inChild = r;
@@ -150,7 +150,7 @@ namespace wcurses
      */
     bool Widget::Update ( const Rect& _interior )
     {
-        // Debug << "Interior:" << _interior.tostring();
+        // // Debug << "Interior:" << _interior.tostring();
         Rect r = _interior;
         if ( !r ) r.assign ( 0,0, _geometry.Width(), _geometry.Height() );
         //Dbg << "interior region to update:" << r.tostring();
@@ -170,11 +170,12 @@ namespace wcurses
     void Widget::Show ( int state )
     {
 
-        SetState ( states::visible|state, true );
+        SetState ( states::visible|_state, true );
 
         _style = ( *_StyleComponents ) [state];
         _painter->SetStyle ( _style );
         ChangeState();
+        Update();
 
     }
 
@@ -237,7 +238,10 @@ namespace wcurses
     Widget* Widget::QueryMouseTarget ( MouseEvent* M )
     {
         Widget* widget = 0l;
-        if ( !State ( states::visible ) ) return 0l;
+        if ( !State ( states::visible ) ){
+            Debug << "Not visible MouseTarget disabled";
+            
+        }
         Rect r = Interior();
         r +=  _topLeft;
         if ( ! r.contains ( M->Position() ) ) return 0l;
@@ -280,7 +284,7 @@ namespace wcurses
         SetState ( states::active, true );
         _style = ( *_StyleComponents ) [_state];
         _painter->SetStyle ( _style );
-        Widget* W = FirstParentAs<Widget();
+        Widget* W = FirstParentAs<Widget>();
         if(W) W->SetActiveChild(this);
         Repaint();
     }

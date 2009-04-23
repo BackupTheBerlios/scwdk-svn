@@ -59,7 +59,7 @@ namespace wcurses
 
     int CursesTerm::Init()
     {
-        Debug;
+        ////// Debug;
         short x,y;
         if ( !Self )
         {
@@ -125,15 +125,7 @@ namespace wcurses
         _scrSize ( x,y );
         Dbg << "CursesTerm::_scrSize="<< _scrSize.tostring();
         meta ( ScrWin, true );
-        Dbg<<   " Good to GO!!!" << DEND;
-/*        swMain* Main = swMain::Instance();
-        if ( !Main )
-        {
-            Debug << " er... No main app object ??" ;DEND;
-            return 128;
-        }
-        ( *Main ) += sigc::mem_fun ( this, & CursesTerm::_CanExit );
-        return 0;*/
+        
     }
 
 
@@ -149,10 +141,8 @@ namespace wcurses
     /*!
         \fn CursesTerm::CursesAbort( const std::string& _erstr )
      */
-    void CursesTerm::CursesAbort ( const std::string& _erstr )
-    {
-//     std::cerr << _erstr << "\n" << D.StrDump() << std::endl;
-//     D.StrDump();
+    void CursesTerm::CursesAbort ( const std::string& _erstr ){
+    
     }
 
 
@@ -161,7 +151,7 @@ namespace wcurses
      */
     int CursesTerm::Finish()
     {
-        Debug << "ending curses terminal";
+        ////// Debug << "ending curses terminal";
         //End();
         endwin();
         //D.CloseLib();
@@ -180,7 +170,7 @@ namespace wcurses
      */
     bool CursesTerm::_CanExit ( Object*& _sender )
     {
-        Debug << " let the app exit";DEND;
+        ////// Debug << " let the app exit";DEND;
         return true;
     }
 
@@ -193,7 +183,7 @@ namespace wcurses
      */
     Event* CursesTerm::WaitEvent()
     {
-        Debug ;
+        ////// Debug ;
         int ncurses_event = 0;
         KeyPressEvent* _ke=0l;
         Event* _ev=0l;
@@ -273,14 +263,14 @@ namespace wcurses
                 return _mouseEvent ( 0 );
                 // there are other kind of input events to pre process here ( terminal cmds, stdio, etc... )
             case KEY_RESIZE:
-                gDebug << "Terminal resize event:" ;
+                
                 _e = new Event ( event::MessageEvent, event::TermResize );
                 getmaxyx ( ScrWin, y, x );
                 _scrSize ( x,y );
                 Dbg << "new size:" << _scrSize.tostring();DEND;
                 return _e;
             case -1:
-                Debug << "Undefined event type return NULL !";DEND;
+                ////// Debug << "Undefined event type return NULL !";DEND;
                 return &Event::nil;
             default:
                 return _inKey ( nce, m );
