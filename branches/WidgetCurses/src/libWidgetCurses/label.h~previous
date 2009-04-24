@@ -42,14 +42,15 @@ namespace wcurses
             const std::string Text();
             void Justify ( int );
             void SetText ( const std::string& str );
+    virtual bool InitView();
 
 
         private:
             void _Render();
-protected:
-    unsigned char _short;
-protected:
-    bool _Scan_();
+        protected:
+            unsigned char _short;
+        protected:
+            bool _Scan_();
     };
 
 }

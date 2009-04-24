@@ -129,7 +129,7 @@ namespace wcurses
         Rect obs;
         Widget* _p;
         Widget::Iterator wid;
-        //// Debug << " Size of queu: " << Queu.size() ;
+        Debug << " Size of queu: " << Queu.size() ;
         if ( !Queu.size() ) return false;
         for ( qit=Queu.begin(); qit != Queu.end(); qit++ )
         {

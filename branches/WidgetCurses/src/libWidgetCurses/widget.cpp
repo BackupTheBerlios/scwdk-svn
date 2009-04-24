@@ -98,7 +98,7 @@ namespace wcurses
         _StyleComponents = Application::StyleTheme ( "Widget.Default" );
         StyleComponents& curstyle= *_StyleComponents;
         _painter = new Painter ( this, 0, String ( NameID() + "::Painter" ).data() );
-        _painter->SetStyle ( curstyle[_state] );
+        _painter->SetStyle ( curstyle[_state&_visualStatesBits()] );
         _painter->Clear();
         return true;
     }
@@ -121,7 +121,7 @@ namespace wcurses
     bool Widget::UpdateChild ( Widget* cw, const Rect& _interior )
     {
         // in child rect
-        //// Debug << cw->NameID();
+        Debug << cw->NameID();
         Rect r = _interior;
         if ( ! r ) r.assign ( 0,0, cw->Geometry().Width(), cw->Geometry().Height() );
         Rect inChild = r;
@@ -134,11 +134,13 @@ namespace wcurses
         // Get inSelf clipped child
         r += cw->Geometry().topleft();
         inSelfClip = inSelf & r;
-        if ( ! inSelfClip ) return false; // Child no visible inSelf
-
+        if ( ! inSelfClip ){
+            Dbg << "ChildArea outside inrect:" << r.tostring();
+            return false; // Child no visible inSelf
+        }
         inChild = inSelfClip;
         inChild -= cw->Geometry().topleft();
-        //Dbg << "Copying " << inChild.tostring() << " into self::" << inSelfClip.tostring();
+        Dbg << "Copying " << inChild.tostring() << " into self::" << inSelfClip.tostring(); DEND;
         _painter->CopyWidget ( inSelfClip.topleft(), cw->DCPainter(), inChild );
         Update ( inSelfClip );
         return true;
@@ -150,12 +152,12 @@ namespace wcurses
      */
     bool Widget::Update ( const Rect& _interior )
     {
-        // // Debug << "Interior:" << _interior.tostring();
+        Debug << "Interior:" << _interior.tostring();
         Rect r = _interior;
         if ( !r ) r.assign ( 0,0, _geometry.Width(), _geometry.Height() );
-        //Dbg << "interior region to update:" << r.tostring();
+        Dbg << "interior region to update:" << r.tostring();
         Widget* parentWidget = FirstParentAs<Widget>();
-        //Dbg << "Has parent Widget? :" << ( parentWidget ? parentWidget->NameID() : "none" );
+        Dbg << "Has parent Widget? :" << ( parentWidget ? parentWidget->NameID() : "none" );
 
         if ( ( ! parentWidget ) || WidgetClass ( wclass::toplevel ) )
         {
@@ -169,10 +171,10 @@ namespace wcurses
      */
     void Widget::Show ( int state )
     {
+        //SetState(states::disable, false);
+        SetState( states::visible|state, true );
 
-        SetState ( states::visible|_state, true );
-
-        _style = ( *_StyleComponents ) [state];
+        //_style = ( *_StyleComponents ) [state];
         _painter->SetStyle ( _style );
         ChangeState();
         Update();
@@ -186,7 +188,8 @@ namespace wcurses
         StyleComponents* newStyle = Application::StyleTheme ( strTheme );
         if ( !newStyle ) return false;
         _StyleComponents = newStyle;
-        Show ( _state );
+        _style = (*_StyleComponents)[states::normal];
+
         return true;
     }
 
@@ -238,10 +241,12 @@ namespace wcurses
     Widget* Widget::QueryMouseTarget ( MouseEvent* M )
     {
         Widget* widget = 0l;
-        if ( !State ( states::visible ) ){
-            Debug << "Not visible MouseTarget disabled";
-            
+        if ( !State ( states::visible ) || State ( states::disabled ) )
+        {
+            Debug << "Not visible/enabled --  QueryMouseTarget disabled";
+
         }
+
         Rect r = Interior();
         r +=  _topLeft;
         if ( ! r.contains ( M->Position() ) ) return 0l;
@@ -270,7 +275,7 @@ namespace wcurses
     void Widget::Blur()
     {
         SetState ( states::normal, true );
-        _style = ( *_StyleComponents ) [_state];
+        //_style = ( *_StyleComponents ) [_state];
         _painter->SetStyle ( _style );
         Repaint();
     }
@@ -282,10 +287,10 @@ namespace wcurses
     void Widget::Activate()
     {
         SetState ( states::active, true );
-        _style = ( *_StyleComponents ) [_state];
+        //_style = ( *_StyleComponents ) [_state]; // fait dans SetState(..)
         _painter->SetStyle ( _style );
         Widget* W = FirstParentAs<Widget>();
-        if(W) W->SetActiveChild(this);
+        if ( W ) W->SetActiveChild ( this );
         Repaint();
     }
     /*!
@@ -296,16 +301,39 @@ namespace wcurses
         _painter->Clear();
         // Iterer les child widgets
         Widget::list L;
-        int nw = QMClass(L);
-        if(!nw) return;
-        for (Widget::Iterator I = L.begin(); I != L.end(); I++){
-            (*I)->Repaint();
+        int nw = QMClass ( L );
+        if ( !nw ) return;
+        for ( Widget::Iterator I = L.begin(); I != L.end(); I++ )
+        {
+            ( *I )->Repaint();
+        }
+    }
+
+    /*!
+        \fn wcurses::Widget::Paint()
+        \brief Initial render painting of the widget. Used to be called from:
+        \see wcurses::Widget::InitView()
+     */
+    void Widget::Paint()
+    {
+        _painter->SetStyle(_style);
+        Debug << NameID() << ":current style set to Color[" << _style.BgColor() << ", " << _style.FgColor() << "]."; DEND;
+        _painter->Clear();
+
+        // Iterer les child widgets
+        Widget::list L;
+        int nw = QMClass ( L );
+        if ( !nw ) return;
+        for ( Widget::Iterator I = L.begin(); I != L.end(); I++ )
+        {
+            ( *I )->Paint();
         }
     }
 
 
-
 }
+
+
 
 
 

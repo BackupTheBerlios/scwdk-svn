@@ -79,9 +79,9 @@ namespace wcurses
              */
             virtual bool Enable ( int e =-1 )
             {
-                if ( !e ) SetState ( states::disable, true );
-                if ( e>0 ) SetState ( states::disable, false );
-                return ( _state & states::disable ) !=0;
+                if ( !e ) SetState ( states::disabled, true );
+                if ( e>0 ) SetState ( states::disabled, false );
+                return ( _state & states::disabled ) !=0;
             }
 
             /*!
@@ -95,13 +95,25 @@ namespace wcurses
             }
 
             /*!
-                \fn wcurses::Widget::Setstate( int e , bool y=true)
+                \fn wcurses::Widget::Setstate( const int e , bool y=true)
              */
-            virtual void SetState ( int e , bool y=true )
+            virtual void SetState ( const int e , bool y=true )
             {
-                if ( y ) _state |= e;
+                int E,S;
+                S = _state;
+                if ( y ){
+                    // retenir le bit des etat visuels
+                    E = e & _visualStatesBits();
+                    if(E){
+                        // eteindre les autres bits visuel ( ils sont exculsif )
+                        S = _state & (~_visualStatesBits());
+                        _state = E|S; // assembler le nouveau bit visuel avec les autres bits d'etat
+                        // changer ou re-affecter le style selon le bit visuel actuel
+                        _style = (*_StyleComponents)[_visualStatesBits()];
+                    }else _state |= e; // bit visuel absent de la requete -- alors just ajouter | merger le bit d'etat
+                }
                 else _state &= ~e;
-                _state = e;
+
             }
             virtual void Show ( int state=states::normal );
             virtual bool ChangeTheme ( const std::string& strTheme ) ;
@@ -161,6 +173,7 @@ namespace wcurses
 
                 return true;
             }
+            virtual void Paint();
 
         protected:
             /// Screen IO engine
@@ -192,6 +205,14 @@ namespace wcurses
             /// list of dirty regions to be updated -- not used yet -- might not at all after all...
             std::list<Rect*> _dirtyRegions;
             virtual int _Create();
+
+    /*!
+        \fn wcurses::Widget::_visualStatesBits()
+     */
+    int _visualStatesBits()
+    {
+        return _state &  states::visualex;
+    }
     };
 
 }

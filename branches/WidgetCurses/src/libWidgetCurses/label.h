@@ -42,6 +42,7 @@ namespace wcurses
             const std::string Text();
             void Justify ( int );
             void SetText ( const std::string& str );
+            virtual bool InitView();
 
 
         private:

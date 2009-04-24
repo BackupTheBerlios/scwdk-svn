@@ -74,9 +74,11 @@ namespace wcurses
             sigc::signal<bool, MessageEvent*> messageListeners_;
             sigc::signal<bool, KeyPressEvent*> keyPressCaptured_;
             sigc::signal<bool, MouseEvent*> mouseCaptured_;
+            Widget* _curTarget;
         protected:
             virtual Widget* QueryTarget ( MouseEvent* M );
-    int MouseButtonDblClick(MouseEvent* M );
+            int MouseButtonDblClick ( MouseEvent* M );
+    void _switchActiveTarget();
     };
 
 }

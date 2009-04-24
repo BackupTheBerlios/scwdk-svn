@@ -97,7 +97,7 @@ namespace wcurses
         KeyPressEvent* key;
         String S;
         MouseEvent* ME;
-        xyCoords xy(1,1);
+        xyCoords xy ( 1,1 );
         do
         {
             E = Application::_terminal->WaitEvent();
@@ -106,8 +106,8 @@ namespace wcurses
 //                 E = &Event::nil;
 //                 continue;
 //             }
-            PushEvent(E);
-            _doEvents();
+            //PushEvent ( E );
+            //_doEvents();
 
             switch ( E->Type() )
             {
@@ -118,13 +118,13 @@ namespace wcurses
                         Application::_textProc << " MouseEvent : cannot cast to MouseEvent!!"  << StyledString::END;
                         break;
                     }
-                    S = String("");
+                    S = String ( "" );
                     S << "<strong; bgcolor blue; fgcolor cyan;>";
                     S << ME->ToString();
                     //PStr pstr = Application::_textProc.Data();
                     P->WriteRT ( S.std().c_str() );
-                    xy += xyCoords(0,1);
-                    P->CPosition(xy);
+                    xy += xyCoords ( 0,1 );
+                    P->CPosition ( xy );
                     R->Update();
                     break;
                 case event::KeyEvent:
@@ -138,11 +138,11 @@ namespace wcurses
                         default:
                         nk:
                             S = String ( "" );
-                            S << '[' << (key->isMeta() ? "M":"-") << ">"<< ( char ) key->KeyValue() << '|' << (int)key->KeyValue();
+                            S << '[' << ( key->isMeta() ? "M":"-" ) << ">"<< ( char ) key->KeyValue() << '|' << ( int ) key->KeyValue();
                             P->WriteStr ( S.std().c_str() );
 
-                            xy += xyCoords(0,1);
-                            P->CPosition(xy);
+                            xy += xyCoords ( 0,1 );
+                            P->CPosition ( xy );
                             R->Update();
                             break;
                     }
@@ -189,27 +189,39 @@ namespace wcurses
     {
         /// @todo implement me
         StyleComponents* sc = Application::AddTheme ( "Widget.Default" );
-        ( *sc ) << states::active  << Style ( colors::cyan,colors::black, Style::normal )
+        int st = states::active;
+        ( *sc ) <<
+           states::active  << Style ( colors::cyan,colors::black, Style::normal )
         << states::normal  << Style ( colors::black,colors::white, Style::normal )
-        << states::disable << Style ( colors::black,colors::white, Style::bold )
+        << states::disabled << Style ( colors::black,colors::white, Style::bold )
         << states::move    << Style ( colors::black,colors::white, Style::bold );
         //gDebug << "Size of the data:" << sc->Size();
         sc = Application::AddTheme ( "Widget.Label" );
-        ( *sc ) << states::active  << Style ( colors::white,colors::black, Style::normal )
+        ( *sc ) <<
+           states::active  << Style ( colors::white,colors::black, Style::normal )
         << states::normal  << Style ( colors::blue,colors::white, Style::normal )
-        << states::disable << Style ( colors::blue,colors::white, Style::bold )
+        << states::disabled << Style ( colors::blue,colors::white, Style::bold )
+        << states::move    << Style ( colors::blue,colors::white, Style::bold );
+
+        sc = Application::AddTheme ( "Widget.Window" );
+        ( *sc ) <<
+           states::active  << Style ( colors::white,colors::black, Style::normal )
+        << states::normal  << Style ( colors::blue,colors::white, Style::normal )
+        << states::disabled << Style ( colors::blue,colors::white, Style::bold )
         << states::move    << Style ( colors::blue,colors::white, Style::bold );
 
         sc = Application::AddTheme ( "Window.Frame" );
-        ( *sc ) << states::active  << Style ( colors::blue,colors::yellow, Style::normal )
+        ( *sc ) <<
+           states::active   << Style ( colors::blue,colors::yellow, Style::normal )
         << states::normal  << Style ( colors::blue,colors::white, Style::normal )
-        << states::disable << Style ( colors::blue,colors::black, Style::bold )
+        << states::disabled << Style ( colors::blue,colors::black, Style::bold )
         << states::move    << Style ( colors::blue,colors::blue, Style::bold );
 
         sc = Application::AddTheme ( "Frame.Caption" );
-        ( *sc ) << states::active  << Style ( colors::blue,colors::white, Style::normal )
+        ( *sc ) <<
+           states::active  << Style ( colors::blue,colors::white, Style::normal )
         << states::normal  << Style ( colors::blue,colors::yellow, Style::bold )
-        << states::disable << Style ( colors::blue,colors::black, Style::bold )
+        << states::disabled << Style ( colors::blue,colors::black, Style::bold )
         << states::move    << Style ( colors::blue,colors::blue, Style::bold );
 
         return 0; // Nombre de styles crees
@@ -220,7 +232,7 @@ namespace wcurses
     int Application::Update ( Widget* w, const Rect& _interior )
     {
         ( void ) Application::_curscreen->UpdateWidget ( w,_interior );
-        
+
         return 0;
 
     }
@@ -281,14 +293,14 @@ namespace wcurses
             case event::KeyEvent:
                 e.K = E->toEventType<KeyPressEvent>();
                 keyPressCaptured_ ( e.K );
-                Dbg << "Key event"; 
+                Dbg << "Key event";
                 ProcessKeyEvent ( e.K );
                 break;
             case event::MouseEvent:
                 e.M = E->toEventType<MouseEvent>();
                 mouseCaptured_ ( e.M );
                 Dbg << "Mouse event...";
-                ProcessMouseEvent(e.M);
+                ProcessMouseEvent ( e.M );
                 break;
             case event::MessageEvent:
                 e.G = E->toEventType<MessageEvent>();
@@ -306,17 +318,18 @@ namespace wcurses
     Widget* Application::QueryTarget ( MouseEvent* M )
     {
         Widget::list& L = _curscreen->Toplevels();
-        Widget* root = Screen::Root("");
+        Widget* root = Screen::Root ( "" );
         //Widget* top = _curscreen->Toplevel();
-        Widget* _newTarget = root->QueryMouseTarget(M);
-        Debug << "_newTarget=" << _newTarget;
-        if(!_newTarget) _newTarget = _activeWidget;
-        else return _newTarget;
+        Widget* _newTarget;
 
-        for(Widget::list::reverse_iterator I = L.rbegin(); I != L.rend(); I++)
+        for ( Widget::list::reverse_iterator I = L.rbegin(); I != L.rend(); I++ )
         {
-            if( (_newTarget = (*I)->QueryMouseTarget(M)) ) return _newTarget;
+            if ( ( _newTarget = ( *I )->QueryMouseTarget ( M ) ) ) return _newTarget;
         }
+        _newTarget = root->QueryMouseTarget ( M );
+        Debug << "_newTarget=" << (_newTarget ? _newTarget->NameID() : "NULL");
+        if ( !_newTarget ) _newTarget = _activeWidget;
+        else return _newTarget;
         return 0; // Impossible mais traiter quand-meme
     }
     /*!
@@ -327,7 +340,8 @@ namespace wcurses
         // ( les object qui capturent le clavier sont executes
         // ici va etre le moteur du clavier qui va pre-processer l'evenement - le traduire en commande ou
         // passer les valeurs au widget actif.
-        if(K->isMeta()){
+        if ( K->isMeta() )
+        {
             // ALT-{clef}
             // Le traitement a ce niveau-ci est asser simple en fait de traduction puisque les clef meta
             // sont passees au widget actif qui va repondre ou passer a son parent...
@@ -353,16 +367,21 @@ namespace wcurses
      */
     bool Application::ProcessMouseEvent ( MouseEvent* M )
     {
-        Widget * _newTarget=0l;
-        Debug ;
+        Debug << M->ToString().std();
+        _curTarget=QueryTarget ( M );
+        if(!_curTarget){
+            Dbg << "error: could not get target widget!!"; DEND;
+            return false;
+        }
+
         if ( M->What() == event::MouseButtonClick ) return MouseButtonClick ( M );
         if ( M->What() == event::MouseButtonPress ) return MouseButtonPress ( M );
         if ( M->What() == event::MouseButtonDblClick ) return MouseButtonDblClick ( M );
-        if ( M->What() == event::MouseButtonRelease ) return MouseButtonRelease( M );
+        if ( M->What() == event::MouseButtonRelease ) return MouseButtonRelease ( M );
         //if ( M->What() == event::MouseButtonMove ) return MouseButton( M );
         Dbg << "Error: unknow  mouse event!!" << M->ToString().std();
         DEND;
-        
+
         return false;
     }
 
@@ -372,29 +391,25 @@ namespace wcurses
      */
     int Application::MouseButtonClick ( MouseEvent* M )
     {
-        Widget* _newTarget = 0l;
         // Two events: left press and right press
         // Dans tous les cas, il faut cibler le target
-         _newTarget = QueryTarget(M);
-        if(M->isLeft()){
+        if ( M->isLeft() )
+        {
             // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
-            if(!_newTarget) return 0; // Impossible mais traiter quand-meme...
-            if(_activeWidget != _newTarget)  _newTarget->Activate();
-            if(_activeWidget){
-                _activeWidget->Blur();
-                _activeWidget = _newTarget;
-            }
+            _switchActiveTarget();
+
         }
-        if(M->isRight()){
+        if ( M->isRight() )
+        {
             // traitement special ici - normalement c'est une commande d'activation du menu contextuel
             // le click droit ne fait pas perde la focus au widget actif, mais active le menu contextuel
             // du target si applicable - ce que le target va determiner... s'il y a lieu...
 
             // ... Sauf que a ce niveau-ci, c'est le target qui va se charger d'activer son menu contextuel...
             // Simplement envoyer l'evenement de la souris au target...
-            if(! _newTarget) return 0;
+            if ( ! _curTarget ) return 0;
         }
-        return _activeWidget->RespondEvent(M);
+        return _activeWidget->RespondEvent ( M );
     }
 
     /*!
@@ -403,33 +418,22 @@ namespace wcurses
     int Application::MouseButtonPress ( MouseEvent* M )
     {
         Debug "at:" << M->Position().tostring();
-        Widget* _newTarget = 0l;
         // Two events: left press and right press
         // Dans tous les cas, il faut cibler le target
-         _newTarget = QueryTarget(M);
-         Dbg << "QueryTarget retourne:" << _newTarget;
-        if(M->isLeft()){
-            // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
-            if(!_newTarget) return 0; // Impossible mais traiter quand-meme...
-            Dbg << "_newTarget=" << _newTarget->NameID();
-            if(_activeWidget != _newTarget)  _newTarget->Activate();
-            if(_activeWidget){
-                Dbg << "Blurring " << _activeWidget->NameID();
-                _activeWidget->Blur();
-                _activeWidget = _newTarget;
-                _activeWidget->Activate();
-            }
+        if ( M->isLeft() )
+        {
+            _switchActiveTarget();
         }
-        if(M->isRight()){
+        if ( M->isRight() )
+        {
             // traitement special ici - normalement c'est une commande d'activation du menu contextuel
             // le click droit ne fait pas perde la focus au widget actif, mais active le menu contextuel
             // du target si applicable - ce que le target va determiner... s'il y a lieu...
 
             // ... Sauf que a ce niveau-ci, c'est le target qui va se charger d'activer son menu contextuel...
             // Simplement envoyer l'evenement de la souris au target...
-            if(! _newTarget) return 0;
         }
-        return _activeWidget->RespondEvent(M);
+        return _activeWidget->RespondEvent ( M );
     }
 
     /*!
@@ -437,9 +441,8 @@ namespace wcurses
      */
     int Application::MouseButtonRelease ( MouseEvent* M )
     {
-        Widget* _newTarget = QueryTarget(M);
-        if(!_newTarget || _newTarget != _activeWidget) return 0;
-        if( _newTarget == _activeWidget) return _newTarget->RespondEvent(M);
+        if(_curTarget != _activeWidget) return 0;
+        _activeWidget->RespondEvent(M);
         return 0;
     }
 
@@ -448,32 +451,37 @@ namespace wcurses
      */
     int Application::MouseButtonDblClick ( MouseEvent* M )
     {
-        Widget* _newTarget = 0l;
         // Two events: left press and right press
         // Dans tous les cas, il faut cibler le target
-         _newTarget = QueryTarget(M);
-        if(M->isLeft()){
+        if ( M->isLeft() )
+        {
             // MouseClick dans le widget actif, sinon processus de blur/activate et renvois event aproprie
-            if(!_newTarget) return 0; // Impossible mais traiter quand-meme...
-            if(_activeWidget != _newTarget)  _newTarget->Activate();
-            if(_activeWidget){
-                _activeWidget->Blur();
-                _activeWidget = _newTarget;
-            }
+            _switchActiveTarget();
         }
-        if(M->isRight()){
+        if ( M->isRight() )
+        {
             // traitement special ici - normalement c'est une commande d'activation du menu contextuel
             // le click droit ne fait pas perde la focus au widget actif, mais active le menu contextuel
             // du target si applicable - ce que le target va determiner... s'il y a lieu...
 
             // ... Sauf que a ce niveau-ci, c'est le target qui va se charger d'activer son menu contextuel...
             // Simplement envoyer l'evenement de la souris au target...
-            if(! _newTarget) return 0;
         }
-        return _activeWidget->RespondEvent(M);
+        return _activeWidget->RespondEvent ( M );
+    }
+
+    /*!
+        \fn wcurses::Application::_switchActiveTarget()
+     */
+    void Application::_switchActiveTarget()
+    {
+        if ( !_curTarget ) return; // Impossible mais traiter quand-meme...
+        if ( _activeWidget != _curTarget )  _curTarget->Activate();
+        if ( _activeWidget )
+        {
+            _activeWidget->Blur();
+            _activeWidget = _curTarget;
+        }/// @todo implement me
     }
 }
-
-
-
 

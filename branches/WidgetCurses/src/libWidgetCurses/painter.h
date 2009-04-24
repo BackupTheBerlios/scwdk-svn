@@ -105,11 +105,11 @@ namespace wcurses
             {
                 pxy C = xy;
                 PStr P;
-                
+
                 if ( !C ) C = _c;
                 if ( !C )
                 {
-                    
+
                     std::cout << __PRETTY_FUNCTION__ << "\n\r \033[0;31mPainter working pxy" << C.tostring() << " is invalid!\r\033[0m" << std::endl;
                     abort();
                     return 0l;
@@ -117,7 +117,7 @@ namespace wcurses
                 C += _r.topleft();
                 if ( ! _r.contains ( C ) )
                 {
-                    
+
                     Dbg << "ABORTING!";DEND;
                     abort();
                     return 0l;
@@ -125,7 +125,7 @@ namespace wcurses
                 P = _ioscr + ( C._y * _owner->Width() + C._x );
                 if ( !P )
                 {
-                    
+
                     abort();
                 }
                 return P;
@@ -212,6 +212,7 @@ namespace wcurses
              */
             void SetStyle ( const Style& A )
             {
+                gDebug << "Setting style for owner:" << _owner->NameID(); DEND;
                 _a = A;
             }
 

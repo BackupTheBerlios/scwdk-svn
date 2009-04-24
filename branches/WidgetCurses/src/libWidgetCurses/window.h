@@ -44,10 +44,11 @@ namespace wcurses
 			bool SetGeometry ( const Rect& r );
 			bool Visible ( bool e );
 			virtual bool InitView();
-			void SetState ( int e, bool y );
+			void SetState ( const int e, bool y=true );
 			void Show ( int state=states::normal );
     void Hide();
     String IconText();
+    void Paint();
 
 protected:
     int SetupLayout();

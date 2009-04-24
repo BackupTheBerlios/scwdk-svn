@@ -25,10 +25,12 @@ namespace wcurses
 
     Label::Label ( Widget* Parent ) : Widget ( Parent )
     {
+        InitView();
     }
 
     Label::Label ( Widget* Parent, const char* name ) : Widget ( Parent,0, name )
     {
+        InitView();
     }
 
     Label::~Label()
@@ -117,3 +119,14 @@ namespace wcurses
 
 
 
+
+
+/*!
+    \fn wcurses::Label::InitView()
+ */
+bool wcurses::Label::InitView()
+{
+    Debug << "Changing theme for Widget.Label" ; DEND;
+    ChangeTheme ( "Widget.Label" );
+    return true;
+}

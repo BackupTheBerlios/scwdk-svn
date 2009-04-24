@@ -72,10 +72,13 @@ namespace wcurses
 
     bool Window::InitView()
     {
+        ChangeTheme("Widget.Window");
         Widget::InitView();
-        _frameStyle = Application::StyleTheme("Window.Frame");
-        _painter->SetStyle( (*_frameStyle)[states::normal] );
-        _painter->DrawFrame((*_frameStyle)[states::normal], Interior() );
+        SetState(states::normal);
+        //_style = Application::StyleTheme ( "Window" );
+        _frameStyle = Application::StyleTheme ( "Window.Frame" );
+        _painter->SetStyle ( ( *_frameStyle ) [states::normal] );
+        _painter->DrawFrame ( ( *_frameStyle ) [states::normal], Interior() );
         SetupLayout();
         return true;
 
@@ -89,6 +92,8 @@ namespace wcurses
     void Window::Show ( int state )
     {
         Widget::Show ( state );
+        Application::GetScreen ( "" )->AddTopLevel ( this );
+        Update()
     }
 
 
@@ -99,7 +104,9 @@ namespace wcurses
      */
     void Window::Hide()
     {
-        /// @todo implement me
+        //SetState(states::visible, false);
+        Visible ( false );
+        Application::GetScreen ( "" )->RemoveTopLevel ( this );
     }
 
 
@@ -120,10 +127,22 @@ namespace wcurses
         Rect r = Interior();
         _layout = new LayoutBase ( this );
         r.resizecenter ( pxy ( -1,-1 ) );
-        Debug << " layout interior rect:" << r.tostring();
+        // Debug << " layout interior rect:" << r.tostring();
         _layout->SetGeometry ( r );
-        //Dbg << "Layout geometry:" << r.tostring() << " Window: " << Interior().tostring(); /// @todo implement me
+        Dbg << "Layout geometry:" << r.tostring() << " Window: " << Interior().tostring(); /// @todo implement me
         return 0;
+    }
+    /*!
+        \fn wcurses::Window::Paint()
+     */
+    void Window::Paint()
+    {
+        Widget::Paint();
+        _frameStyle = Application::StyleTheme ( "Window.Frame" );
+        _painter->SetStyle ( ( *_frameStyle ) [states::normal] );
+        _painter->DrawFrame ( ( *_frameStyle ) [states::normal], Interior() );
     }
 
 }
+
+

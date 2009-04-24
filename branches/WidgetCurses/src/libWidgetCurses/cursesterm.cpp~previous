@@ -279,7 +279,7 @@ namespace wcurses
                 return _e;
             case -1:
                 Debug << "Undefined event type return NULL !";DEND;
-                return 0;
+                return &Event::nil;
             default:
                 return _inKey ( nce, m );
         }

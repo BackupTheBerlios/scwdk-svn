@@ -91,7 +91,7 @@ namespace wcurses
                 xy ( 0,0 );
                 break;
         }
-        Debug << "Rendering text:" << _text.std();
+        ////// Debug << "Rendering text:" << _text.std();
         P->CPosition ( xy );
         P->WriteStr ( _text.std() );
     }
@@ -105,9 +105,9 @@ namespace wcurses
         std::string::size_type n;
         std::string::const_iterator si = scan.begin();
         n= scan.find ( '&', 0 );
-        if ( n == npos ) return false;
+        if ( n == std::string::npos ) return false;
         ++n;
-        if ( n==npos ) return false;
+        if ( n==std::string::npos ) return false;
         _short = scan[n];
         return true;
     }
@@ -117,3 +117,14 @@ namespace wcurses
 
 
 
+
+
+/*!
+    \fn wcurses::Label::InitView()
+ */
+bool wcurses::Label::InitView()
+{
+    Debug << "Changing theme for Widget.Label" ; DEND;
+    ChangeTheme ( "Widget.Label" );
+    return true;
+}

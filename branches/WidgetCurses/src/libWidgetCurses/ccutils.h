@@ -80,12 +80,14 @@ typedef PCell PStr;  // Just an alias to declare array of TCell.
 
 namespace states
 {
-    const int disable   = 0;
-    const int normal    = 1;
-    const int active    = 2;
-    const int move      = 4;
-    const int minimized = 8;
-    const int visible   = 0x10;
+    const int disabled    = 0x01;
+    const int normal    = 0x02;
+    const int active    = 0x04;
+    const int move      = 0x08;
+    const int minimized = 0x10;
+    const int visible   = 0x20;
+    /// Mask for visual value key in style management
+    const int visualex  = normal|active|move|disabled;
 }
 
 
@@ -102,40 +104,40 @@ namespace wclass
     const int status    = 0x400;
     const int dialog    = 0x800;
     const int frame     = 0x1000;
-    const int close     = 0x1100;
+    const int close     = 0x2000;
     const int window    = toplevel|frame|caption|max|min|close;
 }
 
 namespace colors
 {
 
-    const int black = 0;
-    const int red   = 1;
-    const int green = 2;
-    const int brown  = 3;
-    const int blue = 4;
-    const int purple = 5;
-    const int cyan = 6;
-    const int white = 7;
-    const int yellow  = 3;
+    const int black     = 0;
+    const int red       = 1;
+    const int green     = 2;
+    const int brown     = 3;
+    const int blue      = 4;
+    const int purple    = 5;
+    const int cyan      = 6;
+    const int white     = 7;
+    const int yellow    = 3;
     // More to come
 }
 
 namespace directions
 {
-    const int    up=1;
-    const int    down=2;
-    const int    left=4;
-    const int    right=8;
-    const int    horizontal=0x10;
-    const int    vertical= 0x20;
-    const int    table = horizontal|vertical;
-    const int    top = 0x40;
-    const int    bottom = 0x80;
-    const int    topleft = top|left;
-    const int    topright = top|right;
-    const int    bottomleft = bottom|left;
-    const int    bottomright = bottom|right;
+    const int    up         =1;
+    const int    down       =2;
+    const int    left       =4;
+    const int    right      =8;
+    const int    horizontal =0x10;
+    const int    vertical   =0x20;
+    const int    table      =horizontal|vertical;
+    const int    top        =0x40;
+    const int    bottom     =0x80;
+    const int    topleft    =top|left;
+    const int    topright   =top|right;
+    const int    bottomleft =bottom|left;
+    const int    bottomright=bottom|right;
     const int    all=0xFF;
 }
 

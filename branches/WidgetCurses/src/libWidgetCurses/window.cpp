@@ -72,10 +72,13 @@ namespace wcurses
 
     bool Window::InitView()
     {
+        ChangeTheme("Widget.Window");
         Widget::InitView();
-        _frameStyle = Application::StyleTheme("Window.Frame");
-        _painter->SetStyle( (*_frameStyle)[states::normal] );
-        _painter->DrawFrame((*_frameStyle)[states::normal], Interior() );
+        SetState(states::normal);
+        //_style = Application::StyleTheme ( "Window" );
+        _frameStyle = Application::StyleTheme ( "Window.Frame" );
+        _painter->SetStyle ( ( *_frameStyle ) [states::normal] );
+        _painter->DrawFrame ( ( *_frameStyle ) [states::normal], Interior() );
         SetupLayout();
         return true;
 
@@ -89,7 +92,8 @@ namespace wcurses
     void Window::Show ( int state )
     {
         Widget::Show ( state );
-        Application::GetScreen("")->AddTopLevel(this);
+        Application::GetScreen ( "" )->AddTopLevel ( this );
+        Update();
     }
 
 
@@ -101,8 +105,8 @@ namespace wcurses
     void Window::Hide()
     {
         //SetState(states::visible, false);
-        Visible(false);
-        Application::GetScreen("")->RemoveTopLevel(this);
+        Visible ( false );
+        Application::GetScreen ( "" )->RemoveTopLevel ( this );
     }
 
 
@@ -128,5 +132,17 @@ namespace wcurses
         Dbg << "Layout geometry:" << r.tostring() << " Window: " << Interior().tostring(); /// @todo implement me
         return 0;
     }
+    /*!
+        \fn wcurses::Window::Paint()
+     */
+    void Window::Paint()
+    {
+        Widget::Paint();
+        _frameStyle = Application::StyleTheme ( "Window.Frame" );
+        _painter->SetStyle ( ( *_frameStyle ) [states::normal] );
+        _painter->DrawFrame ( ( *_frameStyle ) [states::normal], Interior() );
+    }
 
 }
+
+
