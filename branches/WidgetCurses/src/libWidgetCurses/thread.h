@@ -39,16 +39,19 @@ namespace wcurses
             typedef sigc::signal<bool> THookDelegator;
             typedef sigc::slot<bool> THookDelegate;
             //--------------------------------------------------------
-            typedef sigc::signal<void> TTerminateDelegator;
-            typedef sigc::slot<void> TTerminateDelegate;
+            typedef sigc::signal<void*> TTerminateDelegator;
+            typedef sigc::slot<void*> TTerminateDelegate;
 
             Thread ( Object* parentobj, const std::string& nameid );
             virtual ~Thread();
 
             TNotifyDelegator::iterator
             operator += ( TNotifyDelegate _slot ) { return notify_.connect ( _slot ); }
-            THookDelegator::iterator
+            sigc::connection
             operator += ( THookDelegate  _hook ) { return run_.connect ( _hook ); }
+            sigc::connection DelegateRun( THookDelegate _){
+                return run_.connect( _ );
+            }
             TTerminateDelegator::iterator
             operator += ( TTerminateDelegate _hook ) { return end_.connect ( _hook ); }
 

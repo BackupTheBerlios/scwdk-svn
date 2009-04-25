@@ -29,6 +29,7 @@ namespace wcurses
     void *thread_start_entry ( void* thread_inst )
     {
         Thread* thread_instance = ( Thread* ) thread_inst;
+        gDebug << "Firering thread's client hook..."; DEND;
         thread_instance->run_(); //.emit();
         // -------------------------------
         return 0l;
