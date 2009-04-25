@@ -44,7 +44,23 @@ namespace wcurses
     int MyApplication::InitializeUI()
     {
         Application::InitializeUI();
-        _mainWindow = new Window ( this, wclass::window, "Main Window Test!!" );
+        
+        return 0;
+    }
+    /*!
+        \fn wcurses::MyApplication::TestPainterDC()
+     */
+    int MyApplication::TestPainterDC()
+    {
+        return 0;
+
+    }
+
+}
+
+
+/*
+_mainWindow = new Window ( this, wclass::window, "Main Window Test!!" );
         _mainWindow->SetGeometry ( Rect ( 5,5, 40,20 ) );
         Application::GetScreen ( "" )->AddTopLevel ( _mainWindow );
         Painter* P = _mainWindow->DCPainter();
@@ -80,20 +96,4 @@ namespace wcurses
         _Window->Update();
         // finally update underneath Window -- see result:
         _mainWindow->Update();
-
-
-
-        return 0;
-    }
-    /*!
-        \fn wcurses::MyApplication::TestPainterDC()
-     */
-    int MyApplication::TestPainterDC()
-    {
-        return 0;
-
-    }
-
-}
-
-
+*/

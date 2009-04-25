@@ -47,7 +47,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_widgetcurses_OBJECTS = myapplication.$(OBJEXT) \
-	widgetcurses.$(OBJEXT)
+	netspeedsensortest.$(OBJEXT) widgetcurses.$(OBJEXT)
 widgetcurses_OBJECTS = $(am_widgetcurses_OBJECTS)
 am__DEPENDENCIES_1 =
 widgetcurses_DEPENDENCIES =  \
@@ -200,7 +200,9 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-widgetcurses_SOURCES = myapplication.cpp widgetcurses.cpp
+widgetcurses_SOURCES = myapplication.cpp netspeedsensortest.cpp \
+	widgetcurses.cpp
+
 
 # set the include path found by configure
 INCLUDES = -I$(top_srcdir)/src/libWidgetCurses $(CCDELEGATES_CFLAGS) \
@@ -213,7 +215,7 @@ SUBDIRS = libWidgetCurses
 widgetcurses_LDADD = $(top_builddir)/src/libWidgetCurses/libWidgetCurses.la \
 	$(CCDELEGATES_LIBS)
 
-noinst_HEADERS = myapplication.h
+noinst_HEADERS = myapplication.h netspeedsensortest.h
 all: all-recursive
 
 .SUFFIXES:
@@ -286,6 +288,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/myapplication.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/netspeedsensortest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/widgetcurses.Po@am__quote@
 
 .cpp.o:
