@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "label.h"
 #include <painter.h>
+#include <StyledString.h>
 
 namespace wcurses
 {
@@ -67,6 +68,25 @@ namespace wcurses
 
     }
 
+    /*!
+        \fn wcurses::Label::SetText(String str )
+    */
+    int Label::SetText(String str )
+    {
+        StyledString tr;
+        _rtext = tr.Transform(str.std());
+        if(!_rtext) return -1;
+        char *L = new char[sizeof(_rtext)/sizeof(TCell)+2]; // have enough: strlen(str) >= _rtext
+        PCell pos = _rtext;
+        char* p=L;
+        while(*pos) *p++ = (char)((*pos++) & 0x000000FF);
+        *p=0;
+        _text.clear();
+        _text << L;
+        delete [] _rtext;
+        _rtext = 0l;
+        return _text.len();
+    }
 
     /*!
         \fn wcurses::Label::_Render()
@@ -130,3 +150,5 @@ bool wcurses::Label::InitView()
     ChangeTheme ( "Widget.Label" );
     return true;
 }
+
+

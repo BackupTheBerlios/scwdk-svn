@@ -25,3 +25,4 @@ _SOURCES = Application Events Layouts Object String Style Thread Widget Window \
 	xyCoords
 _SOURCES = Application Events Layouts Object Rect String Style Thread Widget \
 	Window xyCoords
+_SOURCES = Label

@@ -51,6 +51,9 @@ namespace wcurses
                 return true;
             }
             void Render(const xyCoords& xy);
+            ioDC* Position( const xyCoords& xy ){
+                return _data + ( _sz.Width()*xy._y + xy.x() ) ;
+            }
 
         private:
             Size    _sz;
@@ -125,7 +128,7 @@ namespace wcurses
                 P = _ioscr + ( C._y * _owner->Width() + C._x );
                 if ( !P )
                 {
-
+                    Dbg << "Position outside of geometry! ABORTING!";DEND;
                     abort();
                 }
                 return P;
@@ -217,6 +220,7 @@ namespace wcurses
             }
 
             template<typename ioT> int RenderDC(PainterDC<ioT>* _dc, const xyCoords& xy);
+            PainterDC<TCell>* Copy(const Rect& _region=Rect::nil);
         private:
             friend class Widget;
 

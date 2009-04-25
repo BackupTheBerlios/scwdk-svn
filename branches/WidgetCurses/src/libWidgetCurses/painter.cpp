@@ -437,3 +437,23 @@ namespace wcurses
 
 
 
+
+
+/*!
+    \fn wcurses::Painter::Copy(const Rect& _region=Rect::nil)
+ */
+wcurses::PainterDC<TCell>* wcurses::Painter::Copy(const Rect& _region)
+{
+    Rect R=_region;
+    if(!R)  R = _r;
+    PainterDC<TCell>* pDC = new PainterDC<TCell>(0l, Size(R.Width(), R.Height()));
+    PCell io_src, io_dest;
+
+    for( int y = 0; y<R.Height(); y++){
+        io_src = Position( xyCoords(R.x(), R.y()+y) );
+        io_dest=  pDC->Position( xyCoords(0,R.y()+y) );
+        for(int x = 0; x <R.Width(); x++) *io_dest++ = *io_src++;
+    }
+    return pDC;
+    
+}

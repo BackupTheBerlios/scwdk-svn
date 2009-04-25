@@ -34,6 +34,7 @@ namespace wcurses
             String _text;
             int _justify;
             PStr _rtext;
+            
         public:
             Label ( Widget* Parent );
             Label ( Widget* Parent, const char* name );
@@ -43,6 +44,7 @@ namespace wcurses
             void Justify ( int );
             void SetText ( const std::string& str );
             virtual bool InitView();
+    int SetText(String str );
 
 
         private:

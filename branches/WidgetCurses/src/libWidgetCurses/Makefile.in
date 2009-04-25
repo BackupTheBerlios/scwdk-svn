@@ -208,9 +208,7 @@ libWidgetCurses_la_SOURCES = StyledString.cpp application.cpp cursesattr.cpp \
 
 libWidgetCurses_la_LIBADD = -lncurses -lpthread $(CCDELEGATES_CLIBS)
 noinst_HEADERS = application.h label.h screen.h widget.h window.h
-_SOURCES = Application Events Layouts Object Rect String Style Thread Widget \
-	Window xyCoords
-
+_SOURCES = Label
 all: all-am
 
 .SUFFIXES:
