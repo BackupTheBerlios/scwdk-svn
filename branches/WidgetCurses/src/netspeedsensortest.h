@@ -43,35 +43,39 @@ namespace wcurses
                 unsigned long long _totalOUT;// Persistant Accumulated value ..;
                 unsigned int _tx;// updated in each iteration
                 Label* L;
-                NetIFaceInfos(){
-                
+                NetIFaceInfos()
+                {
+
                 }
-                int InitView(){return 0;}
-                void Update() {
-                    String S = String("<fgcolor blue>%1:<fgcolor red;>%2")
-                               .arg(strIFace.data()).arg(_rx);
-                    
-                    L->SetText(S);
-                    
+                int InitView() {return 0;}
+                void Update()
+                {
+                    String S = String ( "<fgcolor blue>%1:<fgcolor red;>%2" )
+                               .arg ( strIFace.data() ).arg ( _rx );
+
+                    L->SetText ( S );
+                    L->Update();
                 }
-            };
+            }; // End Class
+
+
             NetSpeedSensorTest ( Widget* Parent );
 
             NetSpeedSensorTest ( Object* Parent, unsigned int Flags, const char* NameID );
 
             ~NetSpeedSensorTest();
-    bool _TimeOut();
-    bool InitView();
-
+            bool InitView();
+            bool Run();
+    void Start();
         private:
             Thread* _TimerThread;
             int _msDelay;
             char _line[256];
             std::map<std::string, NetIFaceInfos*> _IFaces;
-            
 
-        private:
             int ReadNetProc();
+            void Update();
+            NetIFaceInfos* IFaceLine (  std::list<std::string>& L );
     };
 
 }

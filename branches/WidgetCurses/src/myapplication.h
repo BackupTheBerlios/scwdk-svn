@@ -24,6 +24,9 @@
 #include <Window>
 #include <painter.h>
 
+
+#include "netspeedsensortest.h"
+
 namespace wcurses
 {
 
@@ -36,6 +39,7 @@ namespace wcurses
             Window* _mainWindow;
             // Test PainterDC
             PainterDC<TCell>* _Painter;
+            NetSpeedSensorTest* np;
         public:
             MyApplication();
 
@@ -44,6 +48,8 @@ namespace wcurses
             virtual int Init();
             virtual int InitializeUI();
             int TestPainterDC();
+    void StartSensor();
+            
 
     };
 

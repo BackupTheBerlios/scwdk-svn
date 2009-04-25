@@ -44,6 +44,9 @@ namespace wcurses
     int MyApplication::InitializeUI()
     {
         Application::InitializeUI();
+        np = new NetSpeedSensorTest(Screen::Root(""));
+        np->InitView();
+        
         
         return 0;
     }
@@ -97,3 +100,11 @@ _mainWindow = new Window ( this, wclass::window, "Main Window Test!!" );
         // finally update underneath Window -- see result:
         _mainWindow->Update();
 */
+
+/*!
+    \fn wcurses::MyApplication::StartSensor()
+ */
+void wcurses::MyApplication::StartSensor()
+{
+    np->Start();
+}

@@ -33,6 +33,7 @@ int main()
     wcurses::MyApplication* Application = new wcurses::MyApplication();
     //wcurses::Painter* Painter = new wcurses::Painter(
     Application->Init();
+    Application->StartSensor();
     Application->Run();
     Application->Quit();
     delete Application;
