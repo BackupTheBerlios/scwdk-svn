@@ -55,7 +55,7 @@ namespace wcurses
         std::list<std::string> L;
         Painter* P = DCPainter();
         
-        P->Clear();
+
         int l=0;
         proc = fopen ( "/proc/net/dev","r" );
         int ntok,nIfaces=0;
@@ -77,15 +77,11 @@ namespace wcurses
                 fclose ( proc );
                 return -1;
             }
-            P->CPosition ( 0, l++ );
+
             ( void* ) IFaceLine ( L );
         
 
         }
-        P->CPosition(0,l);
-        String S;
-        S << "cout=" << _IFaces.size();
-        P->WriteStr(S.std());
         fclose ( proc );
         return nIfaces;
         /// @todo implement me
@@ -114,7 +110,7 @@ namespace wcurses
         int py = 2;
         r.assign ( px,py, 30,10 /* test -- replace widh: nIfaces+2*/ ); // top-right of the screen offset 2,1
         SetGeometry ( r );
-        //InitLayout(); // initialize layout -- direct vertical layout
+        SetupLayout(); // initialize layout -- direct vertical layout
         // ----------------------
         return true;
     }
@@ -132,7 +128,7 @@ namespace wcurses
         do
         {
             ts.tv_sec = 0;
-            ts.tv_nsec = 999999999/2;
+            ts.tv_nsec = 999999999;
             int R = nanosleep ( &ts,0l );
 //             int R = sleep ( 1 );
             if ( R<0 ) return false;
@@ -169,6 +165,7 @@ namespace wcurses
         Painter* P;
         String str;
         P = DCPainter();
+        Label* l;
         unsigned long long rxtx;
         NetIFaceInfos* iface;
         std::map<std::string, NetIFaceInfos*>::iterator Find;
@@ -186,12 +183,19 @@ namespace wcurses
                     {
                         // Create a new dev entry...for now even if no activity...
                         iface = new NetIFaceInfos;
+                        
                         _IFaces[S] = iface;
                         iface->strIFace << S;
                         iface->_totalOUT = 0l;
                         iface->_totalIN = 0l;
                         iface->_rx = 0;
                         iface->_tx = 0;
+                        iface->L = new Label(this);
+                        l = iface->L;
+                        _layout->SetWidget(_IFaces.size(), l);
+                        
+                        l->SetGeometry(Rect(0, _IFaces.size()+1, Width(), 1));
+                        l->InitView();
                     }
                     else iface = _IFaces[S];
                     //Dbg << "IFace Name:" << iface->strIFace.std();
@@ -202,7 +206,7 @@ namespace wcurses
                     Dbg << N << ": Bytes Received,,,:" << rxtx<< ": previous val:" << iface->_totalIN;
                     ldelta = rxtx - iface->_totalIN;
                     iface->_totalIN = rxtx;
-                    iface->_rx = ( ldelta*2 ) /1024;
+                    iface->_rx = ( ldelta ) /1024;
                     //Dbg << "rx=" << iface->_rx;
                     str << " RX:" << iface->_rx;
                     /// @todo Update RX UI
@@ -212,7 +216,7 @@ namespace wcurses
                     rxtx = atoll( S.c_str() );
                     ldelta = rxtx - iface->_totalOUT;
                     iface->_totalOUT = rxtx;
-                    iface->_tx = ( ldelta*2 ) /1024;
+                    iface->_tx = ( ldelta ) /1024;
                     //Dbg << "tx=" << iface->_tx;
                     str << " TX:" << iface->_tx;
                     /// @todo Update TX UI
@@ -223,7 +227,10 @@ namespace wcurses
             N++;
         }
         Dbg << str.std();
-        P->WriteStr ( str.std() );
+        //P->WriteStr ( str.std() );
+        l = iface->L;
+        l->SetText(str.std());
+        l->Update();
         str.clear();
 
 
@@ -244,4 +251,18 @@ void wcurses::NetSpeedSensorTest::Start()
     Debug << " Starting and switching to new thread[" << _TimerThread->NameID() << "]"; DEND;
     _TimerThread->run(); // switch to new thread
 
+}
+
+
+/*!
+    \fn wcurses::NetSpeedSensorTest::SetupLayout()
+ */
+int wcurses::NetSpeedSensorTest::SetupLayout()
+{
+    // Default vertical layout with 3 rows ( title|dev|bottom)
+    _layout = new Layout<directions::vertical>(0l, 3);
+    _layout->initialize();
+    _layout->SetGeometry(_geometry);
+    
+    
 }
