@@ -89,7 +89,7 @@ namespace wcurses
             virtual bool SetGeometry ( const Rect& R );
             virtual ~LayoutBase() {}
             virtual Widget* ClientControl() { return _uicontrol;}
-            virtual bool SetUiControl ( Widget* W ) { _uicontrol  = W; return true; }
+            virtual bool SetWidget ( Widget* W );
             /*!
                 \fn LayoutBase::Geometry()
              */
@@ -142,7 +142,7 @@ namespace wcurses
                 \fn Layout< 0 >::Count()
              */
             int Count() { return _nitems; }
-            bool SetUiControl ( int position, Widget* W );
+            bool SetWidget ( int position, Widget* W );
             virtual bool initialize() {return true;}
             virtual Widget* ClientControl ( int position );
             LayoutBase* operator[] ( int );
@@ -169,7 +169,7 @@ namespace wcurses
             //virtual ~Layout(){}
             virtual bool SetGeometry ( const Rect& R );
             virtual bool initialize();
-            bool SetUiControl ( int position, Widget* W );
+            bool SetWidget ( int position, Widget* W );
 
     };
     /*!
@@ -206,7 +206,7 @@ namespace wcurses
             virtual bool initialize();
             Layout< directions :: horizontal >* Row ( int row );
             virtual Widget* ClientControl ( int x, int y );
-            bool SetUiControl ( int, int, Widget* );
+            bool SetWidget ( int, int, Widget* );
         protected:
 
             int _rows;

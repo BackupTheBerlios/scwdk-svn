@@ -186,8 +186,24 @@ namespace wcurses
             {
                 return _aligment;
             }
-    virtual void Align();
-            
+            virtual void Align();
+
+            /*!
+                \fn wcurses::Widget::LayoutContainer()
+             */
+            LayoutBase* LayoutContainer()
+            {
+                return _layoutContainer;
+            }
+
+            /*!
+                \fn wcurses::Widget::SetLayoutContainer( LayoutBase* L )
+             */
+            void SetLayoutContainer ( LayoutBase* L )
+            {
+                _layoutContainer = L;
+            }
+
 
         protected:
             /// Screen IO engine
@@ -200,6 +216,7 @@ namespace wcurses
             virtual int SetupLayout();
             virtual Widget* QueryMouseTarget ( MouseEvent* M );
             Widget* _activeChild;
+            LayoutBase* _layoutContainer;
         private:
             friend class Application;
             /// Widget UI class @see uiclass namespace

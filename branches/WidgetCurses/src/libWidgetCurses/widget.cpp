@@ -31,7 +31,8 @@ namespace wcurses
             _class ( _wclass ),
             _geometry ( Rect ( 0,0,0,0 ) ),
             _layout ( 0l ),
-            _buffer ( 0l )
+            _buffer ( 0l ),
+            _aligment(directions::left)
     {
     }
 
@@ -43,7 +44,8 @@ namespace wcurses
             _class ( 0 ),
             _geometry ( Rect ( 0,0,0,0 ) ),
             _layout ( 0l ),
-            _buffer ( 0l )
+            _buffer ( 0l ),
+            _aligment(directions::left)
     {
     }
 
@@ -55,7 +57,8 @@ namespace wcurses
             _class ( 0 ),
             _geometry ( Rect ( 0,0,0,0 ) ),
             _layout ( 0l ),
-            _buffer ( 0l )
+            _buffer ( 0l ),
+            _aligment(directions::left)
     {
     }
 
@@ -348,19 +351,19 @@ namespace wcurses
     void Widget::Align()
     {
         int X,Y,W,H;
-        LayoutBase* _parentLayout = ParentLayout();
-        if(! _parentLayout) return ;
-        if(_aligment&directions::left) X = _parentLayout->Geometry().x();
+        if(! _layoutContainer) return ;
+        Rect r = _layoutContainer->Geometry();
+        if(_aligment&directions::left) X = r.x();
         else
-        if(_aligment&directions::right) X = _parentLayout->Geometry().Width() - _geometry.Width()-2;
+        if(_aligment&directions::right) X = r.Width() - _geometry.Width()-2;
         else
-        if(_aligment&directions::center) X = (_parentLayout->Geometry().Width() - _geometry.Width())/2;
+        if(_aligment&directions::center) X = (r.Width() - _geometry.Width())/2;
 
-        if(_aligment& directions::top) Y = _parentLayout->Geometry().y();
+        if(_aligment& directions::top) Y = r.y();
         else
-        if(_aligment& directions::vcenter) Y = (_parentLayout->Geometry().Height() - _geometry.Height())/2;
+        if(_aligment& directions::vcenter) Y = (r.Height() - _geometry.Height())/2;
         else
-        if(_aligment& directions::bottom)  Y = _parentLayout->Geometry().Height()-Height()-2;
+        if(_aligment& directions::bottom)  Y = r.Height()-Height()-2;
 
         _geometry.assign(X,Y, Width(), Height());
         //SetGeometry(Rect(X,Y, Width(), Height())); // Clears interior and re-create buffer

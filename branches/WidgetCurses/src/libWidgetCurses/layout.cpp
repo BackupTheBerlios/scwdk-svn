@@ -30,14 +30,14 @@
 namespace wcurses
 {
     /*!
-        \fn Layout< 0 >::SetUiControl(int position, swObject* W )
+        \fn Layout< 0 >::SetWidget(int position, swObject* W )
      */
-    bool Layout< 0 >::SetUiControl ( int position, Widget* W )
+    bool Layout< 0 >::SetWidget ( int position, Widget* W )
     {
         if ( position >= _sublayouts.size() ) return false;
         LayoutBase* L = _sublayouts[position];
         if ( !L ) return false;
-        L->SetUiControl ( W );
+        L->SetWidget ( W );
         return true;
     }
 
@@ -252,14 +252,14 @@ namespace wcurses
 
 
     /*!
-        \fn Layout< directions :: horizontal >::SetUiControl( int position,Widget* W )
+        \fn Layout< directions :: horizontal >::SetWidget( int position,Widget* W )
      */
-    bool Layout< directions :: horizontal >::SetUiControl ( int position, Widget* W )
+    bool Layout< directions :: horizontal >::SetWidget ( int position, Widget* W )
     {
         if ( position >= Count() ) return false;
         LayoutBase* L = _sublayouts[position];
         if ( !L ) return false;
-        L->SetUiControl ( W );
+        L->SetWidget ( W );
         return true;
     }
 
@@ -275,15 +275,15 @@ namespace wcurses
 
 
     /*!
-        \fn Layout< directions :: table >::SetUiControl( int, int, Widget* )
+        \fn Layout< directions :: table >::SetWidget( int, int, Widget* )
      */
-    bool Layout< directions :: table >::SetUiControl ( int col , int row , Widget* W )
+    bool Layout< directions :: table >::SetWidget ( int col , int row , Widget* W )
     {
         Layout<directions::horizontal>* H = Row ( row );
         if ( !H ) return false;
         LayoutBase* B = ( *H ) [col];
         if ( !B ) return false;
-        B->SetUiControl ( W );
+        B->SetWidget ( W );
         return true;
     }
 
@@ -302,5 +302,10 @@ namespace wcurses
         _nitems = _sublayouts.size();
         return _nitems;
     }
-
+    bool LayoutBase::SetWidget ( Widget* W )
+    {
+        _uicontrol  = W;
+        W->SetLayoutContainer ( this );
+        return true;
+    }
 }
