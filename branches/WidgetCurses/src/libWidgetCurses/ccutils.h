@@ -138,6 +138,8 @@ namespace directions
     const int    topright   =top|right;
     const int    bottomleft =bottom|left;
     const int    bottomright=bottom|right;
+    const int    center     =0x100;
+    const int    vcenter    =0x200;
     const int    all=0xFF;
 }
 

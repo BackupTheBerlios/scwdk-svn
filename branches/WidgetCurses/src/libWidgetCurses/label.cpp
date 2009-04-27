@@ -26,12 +26,12 @@ namespace wcurses
 
     Label::Label ( Widget* Parent ) : Widget ( Parent )
     {
-        InitView();
+        
     }
 
     Label::Label ( Widget* Parent, const char* name ) : Widget ( Parent,0, name )
     {
-        InitView();
+        
     }
 
     Label::~Label()
@@ -148,6 +148,8 @@ bool wcurses::Label::InitView()
 {
     Debug << "Changing theme for Widget.Label" ; DEND;
     ChangeTheme ( "Widget.Label" );
+    SetState(states::normal,true);
+    ChangeState();
     return true;
 }
 

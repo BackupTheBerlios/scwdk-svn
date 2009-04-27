@@ -101,16 +101,19 @@ namespace wcurses
             {
                 int E,S;
                 S = _state;
-                if ( y ){
+                if ( y )
+                {
                     // retenir le bit des etat visuels
                     E = e & _visualStatesBits();
-                    if(E){
+                    if ( E )
+                    {
                         // eteindre les autres bits visuel ( ils sont exculsif )
-                        S = _state & (~_visualStatesBits());
+                        S = _state & ( ~_visualStatesBits() );
                         _state = E|S; // assembler le nouveau bit visuel avec les autres bits d'etat
                         // changer ou re-affecter le style selon le bit visuel actuel
-                        _style = (*_StyleComponents)[_visualStatesBits()];
-                    }else _state |= e; // bit visuel absent de la requete -- alors just ajouter | merger le bit d'etat
+                        _style = ( *_StyleComponents ) [_visualStatesBits() ];
+                    }
+                    else _state |= e; // bit visuel absent de la requete -- alors just ajouter | merger le bit d'etat
                 }
                 else _state &= ~e;
 
@@ -168,12 +171,23 @@ namespace wcurses
             bool SetActiveChild ( Widget * W )
             {
                 _activeChild = W;
-                if(Visible()) return false;
-                if(!State(states::visible)) Activate();
+                if ( Visible() ) return false;
+                if ( !State ( states::visible ) ) Activate();
 
                 return true;
             }
             virtual void Paint();
+            virtual void SetAlignment ( int a=directions::left );
+
+            /*!
+                \fn wcurses::Widget::Alignment()
+             */
+            int Alignment()
+            {
+                return _aligment;
+            }
+    virtual void Align();
+            
 
         protected:
             /// Screen IO engine
@@ -204,15 +218,17 @@ namespace wcurses
             PCell    _buffer;
             /// list of dirty regions to be updated -- not used yet -- might not at all after all...
             std::list<Rect*> _dirtyRegions;
+            /// In Layout alignment
+            int _aligment;
             virtual int _Create();
 
-    /*!
-        \fn wcurses::Widget::_visualStatesBits()
-     */
-    int _visualStatesBits()
-    {
-        return _state &  states::visualex;
-    }
+            /*!
+                \fn wcurses::Widget::_visualStatesBits()
+             */
+            int _visualStatesBits()
+            {
+                return _state &  states::visualex;
+            }
     };
 
 }

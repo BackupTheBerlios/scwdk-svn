@@ -98,7 +98,7 @@ namespace wcurses
         _StyleComponents = Application::StyleTheme ( "Widget.Default" );
         StyleComponents& curstyle= *_StyleComponents;
         _painter = new Painter ( this, 0, String ( NameID() + "::Painter" ).data() );
-        _painter->SetStyle ( curstyle[_state&_visualStatesBits()] );
+        _painter->SetStyle ( curstyle[_state&_visualStatesBits() ] );
         _painter->Clear();
         return true;
     }
@@ -134,7 +134,8 @@ namespace wcurses
         // Get inSelf clipped child
         r += cw->Geometry().topleft();
         inSelfClip = inSelf & r;
-        if ( ! inSelfClip ){
+        if ( ! inSelfClip )
+        {
             Dbg << "ChildArea outside inrect:" << r.tostring();
             return false; // Child no visible inSelf
         }
@@ -172,7 +173,7 @@ namespace wcurses
     void Widget::Show ( int state )
     {
         //SetState(states::disable, false);
-        SetState( states::visible|state, true );
+        SetState ( states::visible|state, true );
 
         //_style = ( *_StyleComponents ) [state];
         _painter->SetStyle ( _style );
@@ -188,7 +189,7 @@ namespace wcurses
         StyleComponents* newStyle = Application::StyleTheme ( strTheme );
         if ( !newStyle ) return false;
         _StyleComponents = newStyle;
-        _style = (*_StyleComponents)[states::normal];
+        _style = ( *_StyleComponents ) [states::normal];
 
         return true;
     }
@@ -222,6 +223,8 @@ namespace wcurses
     void Widget::ChangeState()
     {
         // _style has previously be updated
+        _style = ( *_StyleComponents ) [_visualStatesBits() ];
+        _painter->SetStyle ( _style );
         _painter->Clear();
         // that's it! let subclasses Widgets do paint themself
     }
@@ -316,7 +319,7 @@ namespace wcurses
      */
     void Widget::Paint()
     {
-        _painter->SetStyle(_style);
+        _painter->SetStyle ( _style );
         Debug << NameID() << ":current style set to Color[" << _style.BgColor() << ", " << _style.FgColor() << "]."; DEND;
         _painter->Clear();
 
@@ -330,10 +333,36 @@ namespace wcurses
         }
     }
 
+    /*!
+        \fn wcurses::Widget::SetAlignment( int a=directions::left )
+     */
+    void Widget::SetAlignment ( int a )
+    {
+        _aligment = a;
+    }
 
+
+    /*!
+        \fn wcurses::Widget::Align()
+     */
+    void Widget::Align()
+    {
+        int X,Y,W,H;
+        LayoutBase* _parentLayout = ParentLayout();
+        if(! _parentLayout) return ;
+        if(_aligment&directions::left) X = _parentLayout->Geometry().x();
+        else
+        if(_aligment&directions::right) X = _parentLayout->Geometry().Width() - _geometry.Width()-2;
+        else
+        if(_aligment&directions::center) X = (_parentLayout->Geometry().Width() - _geometry.Width())/2;
+
+        if(_aligment& directions::top) Y = _parentLayout->Geometry().y();
+        else
+        if(_aligment& directions::vcenter) Y = (_parentLayout->Geometry().Height() - _geometry.Height())/2;
+        else
+        if(_aligment& directions::bottom)  Y = _parentLayout->Geometry().Height()-Height()-2;
+
+        _geometry.assign(X,Y, Width(), Height());
+        //SetGeometry(Rect(X,Y, Width(), Height())); // Clears interior and re-create buffer
+    }
 }
-
-
-
-
-
