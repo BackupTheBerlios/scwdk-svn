@@ -194,7 +194,7 @@ namespace wcurses
         for ( int i = 0; i < N; i++ )
         {
             L = _sublayouts[i];
-            L->SetGeometry ( Rect ( R.x() , R.y() + ( lh*i ), R.Width(), lh-1 ) );
+            L->SetGeometry ( Rect ( R.x() , R.y() + ( lh*i ), R.Width(), lh/*lh-1*/ ) );
         }
 
     }

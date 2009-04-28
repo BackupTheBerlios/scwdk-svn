@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "label.h"
 #include <painter.h>
+#include <Application>
+
 #include <StyledString.h>
 
 namespace wcurses
@@ -73,7 +75,8 @@ namespace wcurses
     */
     int Label::SetText(String str )
     {
-        StyledString tr;
+        Debug;
+        StyledString& tr = Application::TextProcessor();
         _rtext = tr.Transform(str.std());
         if(!_rtext) return -1;
         char *L = new char[sizeof(_rtext)/sizeof(TCell)+2]; // have enough: strlen(str) >= _rtext
@@ -82,16 +85,19 @@ namespace wcurses
         while(*pos) *p++ = (char)((*pos++) & 0x000000FF);
         *p=0;
         _text.clear();
-        _text << L;
+        Dbg << "_text << " << L;
+        _text = String(L);
+        _Render(_rtext);
         delete [] _rtext;
+        tr.ReleaseData();
         _rtext = 0l;
         return _text.len();
     }
 
     /*!
-        \fn wcurses::Label::_Render()
+        \fn wcurses::Label::_Render(PStr str=0l)
      */
-    void Label::_Render()
+    void Label::_Render(PStr str)
     {
         pxy xy;
         Painter* P = DCPainter();
@@ -115,7 +121,8 @@ namespace wcurses
         }
         ////// Debug << "Rendering text:" << _text.std();
         P->CPosition ( xy );
-        P->WriteStr ( _text.std() );
+        if(str) P->WritePStr(str);
+        else P->WriteStr ( _text.std() );
     }
 
     /*!

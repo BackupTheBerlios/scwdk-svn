@@ -31,6 +31,7 @@ namespace wcurses
         _ioscr  = _owner->DC();
         _r.assign ( 0,0, _owner->Width(), _owner->Height() );
         _a = _owner->CurrentStyle();
+        _c(0,0);
     }
 
 
@@ -38,10 +39,12 @@ namespace wcurses
             _owner ( swOwner ), _ioscr ( _scriobuf ), _r ( _initialSubRect )
     {
         _a = _owner->CurrentStyle();
+        _c(0,0);
     }
 
     Painter::Painter()
     {
+        _c(0,0);
     }
 
 

@@ -74,7 +74,7 @@ namespace wcurses
     {
         Widget* _p = FirstParentAs<Widget>();
         _geometry = r;
-        //// Debug << " recceived rect: " << r.tostring() << " <-> new geometry: "<<  _geometry.tostring();
+        Debug << " received rect: " << r.tostring() << " <-> new geometry: "<<  _geometry.tostring();
         _topLeft = _p ? _p->TopLeft() + r.topleft() : r.topleft();
         return Resize ( _geometry.size() );
     }
