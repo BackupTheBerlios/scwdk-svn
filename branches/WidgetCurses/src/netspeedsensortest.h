@@ -66,6 +66,7 @@ namespace wcurses
             ~NetSpeedSensorTest();
             bool InitView();
             bool Run();
+            virtual int SetupLayout();
     void Start();
         private:
             Thread* _TimerThread;

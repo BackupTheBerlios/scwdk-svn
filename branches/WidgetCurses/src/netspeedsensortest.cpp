@@ -30,11 +30,13 @@ namespace wcurses
 
     NetSpeedSensorTest::NetSpeedSensorTest ( Widget* Parent ) : Widget ( Parent )
     {
+        SetNameID ( "NetSpeedSendorTest" );
     }
 
 
     NetSpeedSensorTest::NetSpeedSensorTest ( Object* Parent, unsigned int Flags, const char* NameID ) : Widget ( Parent, Flags, NameID )
     {
+        SetNameID ( "NetSpeedSendorTest" );
     }
 
 
@@ -54,7 +56,7 @@ namespace wcurses
         FILE* proc;
         std::list<std::string> L;
         Painter* P = DCPainter();
-        
+
 
         int l=0;
         proc = fopen ( "/proc/net/dev","r" );
@@ -79,7 +81,7 @@ namespace wcurses
             }
 
             ( void* ) IFaceLine ( L );
-        
+
 
         }
         fclose ( proc );
@@ -108,9 +110,17 @@ namespace wcurses
         Rect r;
         int px = Screen::Root ( "" )->Width()- 31; // right
         int py = 2;
-        r.assign ( px,py, 30,10 /* test -- replace widh: nIfaces+2*/ ); // top-right of the screen offset 2,1
+        r.assign ( px,py, 30,5 /* test -- replace widh: nIfaces+2*/ ); // top-right of the screen offset 2,1
         SetGeometry ( r );
         SetupLayout(); // initialize layout -- direct vertical layout
+        Label* L = new Label ( this, "NetSpeed Title" );
+        L->SetGeometry ( Rect ( 0,0,Width(), 1 ) );
+        L->InitView();
+        Layout<directions::vertical>* vl = ( Layout<directions::vertical>* ) _layout;
+        vl->SetWidget ( 0,L );
+        
+        L->SetText ( String ( "<strong; fgcolor cyan;>Sensor Test:" ) );
+
         // ----------------------
         return true;
     }
@@ -157,7 +167,7 @@ namespace wcurses
      */
     NetSpeedSensorTest::NetIFaceInfos* NetSpeedSensorTest::IFaceLine ( std::list<std::string>& L )
     {
-        Debug;
+        //Debug;
         std::string S;
         int N=0;
         long ldelta;
@@ -177,48 +187,48 @@ namespace wcurses
             switch ( N )
             {
                 case 0:
-                    
+
                     Find = _IFaces.find ( S );
                     if ( Find == _IFaces.end() )
                     {
                         // Create a new dev entry...for now even if no activity...
                         iface = new NetIFaceInfos;
-                        
+
                         _IFaces[S] = iface;
                         iface->strIFace << S;
                         iface->_totalOUT = 0l;
                         iface->_totalIN = 0l;
                         iface->_rx = 0;
                         iface->_tx = 0;
-                        iface->L = new Label(this);
+                        iface->L = new Label ( this, S.c_str() );
                         l = iface->L;
-                        _layout->SetWidget(_IFaces.size(), l);
-                        
-                        l->SetGeometry(Rect(0, _IFaces.size()+1, Width(), 1));
+                        ( ( Layout<directions::vertical>* ) _layout )->SetWidget ( _IFaces.size(), l );
+
+                        l->SetGeometry ( Rect ( 0, _IFaces.size() +1, Width(), 1 ) );
                         l->InitView();
                     }
                     else iface = _IFaces[S];
                     //Dbg << "IFace Name:" << iface->strIFace.std();
-                    str << iface->strIFace << ":";
+                    str << "<strong; bgcolor cyan; fgcolor red;>" << iface->strIFace << "<strong fgcolor white;>:";
                     break;
                 case 1: // Bytes  Received
                     rxtx = atoll ( S.c_str() );
-                    Dbg << N << ": Bytes Received,,,:" << rxtx<< ": previous val:" << iface->_totalIN;
+                    //Dbg << N << ": Bytes Received,,,:" << rxtx<< ": previous val:" << iface->_totalIN;
                     ldelta = rxtx - iface->_totalIN;
                     iface->_totalIN = rxtx;
                     iface->_rx = ( ldelta ) /1024;
                     //Dbg << "rx=" << iface->_rx;
-                    str << " RX:" << iface->_rx;
+                    str << "<strong; bgcolor cyan; fgcolor white;> RX:<strong; fgcolor yellow;>" << iface->_rx;
                     /// @todo Update RX UI
                     break;
                 case 9:
-                    
-                    rxtx = atoll( S.c_str() );
+
+                    rxtx = atoll ( S.c_str() );
                     ldelta = rxtx - iface->_totalOUT;
                     iface->_totalOUT = rxtx;
                     iface->_tx = ( ldelta ) /1024;
                     //Dbg << "tx=" << iface->_tx;
-                    str << " TX:" << iface->_tx;
+                    str << "<bgcolor cyan; fgcolor white;> TX:<strong; fgcolor blue;>" << iface->_tx;
                     /// @todo Update TX UI
                     break;
                 default: break;
@@ -229,13 +239,13 @@ namespace wcurses
         Dbg << str.std();
         //P->WriteStr ( str.std() );
         l = iface->L;
-        l->SetText(str.std());
+        l->SetText ( str );
         l->Update();
         str.clear();
 
 
-        L.clear();
-        DEND;
+        //L.clear();
+        //DEND;
         return iface;
     }
 
@@ -260,9 +270,14 @@ void wcurses::NetSpeedSensorTest::Start()
 int wcurses::NetSpeedSensorTest::SetupLayout()
 {
     // Default vertical layout with 3 rows ( title|dev|bottom)
-    _layout = new Layout<directions::vertical>(0l, 3);
+    _layout = new Layout<directions::vertical> ( 0l, 4 );
     _layout->initialize();
-    _layout->SetGeometry(_geometry);
-    
-    
+    Label* L = new Label ( this, "NetSpeed Title" );
+    L->SetGeometry ( Rect ( 0,0,Width(), 2 ) );
+    L->InitView();
+    Layout<directions::vertical>* vl = ( Layout<directions::vertical>* ) _layout;
+    vl->SetWidget ( 0,L );
+    _layout->SetGeometry ( Rect ( 0,0, Width(), Height() ) );
+    L->SetText ( String ( "<strong; fgcolor cyan;>Sensor Test:" ) );
+    return 0;
 }
